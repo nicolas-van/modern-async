@@ -1,7 +1,8 @@
 
 /**
- * A basic class used internally to create a promise with its resolve and reject function
- * in the same object.
+ * A basic class to create a promise with its resolve and reject function in the same object.
+ *
+ * Instances of this class are never returned by any function but it is used internally.
  */
 export default class Deferred {
   /**
