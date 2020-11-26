@@ -6,5 +6,5 @@ test('wait', async () => {
   const start = new Date().getTime()
   await wait(100)
   const end = new Date().getTime()
-  expect(end - start).toBeGreaterThanOrEqual(100)
+  expect(end - start).toBeGreaterThanOrEqual(50)
 })
