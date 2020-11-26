@@ -4,7 +4,7 @@ import CancelledError from './CancelledError'
 
 /**
  * Waits a given amount of time. This function returns both a promise and cancel function in
- * order to cancel the wait time if necesssary. If cancelled, the promise will be rejected
+ * order to cancel the wait time if necessary. If cancelled, the promise will be rejected
  * with a CancelError.
  *
  * @param {number} amount An amount of time in milliseconds
