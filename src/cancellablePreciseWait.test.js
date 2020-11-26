@@ -1,6 +1,6 @@
 
 import { expect, test } from '@jest/globals'
-import cancellablePreciseWait from './cancellablePreciseWait'
+import cancellablePreciseWait, { _innerCancellablePreciseWait } from './cancellablePreciseWait'
 import CancelledError from './CancelledError'
 
 test('cancellablePreciseWait base', async () => {
@@ -46,4 +46,23 @@ test('cancellablePreciseWait too late cancel', async () => {
   await cancellablePreciseWait(50)[0]
   cancel()
   await p
+})
+
+test('cancellablePreciseWait retriggers', async () => {
+  const start = new Date().getTime()
+  let first = false
+  let callCount = 0
+  const [p] = _innerCancellablePreciseWait(100, (ellasped, amount) => {
+    callCount += 1
+    if (!first) {
+      first = true
+      return false
+    } else {
+      return true
+    }
+  })
+  await p
+  expect(callCount).toBe(2)
+  const end = new Date().getTime()
+  expect(end - start).toBeGreaterThanOrEqual(100)
 })

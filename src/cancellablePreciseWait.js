@@ -14,6 +14,19 @@ import Deferred from './Deferred'
  *   * The cancel function
  */
 export default function cancellablePreciseWait (amount) {
+  return _innerCancellablePreciseWait(amount, (ellasped, amount) => {
+    return ellasped >= amount
+  })
+}
+
+/**
+ * @ignore
+ *
+ * @param {*} amount ignored
+ * @param {*} checkPassed ignored
+ * @returns {*} ignored
+ */
+function _innerCancellablePreciseWait (amount, checkPassed) {
   assert(typeof amount === 'number')
   const start = new Date().getTime()
   const [p, cancel] = cancellableWait(amount)
@@ -24,11 +37,11 @@ export default function cancellablePreciseWait (amount) {
   }
   const resolve = () => {
     const now = new Date().getTime()
-    const delta = now - start
-    if (delta >= amount) {
+    const ellasped = now - start
+    if (checkPassed(ellasped, amount)) {
       deferred.resolve()
     } else {
-      const [np, ncancel] = cancellableWait(amount - delta)
+      const [np, ncancel] = cancellableWait(amount - ellasped)
       lastCancel = ncancel
       np.then(resolve, reject)
     }
@@ -38,3 +51,5 @@ export default function cancellablePreciseWait (amount) {
     lastCancel()
   }]
 }
+
+export { _innerCancellablePreciseWait }

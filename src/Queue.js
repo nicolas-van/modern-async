@@ -63,7 +63,7 @@ export default class Queue {
   }
 
   /**
-   * @inner
+   * @ignore
    */
   _checkQueue () {
     while (true) {
