@@ -1,6 +1,6 @@
 
 /**
- * Wraps a function call that may not be asynchronous in a function that
+ * Wraps a function call that may be synchronous in a function that
  * is guaranted to be async. This is a stricter version of calling a
  * function and wrapping its result using Promise.resolve() as the new function also
  * handles the case where the original function throws an exception.
