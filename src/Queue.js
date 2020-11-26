@@ -1,5 +1,6 @@
 import assert from 'assert'
 import Deferred from './Deferred'
+import asyncWrap from './asyncWrap'
 
 /**
  * A class representing a queue. Tasks added to the queue are processed in parallel (up to the concurrency limit).
@@ -10,10 +11,11 @@ export default class Queue {
   /**
    * Constructs a queue with the given concurrency
    *
-   * @param {number} concurrency The concurrency of the queue, must be an integer greater than 0.
+   * @param {number} concurrency The concurrency of the queue, must be an integer greater than 0 or
+   * Number.POSITIVE_INFINITY .
    */
   constructor (concurrency) {
-    assert(Number.isInteger(concurrency))
+    assert(Number.isInteger(concurrency) || concurrency === Number.POSITIVE_INFINITY)
     assert(concurrency > 0)
     this._concurrency = concurrency
     this._iqueue = []
@@ -28,6 +30,20 @@ export default class Queue {
   }
 
   /**
+   * @returns {number} The current number of tasks that are processing.
+   */
+  get running () {
+    return this._running
+  }
+
+  /**
+   * @returns {number} The number of pending tasks.
+   */
+  get pending () {
+    return this._iqueue.length - this.running
+  }
+
+  /**
    * Puts a task at the end of the queue. When the task is executed and completes the returned promise will be updated
    * accordingly.
    *
@@ -38,7 +54,7 @@ export default class Queue {
   async exec (fct) {
     const deferred = new Deferred()
     this._iqueue.push({
-      fct,
+      asyncFct: asyncWrap(fct),
       deferred,
       running: false
     })
@@ -51,14 +67,23 @@ export default class Queue {
    */
   _checkQueue () {
     while (true) {
+      assert(this.running >= 0)
+      assert(this.running <= this.concurrency)
       if (this.running === this.concurrency) {
         return
       }
-      const next = this._iqueue.find((v) => !v.running)
-      if (next === undefined) {
+      const obj = this._iqueue.find((v) => !v.running)
+      if (obj === undefined) {
         return
       }
-      // const p = Promise.resolve()
+      const p = obj.asyncFct()
+      obj.running = true
+      this._running += 1
+      p.finally(() => {
+        this._running -= 1
+        this._iqueue = this._iqueue.filter((v) => v !== obj)
+        this._checkQueue()
+      }).then(obj.deferred.resolve, obj.deferred.reject)
     }
   }
 }
