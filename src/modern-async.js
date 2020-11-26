@@ -1,3 +1,11 @@
 
+export { default as asyncWrap } from './asyncWrap'
+export { default as cancellablePreciseWait } from './cancellablePreciseWait'
 export { default as cancellableWait } from './cancellableWait'
+export { default as CancelledError } from './CancelledError'
+export { default as Deferred } from './Deferred'
+export { default as Mutex } from './Mutex'
+export { default as preciseWait } from './preciseWait'
+export { default as PriorityQueue } from './PriorityQueue'
+export { default as Queue } from './Queue'
 export { default as wait } from './wait'
