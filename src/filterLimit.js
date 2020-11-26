@@ -1,5 +1,5 @@
 
-import Queue from './Queue'
+import mapLimit from './mapLimit'
 import assert from 'assert'
 
 /**
@@ -15,21 +15,7 @@ import assert from 'assert'
  */
 export default async function filterLimit (iterable, iteratee, concurrency) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
-  const queue = new Queue(concurrency)
-  const promises = []
-  for (const el of iterable) {
-    promises.push(queue.exec(async () => {
-      return iteratee(el)
-    }))
-  }
-  const results = await Promise.all(promises)
-  const filtered = []
-  let i = 0
-  for (const el of iterable) {
-    if (results[i]) {
-      filtered.push(el)
-    }
-    i += 1
-  }
-  return filtered
+  return (await mapLimit(iterable, async (v) => {
+    return [v, await iteratee(v)]
+  }, concurrency)).filter(([v, t]) => t).map(([v, t]) => v)
 }
