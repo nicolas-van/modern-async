@@ -1,6 +1,5 @@
 
 import { expect, test } from '@jest/globals'
-import assert from 'assert'
 import Deferred from './Deferred'
 
 test('Deferred', async () => {
