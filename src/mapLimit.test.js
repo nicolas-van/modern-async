@@ -41,3 +41,13 @@ test('mapLimit concurrency', async () => {
   expect(called[4]).toBe(1)
   expect(called[5]).toBe(1)
 })
+
+test('mapLimit index & iterable', async () => {
+  const arr = _.range(6)
+  const res = await mapLimit(arr, async (x, index, iterable) => {
+    expect(index).toBe(x)
+    expect(iterable).toBe(arr)
+    return x * 2
+  }, 2)
+  expect(res).toEqual([0, 2, 4, 6, 8, 10])
+})

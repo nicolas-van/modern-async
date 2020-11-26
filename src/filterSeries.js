@@ -6,7 +6,11 @@ import filterLimit from './filterLimit'
  * to iteratee will perform sequentially andthe results array will be in the same order than the original.
  *
  * @param {*} iterable An iterable object.
- * @param {Function} iteratee A function that will be called with each member of the iterable and should return a boolean.
+ * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
+ * three arguments:
+ *   * value: The current value to process
+ *   * index: The index in the iterable. Will start from 0.
+ *   * iterable: The iterable on which the operation is being performed.
  * @returns {Promise} A promise that will be resolved with an Array containing all the values that passed
  * the truth test. This promise will be rejected if any of the iteratee calls throws an exception.
  */
