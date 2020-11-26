@@ -11,9 +11,10 @@ test('Queue base 1', async () => {
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(0)
   const promises = []
-  // eslint-disable-next-line no-unused-vars
+  const callCount = {}
   for (const x of _.range(3)) {
     const p = queue.exec(async () => {
+      callCount[x] = (x in callCount ? callCount[x] : 0) + 1
       await preciseWait(unit)
     })
     expect(p).toBeInstanceOf(Promise)
@@ -40,6 +41,9 @@ test('Queue base 1', async () => {
   now = new Date().getTime()
   expect(now - start).toBeGreaterThanOrEqual(unit * 3)
   expect(now - start).toBeLessThan(unit * 3 * 3)
+  expect(callCount[0]).toBe(1)
+  expect(callCount[1]).toBe(1)
+  expect(callCount[2]).toBe(1)
 })
 
 test('Queue base 2', async () => {
@@ -49,9 +53,10 @@ test('Queue base 2', async () => {
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(0)
   const promises = []
-  // eslint-disable-next-line no-unused-vars
+  const callCount = {}
   for (const x of _.range(6)) {
     const p = queue.exec(async () => {
+      callCount[x] = (x in callCount ? callCount[x] : 0) + 1
       await preciseWait(unit)
     })
     expect(p).toBeInstanceOf(Promise)
@@ -81,6 +86,12 @@ test('Queue base 2', async () => {
   now = new Date().getTime()
   expect(now - start).toBeGreaterThanOrEqual(unit * 3)
   expect(now - start).toBeLessThan(unit * 3 * 3)
+  expect(callCount[0]).toBe(1)
+  expect(callCount[1]).toBe(1)
+  expect(callCount[2]).toBe(1)
+  expect(callCount[3]).toBe(1)
+  expect(callCount[4]).toBe(1)
+  expect(callCount[5]).toBe(1)
 })
 
 test('Queue infinity', async () => {
@@ -90,9 +101,10 @@ test('Queue infinity', async () => {
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(0)
   const promises = []
-  // eslint-disable-next-line no-unused-vars
+  const callCount = {}
   for (const x of _.range(6)) {
     const p = queue.exec(async () => {
+      callCount[x] = (x in callCount ? callCount[x] : 0) + 1
       await preciseWait(unit)
     })
     expect(p).toBeInstanceOf(Promise)
@@ -107,6 +119,12 @@ test('Queue infinity', async () => {
   const now = new Date().getTime()
   expect(now - start).toBeGreaterThanOrEqual(unit * 1)
   expect(now - start).toBeLessThan(unit * 1 * 3)
+  expect(callCount[0]).toBe(1)
+  expect(callCount[1]).toBe(1)
+  expect(callCount[2]).toBe(1)
+  expect(callCount[3]).toBe(1)
+  expect(callCount[4]).toBe(1)
+  expect(callCount[5]).toBe(1)
 })
 
 test('Queue throws', async () => {
@@ -116,8 +134,10 @@ test('Queue throws', async () => {
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(0)
   const promises = []
+  const callCount = {}
   for (const x of _.range(6)) {
     const p = queue.exec(async () => {
+      callCount[x] = (x in callCount ? callCount[x] : 0) + 1
       await preciseWait(unit)
       if (x % 2 === 1) {
         throw new Error()
@@ -145,4 +165,10 @@ test('Queue throws', async () => {
   expect(results[3]).toBe('fail')
   expect(results[4]).toBe('success')
   expect(results[5]).toBe('fail')
+  expect(callCount[0]).toBe(1)
+  expect(callCount[1]).toBe(1)
+  expect(callCount[2]).toBe(1)
+  expect(callCount[3]).toBe(1)
+  expect(callCount[4]).toBe(1)
+  expect(callCount[5]).toBe(1)
 })
