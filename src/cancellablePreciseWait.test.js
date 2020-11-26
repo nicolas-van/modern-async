@@ -52,7 +52,7 @@ test('cancellablePreciseWait retriggers', async () => {
   const start = new Date().getTime()
   let first = false
   let callCount = 0
-  const [p] = _innerCancellablePreciseWait(100, (ellasped, amount) => {
+  const [p] = _innerCancellablePreciseWait(100, (ellapsed, amount) => {
     callCount += 1
     if (!first) {
       first = true
