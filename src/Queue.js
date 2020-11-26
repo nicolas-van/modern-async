@@ -58,7 +58,7 @@ export default class Queue {
       if (next === undefined) {
         return
       }
-      const p = Promise.resolve()
+      // const p = Promise.resolve()
     }
   }
 }
