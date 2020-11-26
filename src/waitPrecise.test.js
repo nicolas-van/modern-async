@@ -1,10 +1,10 @@
 
 import { expect, test } from '@jest/globals'
-import preciseWait from './preciseWait'
+import waitPrecise from './waitPrecise'
 
-test('preciseWait', async () => {
+test('waitPrecise', async () => {
   const start = new Date().getTime()
-  await preciseWait(100)
+  await waitPrecise(100)
   const end = new Date().getTime()
   expect(end - start).toBeGreaterThanOrEqual(100)
 })

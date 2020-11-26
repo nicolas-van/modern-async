@@ -1,5 +1,5 @@
 
-import PriorityMutex from './PriorityMutex'
+import MutexPriority from './MutexPriority'
 
 /**
  * A class representing a mutex. It allows to run tasks in mutual exclusion, which
@@ -12,7 +12,7 @@ export default class Mutex {
    * Constructs a Mutex.
    */
   constructor () {
-    this._pmutex = new PriorityMutex()
+    this._pmutex = new MutexPriority()
   }
 
   /**

@@ -1,5 +1,5 @@
 
-import PriorityQueue from './PriorityQueue'
+import QueuePriority from './QueuePriority'
 
 /**
  * A class representing a queue. Tasks added to the queue are processed in parallel (up to the concurrency limit).
@@ -15,7 +15,7 @@ export default class Queue {
    * Number.POSITIVE_INFINITY .
    */
   constructor (concurrency) {
-    this._pqueue = new PriorityQueue(concurrency)
+    this._pqueue = new QueuePriority(concurrency)
   }
 
   /**

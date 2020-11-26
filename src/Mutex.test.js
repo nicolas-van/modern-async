@@ -1,7 +1,7 @@
 
 import { expect, test } from '@jest/globals'
 import Mutex from './Mutex'
-import preciseWait from './preciseWait'
+import waitPrecise from './waitPrecise'
 import _ from 'lodash'
 
 test('Mutex', async () => {
@@ -16,7 +16,7 @@ test('Mutex', async () => {
     callCount[x] = 0
     const p = mutex.exec(async () => {
       callCount[x] += 1
-      await preciseWait(unit)
+      await waitPrecise(unit)
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)

@@ -1,5 +1,5 @@
 
-import cancellablePreciseWait from './cancellablePreciseWait'
+import waitPreciseCancellable from './waitPreciseCancellable'
 
 /**
  * Waits a given amount of time. This function is similar to wait()
@@ -9,6 +9,6 @@ import cancellablePreciseWait from './cancellablePreciseWait'
  * @param {number} amount An amount of time in milliseconds
  * @returns {Promise} A promise that will be resolved after the given amount of time has passed.
  */
-export default async function preciseWait (amount) {
-  return cancellablePreciseWait(amount)[0]
+export default async function waitPrecise (amount) {
+  return waitPreciseCancellable(amount)[0]
 }

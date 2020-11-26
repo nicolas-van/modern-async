@@ -14,7 +14,7 @@ import CancelledError from './CancelledError'
  *   * The promise
  *   * The cancel function
  */
-export default function cancellableWait (amount) {
+export default function waitCancellable (amount) {
   assert(typeof amount === 'number', 'amount must be a number')
   let id
   let rejectTmp

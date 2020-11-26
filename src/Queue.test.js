@@ -1,7 +1,7 @@
 
 import { expect, test } from '@jest/globals'
 import Queue from './Queue'
-import preciseWait from './preciseWait'
+import waitPrecise from './waitPrecise'
 import _ from 'lodash'
 
 test('Queue base 1', async () => {
@@ -16,7 +16,7 @@ test('Queue base 1', async () => {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
-      await preciseWait(unit)
+      await waitPrecise(unit)
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
@@ -65,7 +65,7 @@ test('Queue base 2', async () => {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
-      await preciseWait(unit)
+      await waitPrecise(unit)
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
@@ -133,7 +133,7 @@ test('Queue infinity', async () => {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
-      await preciseWait(unit)
+      await waitPrecise(unit)
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
@@ -174,7 +174,7 @@ test('Queue infinity race', async () => {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
-      await preciseWait(unit)
+      await waitPrecise(unit)
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
@@ -217,7 +217,7 @@ test('Queue throws', async () => {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
-      await preciseWait(unit)
+      await waitPrecise(unit)
       if (x % 2 === 1) {
         throw new Error()
       }

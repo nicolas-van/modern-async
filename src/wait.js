@@ -1,5 +1,5 @@
 
-import cancellableWait from './cancellableWait'
+import waitCancellable from './waitCancellable'
 
 /**
  * Waits a given amount of time. This function uses setTimeout() internally and has the same
@@ -10,5 +10,5 @@ import cancellableWait from './cancellableWait'
  * @returns {Promise} A promise that will be resolved after the given amount of time has passed.
  */
 export default async function wait (amount) {
-  return cancellableWait(amount)[0]
+  return waitCancellable(amount)[0]
 }

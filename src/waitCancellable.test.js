@@ -1,19 +1,19 @@
 
 import { expect, test } from '@jest/globals'
-import cancellableWait from './cancellableWait'
+import waitCancellable from './waitCancellable'
 import CancelledError from './CancelledError'
 
-test('cancellableWait base', async () => {
+test('waitCancellable base', async () => {
   const start = new Date().getTime()
-  const [p] = cancellableWait(100)
+  const [p] = waitCancellable(100)
   await p
   const end = new Date().getTime()
   expect(end - start).toBeGreaterThanOrEqual(50)
 })
 
-test('cancellableWait cancel', async () => {
+test('waitCancellable cancel', async () => {
   const start = new Date().getTime()
-  const [p, cancel] = cancellableWait(100)
+  const [p, cancel] = waitCancellable(100)
   cancel()
   try {
     await p
@@ -25,9 +25,9 @@ test('cancellableWait cancel', async () => {
   }
 })
 
-test('cancellableWait async cancel', async () => {
+test('waitCancellable async cancel', async () => {
   const start = new Date().getTime()
-  const [p, cancel] = cancellableWait(100)
+  const [p, cancel] = waitCancellable(100)
   setTimeout(() => {
     cancel()
   }, 10)
@@ -41,9 +41,9 @@ test('cancellableWait async cancel', async () => {
   }
 })
 
-test('cancellableWait too late cancel', async () => {
-  const [p, cancel] = cancellableWait(0)
-  await cancellableWait(50)[0]
+test('waitCancellable too late cancel', async () => {
+  const [p, cancel] = waitCancellable(0)
+  await waitCancellable(50)[0]
   cancel()
   await p
 })

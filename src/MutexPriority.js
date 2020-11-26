@@ -1,19 +1,19 @@
 
-import PriorityQueue from './PriorityQueue'
+import QueuePriority from './QueuePriority'
 
 /**
  * A class representing a mutex. It allows to run tasks in mutual exclusion, which
  * means only one task can be executed at a time. When a slot is freed, the pending task with higher
  * priority is executed. If multiple pending tasks have the same priority the first that was scheduled is executed.
  *
- * It is basically a PriorityQueue with a concurrency of 1.
+ * It is basically a QueuePriority with a concurrency of 1.
  */
 export default class Mutex {
   /**
    * Constructs a Mutex.
    */
   constructor () {
-    this._queue = new PriorityQueue(1)
+    this._queue = new QueuePriority(1)
   }
 
   /**

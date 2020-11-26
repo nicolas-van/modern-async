@@ -1,19 +1,19 @@
 
 import { expect, test } from '@jest/globals'
-import cancellablePreciseWait, { _innerCancellablePreciseWait } from './cancellablePreciseWait'
+import waitPreciseCancellable, { _innerWaitPreciseCancellable } from './waitPreciseCancellable'
 import CancelledError from './CancelledError'
 
-test('cancellablePreciseWait base', async () => {
+test('waitPreciseCancellable base', async () => {
   const start = new Date().getTime()
-  const [p] = cancellablePreciseWait(100)
+  const [p] = waitPreciseCancellable(100)
   await p
   const end = new Date().getTime()
   expect(end - start).toBeGreaterThanOrEqual(100)
 })
 
-test('cancellablePreciseWait cancel', async () => {
+test('waitPreciseCancellable cancel', async () => {
   const start = new Date().getTime()
-  const [p, cancel] = cancellablePreciseWait(100)
+  const [p, cancel] = waitPreciseCancellable(100)
   cancel()
   try {
     await p
@@ -25,9 +25,9 @@ test('cancellablePreciseWait cancel', async () => {
   }
 })
 
-test('cancellablePreciseWait async cancel', async () => {
+test('waitPreciseCancellable async cancel', async () => {
   const start = new Date().getTime()
-  const [p, cancel] = cancellablePreciseWait(100)
+  const [p, cancel] = waitPreciseCancellable(100)
   setTimeout(() => {
     cancel()
   }, 10)
@@ -41,18 +41,18 @@ test('cancellablePreciseWait async cancel', async () => {
   }
 })
 
-test('cancellablePreciseWait too late cancel', async () => {
-  const [p, cancel] = cancellablePreciseWait(0)
-  await cancellablePreciseWait(50)[0]
+test('waitPreciseCancellable too late cancel', async () => {
+  const [p, cancel] = waitPreciseCancellable(0)
+  await waitPreciseCancellable(50)[0]
   cancel()
   await p
 })
 
-test('cancellablePreciseWait retriggers', async () => {
+test('waitPreciseCancellable retriggers', async () => {
   const start = new Date().getTime()
   let first = false
   let callCount = 0
-  const [p] = _innerCancellablePreciseWait(100, (ellapsed, amount) => {
+  const [p] = _innerWaitPreciseCancellable(100, (ellapsed, amount) => {
     callCount += 1
     if (!first) {
       first = true

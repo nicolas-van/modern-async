@@ -1,12 +1,12 @@
 
 import { expect, test } from '@jest/globals'
-import PriorityQueue from './PriorityQueue'
-import preciseWait from './preciseWait'
+import QueuePriority from './QueuePriority'
+import waitPrecise from './waitPrecise'
 
-test('PriorityQueue', async () => {
+test('QueuePriority', async () => {
   const unit = 30
   const start = new Date().getTime()
-  const queue = new PriorityQueue(1)
+  const queue = new QueuePriority(1)
   expect(queue.concurrency).toBe(1)
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(0)
@@ -16,7 +16,7 @@ test('PriorityQueue', async () => {
   callCount[0] = 0
   promises.push(queue.exec(async () => {
     callCount[0] += 1
-    await preciseWait(unit)
+    await waitPrecise(unit)
   }, 0))
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(0)
@@ -25,7 +25,7 @@ test('PriorityQueue', async () => {
   callCount[1] = 0
   promises.push(queue.exec(async () => {
     callCount[1] += 1
-    await preciseWait(unit)
+    await waitPrecise(unit)
   }, 1))
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(1)
@@ -34,7 +34,7 @@ test('PriorityQueue', async () => {
   callCount[2] = 0
   promises.push(queue.exec(async () => {
     callCount[2] += 1
-    await preciseWait(unit)
+    await waitPrecise(unit)
   }, 2))
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(2)

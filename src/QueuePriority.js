@@ -9,7 +9,7 @@ import asyncWrap from './asyncWrap'
  * priority the first that was scheduled is executed.
  * Once a task is completed, its corresponding promise is terminated accordingly.
  */
-export default class PriorityQueue {
+export default class QueuePriority {
   /**
    * Constructs a priority queue with the given concurrency
    *
@@ -21,7 +21,7 @@ export default class PriorityQueue {
       'concurrency must be an integer or positive infinity')
     assert(concurrency > 0, 'concurrency must be greater than 0')
     if (concurrency !== Number.POSITIVE_INFINITY) {
-      this._queue = new _InternalPriorityQueue(concurrency)
+      this._queue = new _InternalQueuePriority(concurrency)
     } else {
       this._queue = new _InternalInfinityQueue()
     }
@@ -66,7 +66,7 @@ export default class PriorityQueue {
 /**
  * @ignore
  */
-class _InternalPriorityQueue {
+class _InternalQueuePriority {
   /**
    * @ignore
    *

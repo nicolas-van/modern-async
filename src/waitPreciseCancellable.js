@@ -1,10 +1,10 @@
 
 import assert from 'assert'
-import cancellableWait from './cancellableWait'
+import waitCancellable from './waitCancellable'
 import Deferred from './Deferred'
 
 /**
- * Waits a given amount of time. This function is similar to cancellableWait()
+ * Waits a given amount of time. This function is similar to waitCancellable()
  * except it ensures that the amount of time measured using the Date object is
  * always greater than or equal the asked amount of time.
  *
@@ -13,8 +13,8 @@ import Deferred from './Deferred'
  *   * The promise
  *   * The cancel function
  */
-export default function cancellablePreciseWait (amount) {
-  return _innerCancellablePreciseWait(amount, (ellasped, amount) => {
+export default function waitPreciseCancellable (amount) {
+  return _innerWaitPreciseCancellable(amount, (ellasped, amount) => {
     return ellasped >= amount
   })
 }
@@ -26,10 +26,10 @@ export default function cancellablePreciseWait (amount) {
  * @param {*} checkPassed ignored
  * @returns {*} ignored
  */
-function _innerCancellablePreciseWait (amount, checkPassed) {
+function _innerWaitPreciseCancellable (amount, checkPassed) {
   assert(typeof amount === 'number', 'amount must be a number')
   const start = new Date().getTime()
-  const [p, cancel] = cancellableWait(amount)
+  const [p, cancel] = waitCancellable(amount)
   let lastCancel = cancel
   const deferred = new Deferred()
   const reject = (e) => {
@@ -41,7 +41,7 @@ function _innerCancellablePreciseWait (amount, checkPassed) {
     if (checkPassed(ellasped, amount)) {
       deferred.resolve()
     } else {
-      const [np, ncancel] = cancellableWait(amount - ellasped)
+      const [np, ncancel] = waitCancellable(amount - ellasped)
       lastCancel = ncancel
       np.then(resolve, reject)
     }
@@ -52,4 +52,4 @@ function _innerCancellablePreciseWait (amount, checkPassed) {
   }]
 }
 
-export { _innerCancellablePreciseWait }
+export { _innerWaitPreciseCancellable }

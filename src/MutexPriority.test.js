@@ -1,13 +1,13 @@
 
 import { expect, test } from '@jest/globals'
-import PriorityMutex from './PriorityMutex'
-import preciseWait from './preciseWait'
+import MutexPriority from './MutexPriority'
+import waitPrecise from './waitPrecise'
 import _ from 'lodash'
 
-test('PriorityMutex', async () => {
+test('MutexPriority', async () => {
   const unit = 30
   const start = new Date().getTime()
-  const mutex = new PriorityMutex(1)
+  const mutex = new MutexPriority(1)
   expect(mutex.locked).toBe(false)
   expect(mutex.pending).toBe(0)
   const promises = []
@@ -16,7 +16,7 @@ test('PriorityMutex', async () => {
     callCount[x] = 0
     const p = mutex.exec(async () => {
       callCount[x] += 1
-      await preciseWait(unit)
+      await waitPrecise(unit)
     }, 10)
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
