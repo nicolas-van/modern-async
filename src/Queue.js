@@ -3,8 +3,9 @@ import PriorityQueue from './PriorityQueue'
 
 /**
  * A class representing a queue. Tasks added to the queue are processed in parallel (up to the concurrency limit).
- * If all workers are in progress, the task is queued until one becomes available. Once a worker completes a task, its
- * corresponding promise is resolved.
+ * If all slots of the queue are occupied, the task is queued until one becomes available.
+ * When a slot is freed, the first pending task is executed.
+ * Once a task is completed, its corresponding promise is terminated accordingly.
  */
 export default class Queue {
   /**

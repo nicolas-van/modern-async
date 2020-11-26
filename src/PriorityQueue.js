@@ -4,12 +4,14 @@ import asyncWrap from './asyncWrap'
 
 /**
  * A class representing a queue. Tasks added to the queue are processed in parallel (up to the concurrency limit).
- * If all workers are in progress, the task is queued until one becomes available. Once a worker completes a task, its
- * corresponding promise is resolved.
+ * If all slots of the queue are occupied, the task is queued until one becomes available.
+ * When a slot is freed, the pending task with higher priority is executed. If multiple pending tasks have the same
+ * priority the first that was scheduled is executed.
+ * Once a task is completed, its corresponding promise is terminated accordingly.
  */
 export default class PriorityQueue {
   /**
-   * Constructs a queue with the given concurrency
+   * Constructs a priority queue with the given concurrency
    *
    * @param {number} concurrency The concurrency of the queue, must be an integer greater than 0 or
    * Number.POSITIVE_INFINITY .
@@ -47,7 +49,7 @@ export default class PriorityQueue {
   }
 
   /**
-   * Puts a task at the end of the queue. When the task is executed and completes the returned promise will be updated
+   * Puts a task at the end of the queue. When the task is executed and completes the returned promise will be terminated
    * accordingly.
    *
    * @param {Function} fct An asynchronous functions representing the task. It will be executed when the queue has
@@ -167,33 +169,34 @@ class _InternalInfinityQueue {
   }
 
   /**
-   * @returns {number} The concurrency of the queue.
+   * @ignore
+   * @returns {number} ignore
    */
   get concurrency () {
     return Number.POSITIVE_INFINITY
   }
 
   /**
-   * @returns {number} The current number of tasks that are processing.
+   * @ignore
+   * @returns {number} ignore
    */
   get running () {
     return this._running
   }
 
   /**
-   * @returns {number} The number of pending tasks.
+   * @ignore
+   * @returns {number} ignore
    */
   get pending () {
     return 0
   }
 
   /**
-   * Puts a task at the end of the queue. When the task is executed and completes the returned promise will be updated
-   * accordingly.
+   * @ignore
    *
-   * @param {Function} fct An asynchronous functions representing the task. It will be executed when the queue has
-   * available slots and its result will be propagated to the promise returned by exec().
-   * @returns {Promise} A promise that will be resolved once the task has completed.
+   * @param {Function} fct ignore
+   * @returns {Promise} ignore
    */
   async exec (fct) {
     this._running += 1
