@@ -7,6 +7,7 @@ test('PriorityQueue', async () => {
   const unit = 30
   const start = new Date().getTime()
   const queue = new PriorityQueue(1)
+  expect(queue.concurrency).toBe(1)
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(0)
   const promises = []

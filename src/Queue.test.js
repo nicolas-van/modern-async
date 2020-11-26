@@ -124,6 +124,7 @@ test('Queue infinity', async () => {
   const unit = 30
   const start = new Date().getTime()
   const queue = new Queue(Number.POSITIVE_INFINITY)
+  expect(queue.concurrency).toBe(Number.POSITIVE_INFINITY)
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(0)
   const promises = []
