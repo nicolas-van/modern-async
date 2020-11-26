@@ -1,3 +1,4 @@
+import assert from 'assert'
 
 /**
  * Wraps a function call that may be synchronous in a function that
@@ -9,6 +10,7 @@
  * @returns {Function} The wrapped function.
  */
 export default function asyncWrap (fct) {
+  assert(typeof fct === 'function', 'fct must be a function')
   return async function () {
     return fct(...arguments)
   }
