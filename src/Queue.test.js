@@ -170,11 +170,14 @@ test('Queue infinity race', async () => {
   expect(queue.pending).toBe(0)
   const promises = []
   const callCount = {}
+  const completeCount = {}
   for (const x of _.range(6)) {
     callCount[x] = 0
+    completeCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
       await waitPrecise(unit)
+      completeCount[x] += 1
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
@@ -189,7 +192,7 @@ test('Queue infinity race', async () => {
   expect(callCount[4]).toBe(1)
   expect(callCount[5]).toBe(1)
   await Promise.race(promises)
-  expect(queue.running).toBe(5)
+  expect(queue.running).toBe(6 - Object.values(completeCount).reduce((p, c) => p + c, 0))
   expect(queue.pending).toBe(0)
   await Promise.all(promises)
   expect(queue.running).toBe(0)
