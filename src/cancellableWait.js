@@ -15,7 +15,7 @@ import CancelledError from './CancelledError'
  *   * The cancel function
  */
 export default function cancellableWait (amount) {
-  assert(typeof amount === 'number')
+  assert(typeof amount === 'number', 'amount must be a number')
   let id
   let rejectTmp
   const promise = new Promise((resolve, reject) => {

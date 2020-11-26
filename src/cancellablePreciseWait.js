@@ -27,7 +27,7 @@ export default function cancellablePreciseWait (amount) {
  * @returns {*} ignored
  */
 function _innerCancellablePreciseWait (amount, checkPassed) {
-  assert(typeof amount === 'number')
+  assert(typeof amount === 'number', 'amount must be a number')
   const start = new Date().getTime()
   const [p, cancel] = cancellableWait(amount)
   let lastCancel = cancel
