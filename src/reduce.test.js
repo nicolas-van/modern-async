@@ -59,12 +59,27 @@ test('reduce no args', async () => {
   }
 })
 
-test('reduce index & iterable', async () => {
+test('reduce iterable', async () => {
   const arr = _.range(6)
   const result = await reduce(arr, async (p, v, index, iterable) => {
-    expect(index).toBe(v)
     expect(iterable).toBe(arr)
     return p + v
+  })
+  expect(result).toEqual(arr.reduce((p, v) => p + v))
+})
+
+test('reduce index', async () => {
+  const arr = _.range(6)
+  arr.reduce((p, v, i) => {
+    expect(i).toBe(v)
+  })
+  arr.reduce((p, v, i) => {
+    expect(i).toBe(v)
   }, 0)
-  expect(result).toEqual(arr.reduce((p, v) => p + v), 0)
+  await reduce(arr, async (p, v, i) => {
+    expect(i).toBe(v)
+  })
+  await reduce(arr, async (p, v, i) => {
+    expect(i).toBe(v)
+  }, 0)
 })
