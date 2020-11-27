@@ -1,6 +1,7 @@
 import assert from 'assert'
 import Deferred from './Deferred'
 import asyncWrap from './asyncWrap'
+import CancelledError from './CancelledError'
 
 /**
  * A class representing a queue. Tasks added to the queue are processed in parallel (up to the concurrency limit).
@@ -61,6 +62,35 @@ export default class QueuePriority {
   async exec (fct, priority) {
     return this._queue.exec(fct, priority)
   }
+
+  /**
+   * Puts a task at the end of the queue. When the task is executed and completes the returned promise will be terminated
+   * accordingly.
+   *
+   * @param {Function} fct An asynchronous functions representing the task. It will be executed when the queue has
+   * available slots and its result will be propagated to the promise returned by exec().
+   * @param {number} priority The priority of the task. The higher the priority is, the sooner the task will be
+   * executed regarding the priority of other pending tasks.
+   * @returns {Array} A tuple with two parameters:
+   *   * A promise that will be resolved once the task has completed.
+   *   * A cancel function. When called it will cancel the task if it is still pending. It has no effect is the task has
+   *     already started or already terminated. When a task is cancelled its corresponding promise will be rejected with
+   *     a CancelledError. If will return true if the task was effectively pending and was cancelled, false in any other
+   *     case.
+   */
+  execCancellable (fct, priority) {
+    return this._queue.execCancellable(fct, priority)
+  }
+
+  /**
+   * Cancels all pending tasks. Their corresponding promises will be rejected with a CancelledError. This method will
+   * not alter tasks that are already running.
+   *
+   * @returns {boolean} True if some tasks where effectively cancelled, false in any other case.
+   */
+  cancelAllPending () {
+    return this._queue.cancelAllPending()
+  }
 }
 
 /**
@@ -105,11 +135,21 @@ class _InternalQueuePriority {
   /**
    * @ignore
    *
-   * @param {Function} fct ignored
-   * @param {number} priority ignored
-   * @returns {Promise} ignored
+   * @param {*} fct ignored
+   * @param {*} priority ignored
+   * @returns {*} ignored
    */
   async exec (fct, priority) {
+    return this.execCancellable(fct, priority)[0]
+  }
+
+  /**
+   * @ignore
+   * @param {*} fct ignore
+   * @param {*} priority ignore
+   * @returns {*} ignore
+   */
+  execCancellable (fct, priority) {
     assert(typeof fct === 'function', 'fct must be a function')
     assert(typeof priority === 'number', 'priority must be a number')
     const deferred = new Deferred()
@@ -121,14 +161,28 @@ class _InternalQueuePriority {
       }
       i -= 1
     }
-    this._iqueue.splice(i, 0, {
+    const task = {
       asyncFct: asyncWrap(fct),
       deferred,
       running: false,
       priority
-    })
+    }
+    this._iqueue.splice(i, 0, task)
     this._checkQueue()
-    return deferred.promise
+    return [deferred.promise, () => {
+      if (task.running) {
+        return false
+      } else {
+        const filtered = this._iqueue.filter((v) => v !== task)
+        if (filtered.length < this._iqueue.length) {
+          this._iqueue = filtered
+          deferred.reject(new CancelledError())
+          return true
+        } else {
+          return false
+        }
+      }
+    }]
   }
 
   /**
@@ -141,19 +195,31 @@ class _InternalQueuePriority {
       if (this.running === this.concurrency) {
         return
       }
-      const obj = this._iqueue.find((v) => !v.running)
-      if (obj === undefined) {
+      const task = this._iqueue.find((v) => !v.running)
+      if (task === undefined) {
         return
       }
-      const p = obj.asyncFct()
-      obj.running = true
+      task.running = true
       this._running += 1
-      p.finally(() => {
+      task.asyncFct().finally(() => {
         this._running -= 1
-        this._iqueue = this._iqueue.filter((v) => v !== obj)
+        this._iqueue = this._iqueue.filter((v) => v !== task)
         this._checkQueue()
-      }).then(obj.deferred.resolve, obj.deferred.reject)
+      }).then(task.deferred.resolve, task.deferred.reject)
     }
+  }
+
+  /**
+   * @ignore
+   * @returns {*} ignore
+   */
+  cancelAllPending () {
+    const toCancel = this._iqueue.filter((task) => !task.running)
+    this._iqueue = this._iqueue.filter((task) => task.running)
+    toCancel.forEach((task) => {
+      task.deferred.reject(new CancelledError())
+    })
+    return toCancel.length >= 1
   }
 }
 
@@ -199,11 +265,29 @@ class _InternalInfinityQueue {
    * @returns {Promise} ignore
    */
   async exec (fct) {
+    return this.execCancellable(fct)[0]
+  }
+
+  /**
+   * @ignore
+   *
+   * @param {*} fct ignore
+   * @returns {*} ignore
+   */
+  execCancellable (fct) {
     this._running += 1
-    try {
-      return await fct()
-    } finally {
+    const asyncFct = asyncWrap(fct)
+    const p = asyncFct()
+    return [p.finally(() => {
       this._running -= 1
-    }
+    }), () => false]
+  }
+
+  /**
+   * @ignore
+   * @returns {*} ignore
+   */
+  cancelAllPending () {
+    return false
   }
 }

@@ -14,7 +14,7 @@ test('waitPreciseCancellable base', async () => {
 test('waitPreciseCancellable cancel', async () => {
   const start = new Date().getTime()
   const [p, cancel] = waitPreciseCancellable(100)
-  cancel()
+  expect(cancel()).toBe(true)
   try {
     await p
     expect(true).toBe(false)
@@ -29,8 +29,23 @@ test('waitPreciseCancellable async cancel', async () => {
   const start = new Date().getTime()
   const [p, cancel] = waitPreciseCancellable(100)
   setTimeout(() => {
-    cancel()
+    expect(cancel()).toBe(true)
   }, 10)
+  try {
+    await p
+    expect(true).toBe(false)
+  } catch (e) {
+    const end = new Date().getTime()
+    expect(end - start).toBeLessThan(50)
+    expect(e).toBeInstanceOf(CancelledError)
+  }
+})
+
+test('waitPreciseCancellable double cancel', async () => {
+  const start = new Date().getTime()
+  const [p, cancel] = waitPreciseCancellable(100)
+  expect(cancel()).toBe(true)
+  expect(cancel()).toBe(false)
   try {
     await p
     expect(true).toBe(false)
@@ -44,7 +59,7 @@ test('waitPreciseCancellable async cancel', async () => {
 test('waitPreciseCancellable too late cancel', async () => {
   const [p, cancel] = waitPreciseCancellable(0)
   await waitPreciseCancellable(50)[0]
-  cancel()
+  expect(cancel()).toBe(false)
   await p
 })
 

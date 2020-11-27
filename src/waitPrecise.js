@@ -6,6 +6,11 @@ import waitPreciseCancellable from './waitPreciseCancellable'
  * except it ensures that the amount of time measured using the Date object is
  * always greater than or equal the asked amount of time.
  *
+ * This function implies additional delay that can be bad for performances. As such it is
+ * recommended to only use it in unit tests or very specific cases. Normal applications should
+ * be adapted to work with the usual setTimout() inconsistencies even if it can trigger some
+ * milliseconds before the asked delay.
+ *
  * @param {number} amount An amount of time in milliseconds
  * @returns {Promise} A promise that will be resolved after the given amount of time has passed.
  */

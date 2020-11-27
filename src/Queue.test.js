@@ -260,3 +260,13 @@ test('Queue throws', async () => {
   expect(callCount[4]).toBe(1)
   expect(callCount[5]).toBe(1)
 })
+
+test('Queue all cancels', async () => {
+  const queue = new Queue(1)
+  const [p, cancel] = queue.execCancellable(() => {
+    return 'test'
+  })
+  cancel()
+  queue.cancelAllPending()
+  await p
+})

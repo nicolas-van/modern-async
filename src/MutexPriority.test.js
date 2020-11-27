@@ -52,3 +52,13 @@ test('MutexPriority', async () => {
   expect(now - start).toBeGreaterThanOrEqual(unit * 3)
   expect(now - start).toBeLessThan(unit * 3 * 3)
 })
+
+test('MutexPriority all cancels', async () => {
+  const queue = new MutexPriority()
+  const [p, cancel] = queue.execCancellable(() => {
+    return 'test'
+  }, 0)
+  cancel()
+  queue.cancelAllPending()
+  await p
+})
