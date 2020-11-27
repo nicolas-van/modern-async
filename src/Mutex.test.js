@@ -3,7 +3,7 @@ import { expect, test } from '@jest/globals'
 import Mutex from './Mutex'
 import waitPrecise from './waitPrecise'
 import _ from 'lodash'
-import immediate from './immediate'
+import delay from './delay'
 
 test('Mutex', async () => {
   const unit = 30
@@ -29,7 +29,7 @@ test('Mutex', async () => {
   expect(callCount[1]).toBe(0)
   expect(callCount[2]).toBe(0)
   await promises[0]
-  await immediate()
+  await delay()
   expect(mutex.locked).toBe(true)
   expect(mutex.pending).toBe(1)
   expect(callCount[0]).toBe(1)
@@ -39,7 +39,7 @@ test('Mutex', async () => {
   expect(now - start).toBeGreaterThanOrEqual(unit * 1)
   expect(now - start).toBeLessThan(unit * 1 * 3)
   await promises[1]
-  await immediate()
+  await delay()
   expect(mutex.locked).toBe(true)
   expect(mutex.pending).toBe(0)
   expect(callCount[0]).toBe(1)

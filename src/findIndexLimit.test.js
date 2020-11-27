@@ -38,6 +38,23 @@ test('findIndexLimit cancelSubsequent', async () => {
   expect(callCount[2]).toBe(0)
 })
 
+test('findIndexLimit cancelSubsequent 2', async () => {
+  const callCount = {}
+  _.range(6).forEach((i) => { callCount[i] = 0 })
+  const res = await findIndexLimit(_.range(6), async (v, i) => {
+    callCount[i] += 1
+    await waitPrecise(10)
+    return v === 0
+  }, 2)
+  expect(res === 0 || res === 1).toBe(true)
+  expect(callCount[0]).toBe(1)
+  expect(callCount[1]).toBe(1)
+  expect(callCount[2]).toBe(0)
+  expect(callCount[3]).toBe(0)
+  expect(callCount[4]).toBe(0)
+  expect(callCount[5]).toBe(0)
+})
+
 test('findIndexLimit find first in time', async () => {
   const arr = [0, 1, 0]
   let res = await findIndexLimit(arr, async (v, index) => {

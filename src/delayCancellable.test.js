@@ -1,15 +1,15 @@
 
 import { expect, test } from '@jest/globals'
-import immediateCancellable from './immediateCancellable'
+import delayCancellable from './delayCancellable'
 import CancelledError from './CancelledError'
 
-test('immediateCancellable', async () => {
-  const [p] = immediateCancellable()
+test('delayCancellable', async () => {
+  const [p] = delayCancellable()
   await p
 })
 
-test('immediateCancellable cancel', async () => {
-  const [p, cancel] = immediateCancellable()
+test('delayCancellable cancel', async () => {
+  const [p, cancel] = delayCancellable()
   cancel()
   try {
     await p
