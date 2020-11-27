@@ -6,7 +6,7 @@ import filterLimit from './filterLimit'
  * to iteratee will perform in parallel, but the results array will be
  * in the same order than the original.
  *
- * @param {*} iterable An iterable object.
+ * @param {Iterable} iterable An iterable object.
  * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
  * three arguments:
  *   * value: The current value to process

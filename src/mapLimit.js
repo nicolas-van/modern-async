@@ -6,7 +6,7 @@ import assert from 'assert'
  * Produces a new collection of values by mapping each value in iterable through the iteratee function.
  * Multiple calls to iteratee will be performed in parallel, up to the concurrency limit.
  *
- * @param {*} iterable An iterable object.
+ * @param {Iterable} iterable An iterable object.
  * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
  * three arguments:
  *   * value: The current value to process

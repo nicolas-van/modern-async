@@ -24,5 +24,8 @@ module.exports = {
         FunctionDeclaration: true,
         MethodDefinition: true
       }}]
+  },
+  globals: {
+    Iterable: 'readonly'
   }
 }

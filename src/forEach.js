@@ -5,7 +5,7 @@ import forEachLimit from './forEachLimit'
  * Calls the function iteratee on each element of iterable.
  * Multiple calls to iteratee will be performed in parallel.
  *
- * @param {*} iterable An iterable object.
+ * @param {Iterable} iterable An iterable object.
  * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
  * three arguments:
  *   * value: The current value to process

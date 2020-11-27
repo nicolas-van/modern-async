@@ -5,7 +5,7 @@ import assert from 'assert'
  * Performs a reduce operation as defined in the Array.reduce() method but using an asynchronous
  * function as reducer. The reducer will be called sequentially.
  *
- * @param {*} iterable An iterable object.
+ * @param {Iterable} iterable An iterable object.
  * @param {Function} reducer The reducer function. It will be called with four arguments:
  *   * accumulator: The last calculated value (or the first value of the iterable if no initial value is provided)
  *   * value: The current value
