@@ -1,0 +1,25 @@
+
+import everyLimit from './everyLimit'
+
+/**
+ * Returns true if all elements of an iterable pass a truth test and false otherwise.
+ *
+ * The iteratee will be run in parallel. If any truth test returns false the promise is immediately resolved.
+ *
+ * In case of exception in one of the iteratee calls the promise returned by this function will be rejected
+ * with the exception. In the very specific case where a test returns false and an already started task throws
+ * an exception that exception will be plainly ignored.
+ *
+ * @param {Iterable} iterable An iterable object.
+ * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
+ * three arguments:
+ *   * value: The current value to process
+ *   * index: The index in the iterable. Will start from 0.
+ *   * iterable: The iterable on which the operation is being performed.
+ * @returns {Promise} A promise that will be resolved to true if all values pass the truth test and false
+ * if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
+ * an exception.
+ */
+export default async function every (iterable, iteratee) {
+  return everyLimit(iterable, iteratee, Number.POSITIVE_INFINITY)
+}
