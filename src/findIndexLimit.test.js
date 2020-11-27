@@ -94,3 +94,17 @@ test('findIndexLimit error', async () => {
     expect(e.message).toBe('test')
   }
 })
+
+test('findIndexLimit error after completion', async () => {
+  const arr = [0, 1]
+  const res = await findIndexLimit(arr, async (v, index) => {
+    if (index === 0) {
+      await waitPrecise(10)
+      return true
+    } else {
+      await waitPrecise(100)
+      throw new Error('should be ignored')
+    }
+  }, 2)
+  expect(res).toBe(0)
+})
