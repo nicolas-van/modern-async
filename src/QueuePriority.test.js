@@ -4,6 +4,7 @@ import QueuePriority from './QueuePriority'
 import waitPrecise from './waitPrecise'
 import CancelledError from './CancelledError'
 import _ from 'lodash'
+import immediate from './immediate'
 
 test('QueuePriority', async () => {
   const unit = 30
@@ -43,6 +44,7 @@ test('QueuePriority', async () => {
   expect(callCount[2]).toBe(0)
 
   await promises[0]
+  await immediate()
   let now = new Date().getTime()
   expect(now - start).toBeGreaterThanOrEqual(unit * 1)
   expect(now - start).toBeLessThan(unit * 1 * 3)
@@ -52,6 +54,7 @@ test('QueuePriority', async () => {
   expect(callCount[2]).toBe(1)
 
   await promises[2]
+  await immediate()
   now = new Date().getTime()
   expect(now - start).toBeGreaterThanOrEqual(unit * 2)
   expect(now - start).toBeLessThan(unit * 2 * 3)

@@ -3,6 +3,7 @@ import { expect, test } from '@jest/globals'
 import Queue from './Queue'
 import waitPrecise from './waitPrecise'
 import _ from 'lodash'
+import immediate from './immediate'
 
 test('Queue base 1', async () => {
   const unit = 30
@@ -28,6 +29,7 @@ test('Queue base 1', async () => {
   expect(callCount[1]).toBe(0)
   expect(callCount[2]).toBe(0)
   await promises[0]
+  await immediate()
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(1)
   expect(callCount[0]).toBe(1)
@@ -37,6 +39,7 @@ test('Queue base 1', async () => {
   expect(now - start).toBeGreaterThanOrEqual(unit * 1)
   expect(now - start).toBeLessThan(unit * 1 * 3)
   await promises[1]
+  await immediate()
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -81,6 +84,7 @@ test('Queue base 2', async () => {
   expect(callCount[5]).toBe(0)
   await promises[0]
   await promises[1]
+  await immediate()
   expect(queue.running).toBe(2)
   expect(queue.pending).toBe(2)
   expect(callCount[0]).toBe(1)
@@ -94,6 +98,7 @@ test('Queue base 2', async () => {
   expect(now - start).toBeLessThan(unit * 1 * 3)
   await promises[2]
   await promises[3]
+  await immediate()
   expect(queue.running).toBe(2)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)

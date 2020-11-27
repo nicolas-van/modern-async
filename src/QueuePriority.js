@@ -2,6 +2,7 @@ import assert from 'assert'
 import Deferred from './Deferred'
 import asyncWrap from './asyncWrap'
 import CancelledError from './CancelledError'
+import immediate from './immediate'
 
 /**
  * A class representing a queue. Tasks added to the queue are processed in parallel (up to the concurrency limit).
@@ -204,7 +205,12 @@ class _InternalQueuePriority {
       task.asyncFct().finally(() => {
         this._running -= 1
         this._iqueue = this._iqueue.filter((v) => v !== task)
-        this._checkQueue()
+        // the following check is delayed to give the opportunity to components
+        // listening for promises to cancel pending promises before they are
+        // started
+        immediate().then(() => {
+          this._checkQueue()
+        })
       }).then(task.deferred.resolve, task.deferred.reject)
     }
   }
