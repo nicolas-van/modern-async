@@ -16,13 +16,21 @@ class Deferred {
   }
 
   /**
-   * @returns {Promise} The promise
+   * The promise.
+   *
+   * @member {Promise}
+   *
+   * @returns {Promise} ignored
    */
   get promise () {
     return this._promise
   }
 
   /**
+   * The resolve function.
+   *
+   * @member {Function}
+   *
    * @returns {Function} The resolve function
    */
   get resolve () {
@@ -30,6 +38,10 @@ class Deferred {
   }
 
   /**
+   * The reject function
+   *
+   * @member {Function}
+   *
    * @returns {Function} The reject function
    */
   get reject () {

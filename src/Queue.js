@@ -5,15 +5,18 @@ import CancelledError from './CancelledError'
 import delay from './delay'
 
 /**
- * A class representing a queue. Tasks added to the queue are processed in parallel (up to the concurrency limit).
+ * A class representing a queue.
+ *
+ * Tasks added to the queue are processed in parallel (up to the concurrency limit).
  * If all slots of the queue are occupied, the task is queued until one becomes available.
  * When a slot is freed, the pending task with higher priority is executed. If multiple pending tasks have the same
  * priority the first that was scheduled is executed.
+ *
  * Once a task is completed, its corresponding promise is terminated accordingly.
  */
 class Queue {
   /**
-   * Constructs a priority queue with the given concurrency
+   * Constructs a queue with the given concurrency
    *
    * @param {number} concurrency The concurrency of the queue, must be an integer greater than 0 or
    * Number.POSITIVE_INFINITY .
@@ -30,21 +33,33 @@ class Queue {
   }
 
   /**
-   * @returns {number} The concurrency of the queue.
+   * The concurrency of the queue.
+   *
+   * @member {number}
+   *
+   * @returns {number} ignore
    */
   get concurrency () {
     return this._queue.concurrency
   }
 
   /**
-   * @returns {number} The current number of tasks that are processing.
+   * The current number of tasks that are processing.
+   *
+   * @member {number}
+   *
+   * @returns {number} ignore
    */
   get running () {
     return this._queue.running
   }
 
   /**
-   * @returns {number} The number of pending tasks.
+   * The number of pending tasks.
+   *
+   * @member {number}
+   *
+   * @returns {number} ignore
    */
   get pending () {
     return this._queue.pending
