@@ -22,6 +22,8 @@ import findLimit from './findLimit'
  * @returns {Promise} A promise that will be resolved with the index of the first found value or rejected if one of the
  * iteratee calls throws an exception before finding a value. If no value is found it will return -1.
  */
-export default async function find (iterable, iteratee) {
+async function find (iterable, iteratee) {
   return findLimit(iterable, iteratee, Number.POSITIVE_INFINITY)
 }
+
+export default find

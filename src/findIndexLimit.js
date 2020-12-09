@@ -26,7 +26,7 @@ import assert from 'assert'
  * @returns {Promise} A promise that will be resolved with the index of the first found value or rejected if one of the
  * iteratee calls throws an exception before finding a value. If no value is found it will return -1.
  */
-export default async function findIndexLimit (iterable, iteratee, concurrency) {
+async function findIndexLimit (iterable, iteratee, concurrency) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   const queue = new Queue(concurrency)
   const promises = []
@@ -60,3 +60,5 @@ export default async function findIndexLimit (iterable, iteratee, concurrency) {
     queue.cancelAllPending()
   }
 }
+
+export default findIndexLimit

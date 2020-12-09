@@ -14,6 +14,8 @@ import filterLimit from './filterLimit'
  * @returns {Promise} A promise that will be resolved with an Array containing all the values that passed
  * the truth test. This promise will be rejected if any of the iteratee calls throws an exception.
  */
-export default async function filterSeries (iterable, iteratee) {
+async function filterSeries (iterable, iteratee) {
   return filterLimit(iterable, iteratee, 1)
 }
+
+export default filterSeries

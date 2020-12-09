@@ -23,8 +23,10 @@ import findIndexLimit from './findIndexLimit'
  * @returns {Promise} A promise that will be resolved to true if at least one value pass the truth test and false
  * if none of them do. That promise will be rejected if one of the truth test throws an exception.
  */
-export default async function someLimit (iterable, iteratee, concurrency) {
+async function someLimit (iterable, iteratee, concurrency) {
   const index = await findIndexLimit(iterable, iteratee, concurrency)
   const result = index !== -1
   return result
 }
+
+export default someLimit

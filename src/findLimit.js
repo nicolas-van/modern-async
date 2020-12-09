@@ -25,8 +25,10 @@ import findIndexLimit from './findIndexLimit'
  * @returns {Promise} A promise that will be resolved with the first found value or rejected if one of the
  * iteratee calls throws an exception before finding a value. If no value is found it will return undefined.
  */
-export default async function findLimit (iterable, iteratee, concurrency) {
+async function findLimit (iterable, iteratee, concurrency) {
   const arr = Array.from(iterable)
   const index = await findIndexLimit(iterable, iteratee, concurrency)
   return index === -1 ? undefined : arr[index]
 }
+
+export default findLimit

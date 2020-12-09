@@ -11,7 +11,7 @@ import delay from './delay'
  * priority the first that was scheduled is executed.
  * Once a task is completed, its corresponding promise is terminated accordingly.
  */
-export default class QueuePriority {
+class Queue {
   /**
    * Constructs a priority queue with the given concurrency
    *
@@ -93,6 +93,8 @@ export default class QueuePriority {
     return this._queue.cancelAllPending()
   }
 }
+
+export default Queue
 
 /**
  * @ignore

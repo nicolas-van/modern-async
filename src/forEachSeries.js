@@ -14,6 +14,8 @@ import forEachLimit from './forEachLimit'
  * @returns {Promise} A promise that will be resolved when all the calls to iteratee have been done.
  * This promise will be rejected if any call to iteratee throws an exception.
  */
-export default async function forEachSeries (iterable, iteratee) {
+async function forEachSeries (iterable, iteratee) {
   return forEachLimit(iterable, iteratee, 1)
 }
+
+export default forEachSeries

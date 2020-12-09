@@ -14,6 +14,8 @@ import waitCancellable from './waitCancellable'
  *   * The cancel function. It will return a boolean that will be true if the promise was effectively cancelled,
  *     false otherwise.
  */
-export default function delayCancellable () {
+function delayCancellable () {
   return waitCancellable(0)
 }
+
+export default delayCancellable

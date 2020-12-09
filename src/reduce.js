@@ -18,7 +18,7 @@ import assert from 'assert'
  * @returns {Promise} A promise that will be resolved with the result of the reduce operation,
  *   or rejected if any of the calls to reducer throws an exception.
  */
-export default async function reduce (iterable, reducer, initial = undefined) {
+async function reduce (iterable, reducer, initial = undefined) {
   assert(typeof reducer === 'function', 'reducer must be a function')
   if (initial !== undefined) {
     let current = initial
@@ -45,3 +45,5 @@ export default async function reduce (iterable, reducer, initial = undefined) {
     return current
   }
 }
+
+export default reduce

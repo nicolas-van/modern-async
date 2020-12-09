@@ -10,6 +10,8 @@ import waitCancellable from './waitCancellable'
  * @param {number} amount An amount of time in milliseconds
  * @returns {Promise} A promise that will be resolved after the given amount of time has passed.
  */
-export default async function wait (amount) {
+async function wait (amount) {
   return waitCancellable(amount)[0]
 }
+
+export default wait

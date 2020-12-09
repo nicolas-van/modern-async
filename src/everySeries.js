@@ -20,6 +20,8 @@ import everyLimit from './everyLimit'
  * if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
  * an exception.
  */
-export default async function everySeries (iterable, iteratee) {
+async function everySeries (iterable, iteratee) {
   return everyLimit(iterable, iteratee, 1)
 }
+
+export default everySeries

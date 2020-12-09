@@ -20,6 +20,8 @@ import findIndexLimit from './findIndexLimit'
  * @returns {Promise} A promise that will be resolved with the index of the first found value or rejected if one of the
  * iteratee calls throws an exception before finding a value. If no value is found it will return -1.
  */
-export default async function findIndexSeries (iterable, iteratee) {
+async function findIndexSeries (iterable, iteratee) {
   return findIndexLimit(iterable, iteratee, 1)
 }
+
+export default findIndexSeries

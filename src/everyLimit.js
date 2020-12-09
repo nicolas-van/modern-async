@@ -24,10 +24,12 @@ import findIndexLimit from './findIndexLimit'
  * if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
  * an exception.
  */
-export default async function everyLimit (iterable, iteratee, concurrency) {
+async function everyLimit (iterable, iteratee, concurrency) {
   const index = await findIndexLimit(iterable, async (value, index, iterable) => {
     return !(await iteratee(value, index, iterable))
   }, concurrency)
   const result = index === -1
   return result
 }
+
+export default everyLimit

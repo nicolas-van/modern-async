@@ -15,8 +15,10 @@ import mapLimit from './mapLimit'
  * @returns {Promise} A promise that will be resolved when all the calls to iteratee have been done.
  * This promise will be rejected if any call to iteratee throws an exception.
  */
-export default async function forEachLimit (iterable, iteratee, concurrency) {
+async function forEachLimit (iterable, iteratee, concurrency) {
   await mapLimit(iterable, async (v, i, t) => {
     iteratee(v, i, t)
   }, concurrency)
 }
+
+export default forEachLimit

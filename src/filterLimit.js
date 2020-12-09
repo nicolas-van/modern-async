@@ -17,9 +17,11 @@ import assert from 'assert'
  * @returns {Promise} A promise that will be resolved with an Array containing all the values that passed
  * the truth test. This promise will be rejected if any of the iteratee calls throws an exception.
  */
-export default async function filterLimit (iterable, iteratee, concurrency) {
+async function filterLimit (iterable, iteratee, concurrency) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   return (await mapLimit(iterable, async (v, i, t) => {
     return [v, await iteratee(v, i, t)]
   }, concurrency)).filter(([v, t]) => t).map(([v, t]) => v)
 }
+
+export default filterLimit

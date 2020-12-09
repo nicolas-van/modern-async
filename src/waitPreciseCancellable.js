@@ -21,11 +21,13 @@ import Deferred from './Deferred'
  *   * The cancel function. It will return a boolean that will be true if the promise was effectively cancelled,
  *     false otherwise.
  */
-export default function waitPreciseCancellable (amount) {
+function waitPreciseCancellable (amount) {
   return _innerWaitPreciseCancellable(amount, (ellasped, amount) => {
     return ellasped >= amount
   })
 }
+
+export default waitPreciseCancellable
 
 /**
  * @ignore

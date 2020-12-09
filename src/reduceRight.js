@@ -19,10 +19,12 @@ import reduce from './reduce'
  * @returns {Promise} A promise that will be resolved with the result of the reduce operation,
  *   or rejected if any of the calls to reducer throws an exception.
  */
-export default async function reduceRight (iterable, reducer, initial = undefined) {
+async function reduceRight (iterable, reducer, initial = undefined) {
   const arr = Array.from(iterable)
   arr.reverse()
   return reduce(arr, (accumulator, value, index, iterable) => {
     return reducer(accumulator, value, arr.length - 1 - index, iterable)
   }, initial)
 }
+
+export default reduceRight

@@ -4,7 +4,7 @@
  *
  * Instances of this class are never returned by any function but it is used internally.
  */
-export default class Deferred {
+class Deferred {
   /**
    * Constructs a deferred object.
    */
@@ -36,3 +36,5 @@ export default class Deferred {
     return this._reject
   }
 }
+
+export default Deferred

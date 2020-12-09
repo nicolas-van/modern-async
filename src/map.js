@@ -14,6 +14,8 @@ import mapLimit from './mapLimit'
  * @returns {Promise} A promise that will be resolved with an Array containing all the mapped value,
  * or will be rejected if any of the calls to iteratee throws an exception.
  */
-export default async function map (iterable, iteratee) {
+async function map (iterable, iteratee) {
   return mapLimit(iterable, iteratee, Number.POSITIVE_INFINITY)
 }
+
+export default map

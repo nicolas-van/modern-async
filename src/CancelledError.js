@@ -2,7 +2,7 @@
 /**
  * An error type which is used when a promise is cancelled.
  */
-export default class CancelledError extends Error {
+class CancelledError extends Error {
   /**
    * Constructs a new instance.
    *
@@ -13,3 +13,5 @@ export default class CancelledError extends Error {
     this.name = this.constructor.name
   }
 }
+
+export default CancelledError

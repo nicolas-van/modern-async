@@ -2,7 +2,7 @@
 /**
  * An error type which is used when an asynchronous operation takes too much time to perform.
  */
-export default class TimeoutError extends Error {
+class TimeoutError extends Error {
   /**
    * Constructs a new instance.
    *
@@ -13,3 +13,5 @@ export default class TimeoutError extends Error {
     this.name = this.constructor.name
   }
 }
+
+export default TimeoutError

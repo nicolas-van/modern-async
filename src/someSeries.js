@@ -19,6 +19,8 @@ import someLimit from './someLimit'
  * @returns {Promise} A promise that will be resolved to true if at least one value pass the truth test and false
  * if none of them do. That promise will be rejected if one of the truth test throws an exception.
  */
-export default async function someSeries (iterable, iteratee) {
+async function someSeries (iterable, iteratee) {
   return someLimit(iterable, iteratee, 1)
 }
+
+export default someSeries

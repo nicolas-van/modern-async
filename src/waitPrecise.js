@@ -14,6 +14,8 @@ import waitPreciseCancellable from './waitPreciseCancellable'
  * @param {number} amount An amount of time in milliseconds
  * @returns {Promise} A promise that will be resolved after the given amount of time has passed.
  */
-export default async function waitPrecise (amount) {
+async function waitPrecise (amount) {
   return waitPreciseCancellable(amount)[0]
 }
+
+export default waitPrecise

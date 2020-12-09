@@ -17,7 +17,7 @@ import CancelledError from './CancelledError'
  *   * The cancel function. It will return a boolean that will be true if the promise was effectively cancelled,
  *     false otherwise.
  */
-export default function waitCancellable (amount) {
+function waitCancellable (amount) {
   assert(typeof amount === 'number', 'amount must be a number')
   let id
   const deferred = new Deferred()
@@ -36,3 +36,5 @@ export default function waitCancellable (amount) {
     }
   }]
 }
+
+export default waitCancellable

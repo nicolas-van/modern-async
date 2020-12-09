@@ -8,6 +8,8 @@ import delayCancellable from './delayCancellable'
  *
  * @returns {Promise} A promise that will be resolved on a later tick of the event loop.
  */
-export default async function delay () {
+async function delay () {
   return delayCancellable()[0]
 }
+
+export default delay

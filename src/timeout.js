@@ -14,7 +14,7 @@ import Deferred from './Deferred'
  * to fct. If amount milliseconds pass before the call to fct returns or rejects, this promise will
  * be rejected with a TimeoutError.
  */
-export default async function timeout (fct, amount) {
+async function timeout (fct, amount) {
   const asyncFct = asyncWrap(fct)
 
   const [timoutPromise, cancelTimeout] = waitCancellable(amount)
@@ -33,3 +33,5 @@ export default async function timeout (fct, amount) {
 
   return deferred.promise.finally(cancelTimeout)
 }
+
+export default timeout

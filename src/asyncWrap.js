@@ -9,9 +9,11 @@ import assert from 'assert'
  * @param {Function} fct The function to wrap.
  * @returns {Function} The wrapped function.
  */
-export default function asyncWrap (fct) {
+function asyncWrap (fct) {
   assert(typeof fct === 'function', 'fct must be a function')
   return async function () {
     return fct(...arguments)
   }
 }
+
+export default asyncWrap
