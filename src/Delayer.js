@@ -29,7 +29,7 @@ import assert from 'assert'
  *   }
  * })
  */
-export default class Delayer {
+class Delayer {
   /**
    * Constructs a new Delayer by specifying its trigger time.
    *
@@ -81,3 +81,5 @@ export default class Delayer {
     }
   }
 }
+
+export default Delayer

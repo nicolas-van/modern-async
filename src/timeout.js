@@ -13,6 +13,25 @@ import Deferred from './Deferred'
  * @returns {Promise} A promise that will be resolved or rejected according to the result of the call
  * to fct. If amount milliseconds pass before the call to fct returns or rejects, this promise will
  * be rejected with a TimeoutError.
+ * @example
+ * import { timeout, wait, asyncRoot } from 'modern-async'
+ *
+ * asyncRoot(async () => {
+ *   // the following statement will perform successfully because
+ *   // the function will return before the delay
+ *   await timeout(async () => {
+ *     await wait(10)
+ *   }, 100)
+ *
+ *   try {
+ *     // the following statement will throw after 10ms
+ *     await timeout(async () => {
+ *       await wait(100)
+ *     }, 10)
+ *   } catch (e) {
+ *     print(e.name) // prints TimeoutError
+ *   }
+ * })
  */
 async function timeout (fct, amount) {
   const asyncFct = asyncWrap(fct)
