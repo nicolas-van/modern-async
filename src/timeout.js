@@ -1,5 +1,5 @@
 
-import waitCancellable from './waitCancellable'
+import sleepCancellable from './sleepCancellable'
 import TimeoutError from './TimeoutError'
 import asyncWrap from './asyncWrap'
 import Deferred from './Deferred'
@@ -14,19 +14,19 @@ import Deferred from './Deferred'
  * to fct. If amount milliseconds pass before the call to fct returns or rejects, this promise will
  * be rejected with a TimeoutError.
  * @example
- * import { timeout, wait, asyncRoot } from 'modern-async'
+ * import { timeout, sleep, asyncRoot } from 'modern-async'
  *
  * asyncRoot(async () => {
  *   // the following statement will perform successfully because
  *   // the function will return before the delay
  *   await timeout(async () => {
- *     await wait(10)
+ *     await sleep(10)
  *   }, 100)
  *
  *   try {
  *     // the following statement will throw after 10ms
  *     await timeout(async () => {
- *       await wait(100)
+ *       await sleep(100)
  *     }, 10)
  *   } catch (e) {
  *     print(e.name) // prints TimeoutError
@@ -36,7 +36,7 @@ import Deferred from './Deferred'
 async function timeout (fct, amount) {
   const asyncFct = asyncWrap(fct)
 
-  const [timoutPromise, cancelTimeout] = waitCancellable(amount)
+  const [timoutPromise, cancelTimeout] = sleepCancellable(amount)
 
   const basePromise = asyncFct()
 

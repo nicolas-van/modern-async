@@ -2,7 +2,7 @@
 import { expect, test } from '@jest/globals'
 import filterLimit from './filterLimit'
 import _ from 'lodash'
-import waitPrecise from './waitPrecise'
+import sleepPrecise from './sleepPrecise'
 
 test('filterLimit base', async () => {
   const arr = _.range(6)
@@ -23,7 +23,7 @@ test('filterLimit concurrency', async () => {
   arr.forEach((v) => { called[v] = 0 })
   const p = filterLimit(arr, async (x) => {
     called[x] += 1
-    await waitPrecise(unit)
+    await sleepPrecise(unit)
     return x % 2 === 0
   }, 2)
   expect(called[0]).toBe(1)

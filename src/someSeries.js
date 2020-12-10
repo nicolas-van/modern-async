@@ -19,14 +19,14 @@ import someLimit from './someLimit'
  * @returns {Promise} A promise that will be resolved to true if at least one value pass the truth test and false
  * if none of them do. That promise will be rejected if one of the truth test throws an exception.
  * @example
- * import { someSeries asyncRoot, wait } from 'modern-async'
+ * import { someSeries asyncRoot, sleep } from 'modern-async'
  *
  * asyncRoot(async () => {
  *   const array = [1, 2, 3]
  *
  *   const result = await someSeries(array, async (v) => {
  *     // these calls will be performed sequentially
- *     await wait(10) // waits 10ms
+ *     await sleep(10) // waits 10ms
  *     return v % 2 === 0
  *   })
  *   console.log(result) // prints true

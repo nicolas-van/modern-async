@@ -17,14 +17,14 @@ import assert from 'assert'
  * @returns {Promise} A promise that will be resolved with an Array containing all the values that passed
  * the truth test. This promise will be rejected if any of the iteratee calls throws an exception.
  * @example
- * import { filterLimit, asyncRoot, wait } from 'modern-async'
+ * import { filterLimit, asyncRoot, sleep } from 'modern-async'
  *
  * asyncRoot(async () => {
  *   const array = [1, 2, 3]
  *   const result = await filterLimit(array, async (v) => {
  *     // these calls will be performed in parallel with a maximum of 2
  *     // concurrent calls
- *     await wait(10) // waits 10ms
+ *     await sleep(10) // waits 10ms
  *     return v % 2 === 1
  *   }, 2)
  *   console.log(result) // prints [1, 3]

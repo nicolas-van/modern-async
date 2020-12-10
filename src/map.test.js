@@ -2,7 +2,7 @@
 import { expect, test } from '@jest/globals'
 import map from './map'
 import _ from 'lodash'
-import waitPrecise from './waitPrecise'
+import sleepPrecise from './sleepPrecise'
 
 test('map base', async () => {
   const arr = _.range(6)
@@ -23,7 +23,7 @@ test('map concurrency', async () => {
   arr.forEach((v) => { called[v] = 0 })
   const p = map(arr, async (x) => {
     called[x] += 1
-    await waitPrecise(unit)
+    await sleepPrecise(unit)
     return x * 2
   })
   expect(called[0]).toBe(1)

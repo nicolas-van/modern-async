@@ -2,14 +2,14 @@
 import { expect, test } from '@jest/globals'
 import everySeries from './everySeries'
 import _ from 'lodash'
-import waitPrecise from './waitPrecise'
+import sleepPrecise from './sleepPrecise'
 
 test('everySeries all pass', async () => {
   const callCount = {}
   _.range(3).forEach((i) => { callCount[i] = 0 })
   const res = await everySeries(_.range(3), async (v, i) => {
     callCount[i] += 1
-    await waitPrecise(10)
+    await sleepPrecise(10)
     return true
   })
   expect(res).toBe(true)
@@ -23,7 +23,7 @@ test('everySeries no all pass', async () => {
   _.range(3).forEach((i) => { callCount[i] = 0 })
   const res = await everySeries(_.range(3), async (v, i) => {
     callCount[i] += 1
-    await waitPrecise(10)
+    await sleepPrecise(10)
     if (i === 1) {
       return false
     } else {

@@ -1,8 +1,8 @@
 
-import waitPreciseCancellable from './waitPreciseCancellable'
+import sleepPreciseCancellable from './sleepPreciseCancellable'
 
 /**
- * Waits a given amount of time. This function is similar to wait()
+ * Waits a given amount of time. This function is similar to sleep()
  * except it ensures that the amount of time measured using the Date object is
  * always greater than or equal the asked amount of time.
  *
@@ -14,8 +14,8 @@ import waitPreciseCancellable from './waitPreciseCancellable'
  * @param {number} amount An amount of time in milliseconds
  * @returns {Promise} A promise that will be resolved after the given amount of time has passed.
  */
-async function waitPrecise (amount) {
-  return waitPreciseCancellable(amount)[0]
+async function sleepPrecise (amount) {
+  return sleepPreciseCancellable(amount)[0]
 }
 
-export default waitPrecise
+export default sleepPrecise

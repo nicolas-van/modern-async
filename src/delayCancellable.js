@@ -1,5 +1,5 @@
 
-import waitCancellable from './waitCancellable'
+import sleepCancellable from './sleepCancellable'
 
 /**
  * A function returning a promise that will be resolved in a later tick of the event loop.
@@ -27,7 +27,7 @@ import waitCancellable from './waitCancellable'
  * })
  */
 function delayCancellable () {
-  return waitCancellable(0)
+  return sleepCancellable(0)
 }
 
 export default delayCancellable

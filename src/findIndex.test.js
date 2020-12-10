@@ -2,14 +2,14 @@
 import { expect, test } from '@jest/globals'
 import findIndex from './findIndex'
 import _ from 'lodash'
-import waitPrecise from './waitPrecise'
+import sleepPrecise from './sleepPrecise'
 
 test('findIndex', async () => {
   const callCount = {}
   _.range(3).forEach((i) => { callCount[i] = 0 })
   const res = await findIndex(_.range(3), async (v, i) => {
     callCount[i] += 1
-    await waitPrecise(10)
+    await sleepPrecise(10)
     return v === 0
   })
   expect(res).toBe(0)

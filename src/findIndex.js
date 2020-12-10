@@ -22,13 +22,13 @@ import findIndexLimit from './findIndexLimit'
  * @returns {Promise} A promise that will be resolved with the index of the first found value or rejected if one of the
  * iteratee calls throws an exception before finding a value. If no value is found it will return -1.
  * @example
- * import { findIndex, asyncRoot, wait } from 'modern-async'
+ * import { findIndex, asyncRoot, sleep } from 'modern-async'
  *
  * asyncRoot(async () => {
  *   const array = [1, 2, 3]
  *   const result = await findIndex(array, async (v) => {
  *     // these calls will be performed in parallel
- *     await wait(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+ *     await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
  *     return v % 2 === 1
  *   })
  *   console.log(result) // prints 0 or 2 randomly

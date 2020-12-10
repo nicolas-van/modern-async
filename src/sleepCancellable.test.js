@@ -1,19 +1,19 @@
 
 import { expect, test } from '@jest/globals'
-import waitCancellable from './waitCancellable'
+import sleepCancellable from './sleepCancellable'
 import CancelledError from './CancelledError'
 
-test('waitCancellable base', async () => {
+test('sleepCancellable base', async () => {
   const start = new Date().getTime()
-  const [p] = waitCancellable(100)
+  const [p] = sleepCancellable(100)
   await p
   const end = new Date().getTime()
   expect(end - start).toBeGreaterThanOrEqual(50)
 })
 
-test('waitCancellable cancel', async () => {
+test('sleepCancellable cancel', async () => {
   const start = new Date().getTime()
-  const [p, cancel] = waitCancellable(100)
+  const [p, cancel] = sleepCancellable(100)
   expect(cancel()).toBe(true)
   try {
     await p
@@ -25,9 +25,9 @@ test('waitCancellable cancel', async () => {
   }
 })
 
-test('waitCancellable async cancel', async () => {
+test('sleepCancellable async cancel', async () => {
   const start = new Date().getTime()
-  const [p, cancel] = waitCancellable(100)
+  const [p, cancel] = sleepCancellable(100)
   setTimeout(() => {
     expect(cancel()).toBe(true)
   }, 10)
@@ -41,9 +41,9 @@ test('waitCancellable async cancel', async () => {
   }
 })
 
-test('waitCancellable double cancel', async () => {
+test('sleepCancellable double cancel', async () => {
   const start = new Date().getTime()
-  const [p, cancel] = waitCancellable(100)
+  const [p, cancel] = sleepCancellable(100)
   expect(cancel()).toBe(true)
   expect(cancel()).toBe(false)
   try {
@@ -56,9 +56,9 @@ test('waitCancellable double cancel', async () => {
   }
 })
 
-test('waitCancellable too late cancel', async () => {
-  const [p, cancel] = waitCancellable(0)
-  await waitCancellable(50)[0]
+test('sleepCancellable too late cancel', async () => {
+  const [p, cancel] = sleepCancellable(0)
+  await sleepCancellable(50)[0]
   expect(cancel()).toBe(false)
   await p
 })

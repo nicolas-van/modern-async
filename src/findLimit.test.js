@@ -2,7 +2,7 @@
 import { expect, test } from '@jest/globals'
 import findLimit from './findLimit'
 import _ from 'lodash'
-import waitPrecise from './waitPrecise'
+import sleepPrecise from './sleepPrecise'
 
 test('findLimit', async () => {
   const arr = ['a', 'b', 'c']
@@ -10,7 +10,7 @@ test('findLimit', async () => {
   _.range(3).forEach((i) => { callCount[i] = 0 })
   const res = await findLimit(arr, async (v, i) => {
     callCount[i] += 1
-    await waitPrecise(10)
+    await sleepPrecise(10)
     return v === 'b'
   }, 1)
   expect(res).toBe('b')
@@ -25,7 +25,7 @@ test('findLimit not found', async () => {
   _.range(3).forEach((i) => { callCount[i] = 0 })
   const res = await findLimit(arr, async (v, i) => {
     callCount[i] += 1
-    await waitPrecise(10)
+    await sleepPrecise(10)
     return v === 'd'
   }, 1)
   expect(res).toBe(arr.find((v) => v === 'd'))

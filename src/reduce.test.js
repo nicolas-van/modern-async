@@ -1,13 +1,13 @@
 
 import { expect, test } from '@jest/globals'
-import waitPrecise from './waitPrecise'
+import sleepPrecise from './sleepPrecise'
 import reduce from './reduce'
 import _ from 'lodash'
 
 test('reduce base', async () => {
   const arr = _.range(6)
   const result = await reduce(arr, async (p, v) => {
-    await waitPrecise(1)
+    await sleepPrecise(1)
     return p + v
   }, 0)
   expect(result).toEqual(arr.reduce((p, v) => p + v), 0)
@@ -16,7 +16,7 @@ test('reduce base', async () => {
 test('reduce no accumulator', async () => {
   const arr = _.range(6)
   const result = await reduce(arr, async (p, v) => {
-    await waitPrecise(1)
+    await sleepPrecise(1)
     return p + v
   })
   expect(result).toEqual(arr.reduce((p, v) => p + v))

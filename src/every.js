@@ -20,14 +20,14 @@ import everyLimit from './everyLimit'
  * if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
  * an exception.
  * @example
- * import { every, asyncRoot, wait } from 'modern-async'
+ * import { every, asyncRoot, sleep } from 'modern-async'
  *
  * asyncRoot(async () => {
  *   const array = [1, 2, 3]
  *
  *   const result = await every(array, async (v) => {
  *     // these calls will be performed in parallel
- *     await wait(10) // waits 10ms
+ *     await sleep(10) // waits 10ms
  *     return v > 0
  *   })
  *   console.log(result) // prints true

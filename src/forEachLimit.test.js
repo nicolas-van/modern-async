@@ -2,7 +2,7 @@
 import { expect, test } from '@jest/globals'
 import forEachLimit from './forEachLimit'
 import _ from 'lodash'
-import waitPrecise from './waitPrecise'
+import sleepPrecise from './sleepPrecise'
 
 test('forEachLimit base', async () => {
   const arr = _.range(6)
@@ -41,7 +41,7 @@ test('forEachLimit concurrency', async () => {
   arr.forEach((v) => { called[v] = 0 })
   const p = forEachLimit(arr, async (x) => {
     called[x] += 1
-    await waitPrecise(unit)
+    await sleepPrecise(unit)
   }, 2)
   expect(called[0]).toBe(1)
   expect(called[1]).toBe(1)

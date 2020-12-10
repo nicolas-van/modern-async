@@ -2,7 +2,7 @@
 import { expect, test } from '@jest/globals'
 import findSeries from './findSeries'
 import _ from 'lodash'
-import waitPrecise from './waitPrecise'
+import sleepPrecise from './sleepPrecise'
 
 test('findSeries', async () => {
   const arr = ['a', 'b', 'c']
@@ -10,7 +10,7 @@ test('findSeries', async () => {
   _.range(3).forEach((i) => { callCount[i] = 0 })
   const res = await findSeries(arr, async (v, i) => {
     callCount[i] += 1
-    await waitPrecise(10)
+    await sleepPrecise(10)
     return v === 'b'
   })
   expect(res).toBe('b')

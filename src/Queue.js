@@ -83,6 +83,10 @@ class Queue {
    * Puts a task at the end of the queue. When the task is executed and completes the returned promise will be terminated
    * accordingly.
    *
+   * This function returns both a promise and a cancel function. The cancel function allows to cancel the pending task,
+   * but only if it wasn't started yet. Calling the cancel function on a task that it already running has no effect.
+   * When a task is cancelled its corresponding promise will be rejected with a CancelledError.
+   *
    * @param {Function} fct An asynchronous functions representing the task. It will be executed when the queue has
    * available slots and its result will be propagated to the promise returned by exec().
    * @param {number} priority (Optional) The priority of the task. The higher the priority is, the sooner the task will be

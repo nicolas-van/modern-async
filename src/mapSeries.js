@@ -14,13 +14,13 @@ import mapLimit from './mapLimit'
  * @returns {Promise} A promise that will be resolved with an Array containing all the mapped value,
  * or will be rejected if any of the calls to iteratee throws an exception.
  * @example
- * import { mapSeries, asyncRoot, wait } from 'modern-async'
+ * import { mapSeries, asyncRoot, sleep } from 'modern-async'
  *
  * asyncRoot(async () => {
  *   const array = [1, 2, 3]
  *   const result = await mapSeries(array, async (v) => {
  *     // these calls will be performed sequentially
- *     await wait(10) // waits 10ms
+ *     await sleep(10) // waits 10ms
  *     return v * 2
  *   }, 2)
  *   console.log(result) // prints [2, 4, 6]

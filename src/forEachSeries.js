@@ -15,13 +15,13 @@ import forEachLimit from './forEachLimit'
  * @returns {Promise} A promise that will be resolved when all the calls to iteratee have been done.
  * This promise will be rejected if any call to iteratee throws an exception.
  * @example
- * import { forEachSeries, asyncRoot, wait } from 'modern-async'
+ * import { forEachSeries, asyncRoot, sleep } from 'modern-async'
  *
  * asyncRoot(async () => {
  *   const array = [1, 2, 3]
  *   await forEachSeries(array, async (v) => {
  *     // these calls will be performed sequentially
- *     await wait(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+ *     await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
  *     console.log(v)
  *   })
  *   // prints 1, 2 and 3 in that exact order

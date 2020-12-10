@@ -1,10 +1,10 @@
 
 import { expect, test } from '@jest/globals'
-import wait from './wait'
+import sleep from './sleep'
 
-test('wait', async () => {
+test('sleep', async () => {
   const start = new Date().getTime()
-  await wait(100)
+  await sleep(100)
   const end = new Date().getTime()
   expect(end - start).toBeGreaterThanOrEqual(50)
 })

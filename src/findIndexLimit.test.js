@@ -2,23 +2,23 @@
 import { expect, test } from '@jest/globals'
 import findIndexLimit from './findIndexLimit'
 import _ from 'lodash'
-import waitPrecise from './waitPrecise'
+import sleepPrecise from './sleepPrecise'
 
 test('findIndexLimit compatibility', async () => {
   let res = await findIndexLimit(_.range(3), async (v) => {
-    await waitPrecise(10)
+    await sleepPrecise(10)
     return v === 2
   }, 1)
   expect(res).toBe(_.range(3).findIndex((v) => v === 2))
 
   res = await findIndexLimit(_.range(3), async (v) => {
-    await waitPrecise(10)
+    await sleepPrecise(10)
     return v === 5
   }, 1)
   expect(res).toBe(_.range(3).findIndex((v) => v === 5))
 
   res = await findIndexLimit([], async (v) => {
-    await waitPrecise(10)
+    await sleepPrecise(10)
     return v === 5
   }, 1)
   expect(res).toBe([].findIndex((v) => v === 5))
@@ -29,7 +29,7 @@ test('findIndexLimit cancelSubsequent', async () => {
   _.range(3).forEach((i) => { callCount[i] = 0 })
   const res = await findIndexLimit(_.range(3), async (v, i) => {
     callCount[i] += 1
-    await waitPrecise(10)
+    await sleepPrecise(10)
     return v === 0
   }, 1)
   expect(res).toBe(0)
@@ -43,7 +43,7 @@ test('findIndexLimit cancelSubsequent 2', async () => {
   _.range(6).forEach((i) => { callCount[i] = 0 })
   const res = await findIndexLimit(_.range(6), async (v, i) => {
     callCount[i] += 1
-    await waitPrecise(10)
+    await sleepPrecise(10)
     return v === 0
   }, 2)
   expect(res === 0 || res === 1).toBe(true)
@@ -59,9 +59,9 @@ test('findIndexLimit find first in time', async () => {
   const arr = [0, 1, 0]
   let res = await findIndexLimit(arr, async (v, index) => {
     if (index === 0) {
-      await waitPrecise(10)
+      await sleepPrecise(10)
     } else {
-      await waitPrecise(100)
+      await sleepPrecise(100)
     }
     return v === 0
   }, 3)
@@ -69,9 +69,9 @@ test('findIndexLimit find first in time', async () => {
 
   res = await findIndexLimit(arr, async (v, index) => {
     if (index === 0) {
-      await waitPrecise(100)
+      await sleepPrecise(100)
     } else {
-      await waitPrecise(10)
+      await sleepPrecise(10)
     }
     return v === 0
   }, 3)
@@ -85,7 +85,7 @@ test('findIndexLimit error', async () => {
       if (index === 1) {
         throw new Error('test')
       } else {
-        await waitPrecise(100)
+        await sleepPrecise(100)
       }
       return v === 2
     }, 3)
@@ -99,10 +99,10 @@ test('findIndexLimit error after completion', async () => {
   const arr = [0, 1]
   const res = await findIndexLimit(arr, async (v, index) => {
     if (index === 0) {
-      await waitPrecise(10)
+      await sleepPrecise(10)
       return true
     } else {
-      await waitPrecise(100)
+      await sleepPrecise(100)
       throw new Error('should be ignored')
     }
   }, 2)

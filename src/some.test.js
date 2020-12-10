@@ -2,14 +2,14 @@
 import { expect, test } from '@jest/globals'
 import some from './some'
 import _ from 'lodash'
-import waitPrecise from './waitPrecise'
+import sleepPrecise from './sleepPrecise'
 
 test('some all no pass', async () => {
   const callCount = {}
   _.range(3).forEach((i) => { callCount[i] = 0 })
   const res = await some(_.range(3), async (v, i) => {
     callCount[i] += 1
-    await waitPrecise(10)
+    await sleepPrecise(10)
     return false
   })
   expect(res).toBe(false)
@@ -23,7 +23,7 @@ test('some some pass', async () => {
   _.range(3).forEach((i) => { callCount[i] = 0 })
   const res = await some(_.range(3), async (v, i) => {
     callCount[i] += 1
-    await waitPrecise(10)
+    await sleepPrecise(10)
     if (i === 1) {
       return true
     } else {

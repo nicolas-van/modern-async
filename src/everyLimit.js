@@ -24,7 +24,7 @@ import findIndexLimit from './findIndexLimit'
  * if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
  * an exception.
  * @example
- * import { everyLimit, asyncRoot, wait } from 'modern-async'
+ * import { everyLimit, asyncRoot, sleep } from 'modern-async'
  *
  * asyncRoot(async () => {
  *   const array = [1, 2, 3]
@@ -32,7 +32,7 @@ import findIndexLimit from './findIndexLimit'
  *   const result = await everyLimit(arrar, async (v) => {
  *     // these calls will be performed in parallel with a maximum of 2
  *     // concurrent calls
- *     await wait(10) // waits 10ms
+ *     await sleep(10) // waits 10ms
  *     return v > 0
  *   }, 2)
  *   console.log(result) // prints true

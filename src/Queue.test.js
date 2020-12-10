@@ -1,7 +1,7 @@
 
 import { expect, test } from '@jest/globals'
 import Queue from './Queue'
-import waitPrecise from './waitPrecise'
+import sleepPrecise from './sleepPrecise'
 import _ from 'lodash'
 import delay from './delay'
 import CancelledError from './CancelledError'
@@ -18,7 +18,7 @@ test('Queue base 1', async () => {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
-      await waitPrecise(unit)
+      await sleepPrecise(unit)
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
@@ -69,7 +69,7 @@ test('Queue base 2', async () => {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
-      await waitPrecise(unit)
+      await sleepPrecise(unit)
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
@@ -139,7 +139,7 @@ test('Queue infinity', async () => {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
-      await waitPrecise(unit)
+      await sleepPrecise(unit)
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
@@ -182,7 +182,7 @@ test('Queue infinity race', async () => {
     completeCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
-      await waitPrecise(unit)
+      await sleepPrecise(unit)
       completeCount[x] += 1
     })
     expect(p).toBeInstanceOf(Promise)
@@ -226,7 +226,7 @@ test('Queue throws', async () => {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
-      await waitPrecise(unit)
+      await sleepPrecise(unit)
       if (x % 2 === 1) {
         throw new Error()
       }
@@ -290,7 +290,7 @@ test('Queue priority', async () => {
   callCount[0] = 0
   promises.push(queue.exec(async () => {
     callCount[0] += 1
-    await waitPrecise(unit)
+    await sleepPrecise(unit)
   }, 0))
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(0)
@@ -299,7 +299,7 @@ test('Queue priority', async () => {
   callCount[1] = 0
   promises.push(queue.exec(async () => {
     callCount[1] += 1
-    await waitPrecise(unit)
+    await sleepPrecise(unit)
   }, 1))
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(1)
@@ -308,7 +308,7 @@ test('Queue priority', async () => {
   callCount[2] = 0
   promises.push(queue.exec(async () => {
     callCount[2] += 1
-    await waitPrecise(unit)
+    await sleepPrecise(unit)
   }, 2))
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(2)
@@ -354,7 +354,7 @@ test('Queue cancel', async () => {
     callCount[x] = 0
     const [p, cancel] = queue.execCancellable(async () => {
       callCount[x] += 1
-      await waitPrecise(unit)
+      await sleepPrecise(unit)
       return 'test'
     }, 0)
     const p2 = p.catch((e) => {
@@ -423,7 +423,7 @@ test('Queue cancelAllPending', async () => {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
-      await waitPrecise(unit)
+      await sleepPrecise(unit)
       return 'test'
     }, 0).catch((e) => {
       expect(e).toBeInstanceOf(CancelledError)
@@ -475,7 +475,7 @@ test('Queue concurrency 1', async () => {
     callCount[x] = 0
     const p = mutex.exec(async () => {
       callCount[x] += 1
-      await waitPrecise(unit)
+      await sleepPrecise(unit)
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
@@ -536,7 +536,7 @@ test('Queue concurrency 1 priority', async () => {
     callCount[x] = 0
     const p = mutex.exec(async () => {
       callCount[x] += 1
-      await waitPrecise(unit)
+      await sleepPrecise(unit)
     }, 10)
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
