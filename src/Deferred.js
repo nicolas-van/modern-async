@@ -3,6 +3,19 @@
  * A basic class to create a promise with its resolve and reject function in the same object.
  *
  * Instances of this class are never returned by any function but it is used internally.
+ *
+ * @example
+ * import { Deferred, asyncRoot } from 'modern-async'
+ *
+ * asyncRoot(async () => {
+ *   const deferred = new Deferred()
+ *
+ *   setTimeout(() => {
+ *     deferred.resolve('test')
+ *   }, 10)
+ *
+ *   console.log(await deferred.promise) // will wait 10ms before returning 'test'
+ * })
  */
 class Deferred {
   /**

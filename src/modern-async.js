@@ -1,4 +1,5 @@
 
+export { default as asyncRoot } from './asyncRoot'
 export { default as asyncWrap } from './asyncWrap'
 export { default as CancelledError } from './CancelledError'
 export { default as Deferred } from './Deferred'
