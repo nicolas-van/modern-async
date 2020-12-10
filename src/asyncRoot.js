@@ -27,7 +27,9 @@ import asyncWrap from './asyncWrap'
  * })
  */
 async function asyncRoot (fct, errorHandler = null) {
-  errorHandler = errorHandler || console.error.bind(console)
+  errorHandler = errorHandler || ((e) => {
+    console.error(e)
+  })
   const asyncFct = asyncWrap(fct)
   try {
     await asyncFct()
