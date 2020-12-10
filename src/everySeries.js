@@ -19,6 +19,20 @@ import everyLimit from './everyLimit'
  * @returns {Promise} A promise that will be resolved to true if all values pass the truth test and false
  * if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
  * an exception.
+ * @example
+ * import { everySeries, asyncRoot, wait } from 'modern-async'
+ *
+ * asyncRoot(async () => {
+ *   const array = [1, 2, 3]
+ *
+ *   const result = await everySeries(array, async (v) => {
+ *     // these calls will be performed sequentially
+ *     await wait(10) // waits 10ms
+ *     return v > 0
+ *   })
+ *   console.log(result) // prints true
+ *   // total processing time should be ~ 30ms
+ * })
  */
 async function everySeries (iterable, iteratee) {
   return everyLimit(iterable, iteratee, 1)

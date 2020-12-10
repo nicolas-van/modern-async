@@ -19,8 +19,20 @@ import findLimit from './findLimit'
  *   * value: The current value to process
  *   * index: The index in the iterable. Will start from 0.
  *   * iterable: The iterable on which the operation is being performed.
- * @returns {Promise} A promise that will be resolved with the index of the first found value or rejected if one of the
- * iteratee calls throws an exception before finding a value. If no value is found it will return -1.
+ * @returns {Promise} A promise that will be resolved with the first found value or rejected if one of the
+ * iteratee calls throws an exception before finding a value. If no value is found it will return undefined.
+ * @example
+ * import { find, asyncRoot, wait } from 'modern-async'
+ *
+ * asyncRoot(async () => {
+ *   const array = [1, 2, 3]
+ *   const result = await find(array, async (v) => {
+ *     // these calls will be performed in parallel
+ *     await wait(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+ *     return v % 2 === 1
+ *   })
+ *   console.log(result) // prints 1 or 3 randomly
+ * })
  */
 async function find (iterable, iteratee) {
   return findLimit(iterable, iteratee, Number.POSITIVE_INFINITY)

@@ -25,6 +25,22 @@ import assert from 'assert'
  * @param {number} concurrency The number of times iteratee can be called concurrently.
  * @returns {Promise} A promise that will be resolved with the index of the first found value or rejected if one of the
  * iteratee calls throws an exception before finding a value. If no value is found it will return -1.
+ * @example
+ * import { findIndexLimit, asyncRoot, wait } from 'modern-async'
+ *
+ * asyncRoot(async () => {
+ *   const array = [1, 2, 3, 4, 5]
+ *   const result = await findIndexLimit(array, async (v) => {
+ *     // these calls will be performed in parallel with a maximum of 3
+ *     // concurrent calls
+ *     await wait(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+ *     return v % 2 === 1
+ *   }, 3)
+ *   console.log(result) // prints 0, 2 or 4 randomly
+ *   // 4 is a potential result in this case even with a concurrency of 3 due to how
+ *   // randomness works, and all asynchronous operations are inherently random. The only way to ensure an
+ *   // order is to use a concurreny of 1 or to use findSeries() which does the same thing.
+ * })
  */
 async function findIndexLimit (iterable, iteratee, concurrency) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')

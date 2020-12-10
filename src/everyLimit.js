@@ -23,6 +23,21 @@ import findIndexLimit from './findIndexLimit'
  * @returns {Promise} A promise that will be resolved to true if all values pass the truth test and false
  * if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
  * an exception.
+ * @example
+ * import { everyLimit, asyncRoot, wait } from 'modern-async'
+ *
+ * asyncRoot(async () => {
+ *   const array = [1, 2, 3]
+ *
+ *   const result = await everyLimit(arrar, async (v) => {
+ *     // these calls will be performed in parallel with a maximum of 2
+ *     // concurrent calls
+ *     await wait(10) // waits 10ms
+ *     return v > 0
+ *   }, 2)
+ *   console.log(result) // prints true
+ *   // total processing time should be ~ 20ms
+ * })
  */
 async function everyLimit (iterable, iteratee, concurrency) {
   const index = await findIndexLimit(iterable, async (value, index, iterable) => {

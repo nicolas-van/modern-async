@@ -17,6 +17,19 @@ import assert from 'assert'
  *   function).
  * @returns {Promise} A promise that will be resolved with the result of the reduce operation,
  *   or rejected if any of the calls to reducer throws an exception.
+ * @example
+ * import { reduce, asyncRoot, wait } from 'modern-async'
+ *
+ * asyncRoot(async () => {
+ *   const array = [1, 2, 3]
+ *   const result = await reduce(array, async (v, p) => {
+ *     // these calls will be performed sequentially
+ *     await wait(10) // waits 10ms
+ *     return v + p
+ *   })
+ *   console.log(result) // prints 6
+ *   // total processing time should be ~ 20ms
+ * })
  */
 async function reduce (iterable, reducer, initial = undefined) {
   assert(typeof reducer === 'function', 'reducer must be a function')

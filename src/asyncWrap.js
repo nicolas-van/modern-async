@@ -8,6 +8,17 @@ import assert from 'assert'
  *
  * @param {Function} fct The function to wrap.
  * @returns {Function} The wrapped function.
+ * @example
+ * import { asyncWrap } from 'modern-async'
+ *
+ * const myFunction = () => {
+ *   // any kind of function that may or may not return a promise
+ * }
+ *
+ * const asyncFct = asyncWrap(myFunction)
+ *
+ * const promise = asyncFct()
+ * console.log(promise instanceof Promise) // prints true
  */
 function asyncWrap (fct) {
   assert(typeof fct === 'function', 'fct must be a function')

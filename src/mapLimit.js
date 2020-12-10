@@ -15,6 +15,20 @@ import assert from 'assert'
  * @param {number} concurrency The number of times iteratee can be called concurrently.
  * @returns {Promise} A promise that will be resolved with an Array containing all the mapped value,
  * or will be rejected if any of the calls to iteratee throws an exception.
+ * @example
+ * import { mapLimit, asyncRoot, wait } from 'modern-async'
+ *
+ * asyncRoot(async () => {
+ *   const array = [1, 2, 3]
+ *   const result = await mapLimit(array, async (v) => {
+ *     // these calls will be performed in parallel with a maximum of 2
+ *     // concurrent calls
+ *     await wait(10) // waits 10ms
+ *     return v * 2
+ *   }, 2)
+ *   console.log(result) // prints [2, 4, 6]
+ *   // total processing time should be ~ 20ms
+ * })
  */
 async function mapLimit (iterable, iteratee, concurrency) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')

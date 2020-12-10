@@ -13,6 +13,18 @@ import waitCancellable from './waitCancellable'
  *   * The promise
  *   * The cancel function. It will return a boolean that will be true if the promise was effectively cancelled,
  *     false otherwise.
+ * @example
+ * import { delayCancellable, asyncRoot, CancelledError } from 'modern-async'
+ *
+ * asyncRoot(async () => {
+ *   const [promise, cancel] = delayCancellable()
+ *   cancel()
+ *   try {
+ *     await promise
+ *   } catch (e) {
+ *     console.log(e instanceof CancelledError) // prints true
+ *   }
+ * })
  */
 function delayCancellable () {
   return waitCancellable(0)
