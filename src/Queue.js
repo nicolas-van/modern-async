@@ -102,7 +102,7 @@ class Queue {
    * Cancels all pending tasks. Their corresponding promises will be rejected with a CancelledError. This method will
    * not alter tasks that are already running.
    *
-   * @returns {boolean} True if some tasks where effectively cancelled, false in any other case.
+   * @returns {number} The number of pending tasks that were effectively cancelled.
    */
   cancelAllPending () {
     return this._queue.cancelAllPending()
@@ -242,7 +242,7 @@ class _InternalQueuePriority {
     toCancel.forEach((task) => {
       task.deferred.reject(new CancelledError())
     })
-    return toCancel.length >= 1
+    return toCancel.length
   }
 }
 
@@ -311,6 +311,6 @@ class _InternalInfinityQueue {
    * @returns {*} ignore
    */
   cancelAllPending () {
-    return false
+    return 0
   }
 }

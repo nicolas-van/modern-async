@@ -459,7 +459,7 @@ test('Queue infinity cancel', async () => {
   const queue = new Queue(Number.POSITIVE_INFINITY)
   const [p, cancel] = queue.execCancellable(() => 'test', 0)
   expect(cancel()).toBe(false)
-  expect(queue.cancelAllPending()).toBe(false)
+  expect(queue.cancelAllPending()).toBe(0)
   await p
 })
 
