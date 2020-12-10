@@ -1,5 +1,5 @@
 
-import sleepCancellable from './sleepCancellable'
+import sleepPreciseCancellable from './sleepPreciseCancellable'
 import TimeoutError from './TimeoutError'
 import asyncWrap from './asyncWrap'
 import Deferred from './Deferred'
@@ -8,8 +8,13 @@ import Deferred from './Deferred'
  * Wraps a call to an asynchronous function to add a timer on it. If the delay is exceeded
  * the returned promise will be rejected with a TimeoutError.
  *
- * This function uses setTimeout() internally and has the same behavior, notably that it could reject
- * after the asked time (depending on other tasks running in the event loop) or a few milliseconds before.
+ * This function is similar to timeout() except it ensures that the amount of time measured
+ * using the Date object is always greater than or equal the asked amount of time.
+ *
+ * This function can imply additional delay that can be bad for performances. As such it is
+ * recommended to only use it in unit tests or very specific cases. Most applications should
+ * be adapted to work with the usual setTimout() inconsistencies even if it can trigger some
+ * milliseconds before the asked delay.
  *
  * @param {Function} fct An asynchronous function that will be called immediately without arguments.
  * @param {number} amount An amount of time in milliseconds
@@ -17,18 +22,18 @@ import Deferred from './Deferred'
  * to fct. If amount milliseconds pass before the call to fct returns or rejects, this promise will
  * be rejected with a TimeoutError.
  * @example
- * import { timeout, sleep, asyncRoot } from 'modern-async'
+ * import { timeoutPrecise, sleep, asyncRoot } from 'modern-async'
  *
  * asyncRoot(async () => {
  *   // the following statement will perform successfully because
  *   // the function will return before the delay
- *   await timeout(async () => {
+ *   await timeoutPrecise(async () => {
  *     await sleep(10)
  *   }, 100)
  *
  *   try {
  *     // the following statement will throw after 10ms
- *     await timeout(async () => {
+ *     await timeoutPrecise(async () => {
  *       await sleep(100)
  *     }, 10)
  *   } catch (e) {
@@ -36,10 +41,10 @@ import Deferred from './Deferred'
  *   }
  * })
  */
-async function timeout (fct, amount) {
+async function timeoutPrecise (fct, amount) {
   const asyncFct = asyncWrap(fct)
 
-  const [timoutPromise, cancelTimeout] = sleepCancellable(amount)
+  const [timoutPromise, cancelTimeout] = sleepPreciseCancellable(amount)
 
   const basePromise = asyncFct()
 
@@ -56,4 +61,4 @@ async function timeout (fct, amount) {
   return deferred.promise.finally(cancelTimeout)
 }
 
-export default timeout
+export default timeoutPrecise

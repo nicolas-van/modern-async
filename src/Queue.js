@@ -13,6 +13,26 @@ import delay from './delay'
  * priority the first that was scheduled is executed.
  *
  * Once a task is completed, its corresponding promise is terminated accordingly.
+ *
+ * @example
+ * import { Queue, asyncRoot, sleep } from 'modern-async'
+ *
+ * asyncRoot(async () => {
+ *   const queue = new Queue(3) // create a queue with concurrency 3
+ *
+ *   const array = Array.from(Array(100).keys()) // an array of 100 numbers from 0 to 99
+ *
+ *   const promises = []
+ *   for (const i of array) {
+ *     promises.push(queue.exec(async () => {
+ *       console.log(`Starting task ${i}`)
+ *       await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+ *       console.log(`Ending task ${i}`)
+ *     }))
+ *   }
+ *   await Promise.all(promises)
+ *   // all the scheduled tasks will perform with a maximum concurrency of 3 and log when they start and stop
+ * })
  */
 class Queue {
   /**

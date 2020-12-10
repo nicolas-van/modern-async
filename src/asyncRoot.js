@@ -5,7 +5,7 @@ import asyncWrap from './asyncWrap'
  * Immediately calls an asynchronous function and redirects to an error handler if it throws an exception.
  * The error handler is optional, the default one just outputs the error in the console.
  *
- * This function is trivial but useful in the context of node.js when you would like to use await on the root
+ * This function is trivial but useful in the context of node.js when you would like to use await in the root
  * scope. It is also used in most examples provided for this library.
  *
  * @param {Function} fct An asynchronous function to call.

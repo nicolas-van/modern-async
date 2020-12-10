@@ -9,6 +9,21 @@ import sleepCancellable from './sleepCancellable'
  *
  * @param {number} amount An amount of time in milliseconds
  * @returns {Promise} A promise that will be resolved after the given amount of time has passed.
+ * @example
+ * import { sleep, asyncRoot } from 'modern-async'
+ *
+ * asyncRoot(async () => {
+ *   await sleep(100) // will wait 100ms
+ * })
+ * @example
+ * // another example that doesn't block on the sleep call
+ * // it's functionally identical to using setTimout but with a promise syntax
+ * import { sleep } from 'modern-async'
+ *
+ * sleep(10).then(() => {
+ *   console.log('hello')
+ * })
+ * // will print 'hello' after 10ms
  */
 async function sleep (amount) {
   return sleepCancellable(amount)[0]
