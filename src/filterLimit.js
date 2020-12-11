@@ -3,19 +3,20 @@ import mapLimit from './mapLimit'
 import assert from 'assert'
 
 /**
- * Returns a new array of all the values in iterable which pass an asynchronous truth test. The calls
- * to iteratee will perform in parallel, up to the concurrency limit, but the results array will be
+ * Returns a new array of all the values in iterable which pass an asynchronous truth test.
+ *
+ * The calls to `iteratee` will perform in parallel, up to the concurrency limit, but the results array will be
  * in the same order than the original.
  *
  * @param {Iterable} iterable An iterable object.
- * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
+ * @param {Function} iteratee A function that will be called with each member of `iterable`. It will receive
  * three arguments:
- *   * value: The current value to process
- *   * index: The index in the iterable. Will start from 0.
- *   * iterable: The iterable on which the operation is being performed.
+ *   * `value`: The current value to process
+ *   * `index`: The index in the iterable. Will start from 0.
+ *   * `iterable`: The iterable on which the operation is being performed.
  * @param {number} concurrency The number of times iteratee can be called concurrently.
- * @returns {Promise} A promise that will be resolved with an Array containing all the values that passed
- * the truth test. This promise will be rejected if any of the iteratee calls throws an exception.
+ * @returns {Promise} A promise that will be resolved with an array containing all the values that passed
+ * the truth test. This promise will be rejected if any of the `iteratee` calls throws an exception.
  * @example
  * import { filterLimit, asyncRoot, sleep } from 'modern-async'
  *

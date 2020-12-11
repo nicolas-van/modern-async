@@ -6,16 +6,16 @@ import Deferred from './Deferred'
 
 /**
  * Wraps a call to an asynchronous function to add a timer on it. If the delay is exceeded
- * the returned promise will be rejected with a TimeoutError.
+ * the returned promise will be rejected with a `TimeoutError`.
  *
- * This function uses setTimeout() internally and has the same behavior, notably that it could reject
+ * This function uses `setTimeout()` internally and has the same behavior, notably that it could reject
  * after the asked time (depending on other tasks running in the event loop) or a few milliseconds before.
  *
  * @param {Function} fct An asynchronous function that will be called immediately without arguments.
  * @param {number} amount An amount of time in milliseconds
  * @returns {Promise} A promise that will be resolved or rejected according to the result of the call
- * to fct. If amount milliseconds pass before the call to fct returns or rejects, this promise will
- * be rejected with a TimeoutError.
+ * to `fct`. If `amount` milliseconds pass before the call to `fct` returns or rejects, this promise will
+ * be rejected with a `TimeoutError`.
  * @example
  * import { timeout, sleep, asyncRoot } from 'modern-async'
  *

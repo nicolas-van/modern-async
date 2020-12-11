@@ -2,18 +2,18 @@
 import forEachLimit from './forEachLimit'
 
 /**
- * Calls the function iteratee on each element of iterable.
+ * Calls a function on each element of iterable.
  *
- * Multiple calls to iteratee will be performed sequentially.
+ * Multiple calls to `iteratee` will be performed sequentially.
  *
  * @param {Iterable} iterable An iterable object.
  * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
  * three arguments:
- *   * value: The current value to process
- *   * index: The index in the iterable. Will start from 0.
- *   * iterable: The iterable on which the operation is being performed.
- * @returns {Promise} A promise that will be resolved when all the calls to iteratee have been done.
- * This promise will be rejected if any call to iteratee throws an exception.
+ *   * `value`: The current value to process
+ *   * `index`: The index in the iterable. Will start from 0.
+ *   * `iterable`: The iterable on which the operation is being performed.
+ * @returns {Promise} A promise that will be resolved when all the calls to `iteratee` have been done.
+ * This promise will be rejected if any call to `iteratee` throws an exception.
  * @example
  * import { forEachSeries, asyncRoot, sleep } from 'modern-async'
  *

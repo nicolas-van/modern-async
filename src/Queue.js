@@ -28,10 +28,13 @@ import delay from './delay'
  *       console.log(`Starting task ${i}`)
  *       await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
  *       console.log(`Ending task ${i}`)
+ *       return i;
  *     }))
  *   }
- *   await Promise.all(promises)
+ *   const results = await Promise.all(promises)
  *   // all the scheduled tasks will perform with a maximum concurrency of 3 and log when they start and stop
+ *
+ *   console.log(results) // will display an array with the result of the execution of each separate task
  * })
  */
 class Queue {
@@ -39,7 +42,7 @@ class Queue {
    * Constructs a queue with the given concurrency
    *
    * @param {number} concurrency The concurrency of the queue, must be an integer greater than 0 or
-   * Number.POSITIVE_INFINITY .
+   * `Number.POSITIVE_INFINITY`.
    */
   constructor (concurrency) {
     assert(Number.isInteger(concurrency) || concurrency === Number.POSITIVE_INFINITY,
@@ -93,7 +96,8 @@ class Queue {
    * available slots and its result will be propagated to the promise returned by exec().
    * @param {number} priority (Optional) The priority of the task. The higher the priority is, the sooner the task will be
    * executed regarding the priority of other pending tasks. Defaults to 0.
-   * @returns {Promise} A promise that will be resolved once the task has completed.
+   * @returns {Promise} A promise that will be resolved or rejected once the task has completed. Its state will be the same
+   * than the promise returned by the call to `fct`.
    */
   async exec (fct, priority = 0) {
     return this._queue.exec(fct, priority)
@@ -105,25 +109,26 @@ class Queue {
    *
    * This function returns both a promise and a cancel function. The cancel function allows to cancel the pending task,
    * but only if it wasn't started yet. Calling the cancel function on a task that it already running has no effect.
-   * When a task is cancelled its corresponding promise will be rejected with a CancelledError.
+   * When a task is cancelled its corresponding promise will be rejected with a `CancelledError`.
    *
    * @param {Function} fct An asynchronous functions representing the task. It will be executed when the queue has
    * available slots and its result will be propagated to the promise returned by exec().
    * @param {number} priority (Optional) The priority of the task. The higher the priority is, the sooner the task will be
    * executed regarding the priority of other pending tasks. Defaults to 0.
    * @returns {Array} A tuple with two parameters:
-   *   * A promise that will be resolved once the task has completed.
-   *   * A cancel function. When called it will cancel the task if it is still pending. It has no effect is the task has
-   *     already started or already terminated. When a task is cancelled its corresponding promise will be rejected with
-   *     a CancelledError. If will return true if the task was effectively pending and was cancelled, false in any other
-   *     case.
+   *   * `promise`: A promise that will be resolved or rejected once the task has completed. Its state will be the same
+   *     than the promise returned by the call to `fct`.
+   *   * `cancel`: A cancel function. When called it will cancel the task if it is still pending. It has no effect is the
+   *     task has already started or already terminated. When a task is cancelled its corresponding promise will be
+   *     rejected with a `CancelledError`. If will return `true` if the task was effectively pending and was cancelled,
+   *     `false` in any other case.
    */
   execCancellable (fct, priority = 0) {
     return this._queue.execCancellable(fct, priority)
   }
 
   /**
-   * Cancels all pending tasks. Their corresponding promises will be rejected with a CancelledError. This method will
+   * Cancels all pending tasks. Their corresponding promises will be rejected with a `CancelledError`. This method will
    * not alter tasks that are already running.
    *
    * @returns {number} The number of pending tasks that were effectively cancelled.

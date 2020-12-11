@@ -12,9 +12,9 @@ import assert from 'assert'
  * tasks that need to run in the event loop.
  *
  * When using Delayer your code should contain frequent calls to `await delayer.checkDelay()`, usually
- * at the end of every loop. checkDelay() will check the amount of time that ellasped since the last time
+ * at the end of every loop. `checkDelay()` will check the amount of time that ellasped since the last time
  * your called it. If the amount of time is below the trigger time it returns immediately. If not it will
- * call the delay() function that will retrigger the operation in a later task of the event loop.
+ * call the `delay()` function that will retrigger the operation in a later task of the event loop.
  *
  * @example
  * import { Delayer, asyncRoot } from 'modern-async'
@@ -31,7 +31,7 @@ import assert from 'assert'
  */
 class Delayer {
   /**
-   * Constructs a new Delayer by specifying its trigger time.
+   * Constructs a new `Delayer` by specifying its trigger time.
    *
    * @param {number} triggerTime The trigger time.
    */
@@ -41,16 +41,21 @@ class Delayer {
   }
 
   /**
-   * @returns {number} The trigger time of this Delayer in milliseconds. The trigger time represent the
-   * maximum amount of time before a call to checkDelay() decide to schedule a new task in the event loop.
+   * The trigger time of this `Delayer` in milliseconds. The trigger time represent the
+   * maximum amount of time before a call to `checkDelay()` decide to schedule a new task in the event loop.
+   *
+   * @member {number}
+   *
+   * @returns {number} ignore
    */
   get triggerTime () {
     return this._triggerTime
   }
 
   /**
-   * @param {number} triggerTime The trigger time of this Delayer in milliseconds. The trigger time represent the
-   * maximum amount of time before a call to checkDelay() decide to schedule a new task in the event loop.
+   * @ignore
+   *
+   * @param {number} triggerTime ignore
    */
   set triggerTime (triggerTime) {
     assert(typeof triggerTime === 'number', 'trigger time must be a number')
@@ -66,9 +71,9 @@ class Delayer {
 
   /**
    * Checks if a delay must be applied according to the internal timer. If that's the case this method
-   * will call delay() and return true. If not it will do nothing and return false.
+   * will call `delay()` and return `true`. If not it will do nothing and return `false`.
    *
-   * @returns {boolean} True if a new task was scheduled in the event loop, false otherwise.
+   * @returns {boolean} `true` if a new task was scheduled in the event loop, `false` otherwise.
    */
   async checkDelay () {
     const current = new Date().getTime()

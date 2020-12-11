@@ -7,7 +7,7 @@ import sleepCancellable from './sleepCancellable'
  * This function returns both a promise and cancel function in order to cancel the wait time if
  * necessary. If cancelled, the promise will be rejected with a CancelledError.
  *
- * This function simply uses setTimeout() internally as it's the most portable solution.
+ * This function simply uses `setTimeout()` internally as it's the most portable solution.
  *
  * @returns {Array} A tuple of two objects:
  *   * The promise

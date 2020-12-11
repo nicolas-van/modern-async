@@ -23,8 +23,8 @@ import CancelledError from './CancelledError'
  *     await sleep(10) // waits 10ms
  *     console.log(`Ending task ${taskNbr}`)
  *   }, 100) // a scheduler that triggers every 100ms
- *   // the default configuration uses a maximum concurrency of 1
- *   // and doesn't allow pending tasks
+ *   // the default configuration uses a maximum concurrency of 1 and doesn't allow pending
+ *   // tasks, which mean that if a task takes more time to complete than the delay it will be skipped
  *
  *   scheduler.start() // starts the scheduler
  *
@@ -43,7 +43,12 @@ class Scheduler {
    *
    * @param {Function} fct The asynchronous function to call when the scheduler is triggered.
    * @param {number} delay The delay between two triggering of the scheduler, in ms.
-   * @param {object} options (Optional) Additional options. TODO
+   * @param {object} options (Optional) An object that can contain additional options:
+   *
+   *   * `startImmediate`: If true a new task will be triggered as soon as the start() method is called.
+   *     Defaults to false.
+   *   * `concurrency`: The maximum number of concurrent tasks. See the concurrency attribute. Defaults to 1.
+   *   * `maxPending`: The maximum number of pending tasks. See the maxPending attribute. Defaults to 0.
    */
   constructor (fct, delay, options = null) {
     options = options || {}
