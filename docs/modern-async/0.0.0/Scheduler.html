@@ -281,9 +281,9 @@ tasks. Notably it can limit the concurrency of asynchronous tasks running in par
             <td class="description last"><p>(Optional) An object that can contain additional options:</p>
 <ul>
 <li><code>startImmediate</code>: If true a new task will be triggered as soon as the start() method is called.
-Defaults to false.</li>
-<li><code>concurrency</code>: The maximum number of concurrent tasks. See the concurrency attribute. Defaults to 1.</li>
-<li><code>maxPending</code>: The maximum number of pending tasks. See the maxPending attribute. Defaults to 0.</li>
+Defaults to ´false`.</li>
+<li><code>concurrency</code>: The maximum number of concurrent tasks. See the <code>concurrency</code> attribute. Defaults to 1.</li>
+<li><code>maxPending</code>: The maximum number of pending tasks. See the <code>maxPending</code> attribute. Defaults to 0.</li>
 </ul></td>
         </tr>
 
@@ -414,7 +414,7 @@ asyncRoot(async () => {
     <p>(Read-only) The maximum number of asynchronous tasks that can run in parallel.</p>
 <p>This parameter only matters in the event where some tasks may take more time to execute
 than the delay. If the concurrency allows it the new task will be run concurrently. If not
-it may be scheduled to be executed depending on the configuration of the maxPending parameter.</p>
+it may be scheduled to be executed depending on the configuration of the <code>maxPending</code> parameter.</p>
 <p>Defaults to 1.</p>
 </div>
 
@@ -494,7 +494,7 @@ it may be scheduled to be executed depending on the configuration of the maxPend
 
 
 <div class="description">
-    <p>(Read-only) The delay between two triggering of the scheduler, in ms.</p>
+    <p>(Read-only) The delay between two triggering of the scheduler, in milliseconds.</p>
 </div>
 
 
@@ -576,14 +576,14 @@ it may be scheduled to be executed depending on the configuration of the maxPend
     <p>(Read-only) The maximum number of tasks that can be pending.</p>
 <p>In the event where one of the tasks triggered by the scheduler takes more time to execute than
 the delay the next task may or may not be run concurrently depending on the configuration of
-the concurrency parameter. If the maximum concurrency was already reached the new task can
+the <code>concurrency</code> parameter. If the maximum concurrency was already reached the new task can
 be scheduled to be executed as soon as the previous task finished.</p>
 <p>This parameter indicates the maximum amount of tasks that can be pending at any time. If a
-task should be scheduled and the maximum amount of pending tasks is already at the maximum
+task should be scheduled and the maximum amount of pending tasks is already reached
 that new task will be skipped.</p>
 <p>This behavior helps to prevent cases that would lead to a infinite amount of tasks to be
 pending. This could happen in extreme cases where the tasks would take systematically more
-time to execute than the triggering time.</p>
+time to execute than the delay.</p>
 <p>Defaults to 0.</p>
 </div>
 
@@ -742,7 +742,7 @@ time to execute than the triggering time.</p>
 
 
 <div class="description">
-    <p>(Read-only) Whether or not a triggering of the task should occur immediately when calling start() or not.</p>
+    <p>(Read-only) Whether or not a triggering of the task should occur immediately when calling <code>start()</code> or not.</p>
 <p>Defaults to false.</p>
 </div>
 
@@ -834,7 +834,7 @@ time to execute than the triggering time.</p>
     <div class="description">
         <p>Starts the scheduler.</p>
 <p>Calling this method can trigger a task immediately depending on the configuration
-of the startImmediate parameter.</p>
+of the <code>startImmediate</code> parameter.</p>
 <p>If this method is called while the scheduler is already started it will have no effect.</p>
     </div>
 
@@ -925,7 +925,7 @@ of the startImmediate parameter.</p>
         <p>Stops the scheduler.</p>
 <p>If, for any reason, there were pending tasks in the scheduler they will be cancelled. On the other
 hand if they are still one or more tasks that are running they will continue to run until they
-are finished.</p>
+terminate.</p>
 <p>This method is safe to call in a task if necessary.</p>
 <p>If this method is called while the scheduler is already stopped it will have no effect.</p>
     </div>

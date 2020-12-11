@@ -46,9 +46,9 @@ class Scheduler {
    * @param {object} options (Optional) An object that can contain additional options:
    *
    *   * `startImmediate`: If true a new task will be triggered as soon as the start() method is called.
-   *     Defaults to false.
-   *   * `concurrency`: The maximum number of concurrent tasks. See the concurrency attribute. Defaults to 1.
-   *   * `maxPending`: The maximum number of pending tasks. See the maxPending attribute. Defaults to 0.
+   *     Defaults to ´false`.
+   *   * `concurrency`: The maximum number of concurrent tasks. See the `concurrency` attribute. Defaults to 1.
+   *   * `maxPending`: The maximum number of pending tasks. See the `maxPending` attribute. Defaults to 0.
    */
   constructor (fct, delay, options = null) {
     options = options || {}
@@ -71,7 +71,7 @@ class Scheduler {
   }
 
   /**
-   * (Read-only) The delay between two triggering of the scheduler, in ms.
+   * (Read-only) The delay between two triggering of the scheduler, in milliseconds.
    *
    * @member {number}
    *
@@ -82,7 +82,7 @@ class Scheduler {
   }
 
   /**
-   * (Read-only) Whether or not a triggering of the task should occur immediately when calling start() or not.
+   * (Read-only) Whether or not a triggering of the task should occur immediately when calling `start()` or not.
    *
    * Defaults to false.
    *
@@ -99,7 +99,7 @@ class Scheduler {
    *
    * This parameter only matters in the event where some tasks may take more time to execute
    * than the delay. If the concurrency allows it the new task will be run concurrently. If not
-   * it may be scheduled to be executed depending on the configuration of the maxPending parameter.
+   * it may be scheduled to be executed depending on the configuration of the `maxPending` parameter.
    *
    * Defaults to 1.
    *
@@ -116,16 +116,16 @@ class Scheduler {
    *
    * In the event where one of the tasks triggered by the scheduler takes more time to execute than
    * the delay the next task may or may not be run concurrently depending on the configuration of
-   * the concurrency parameter. If the maximum concurrency was already reached the new task can
+   * the `concurrency` parameter. If the maximum concurrency was already reached the new task can
    * be scheduled to be executed as soon as the previous task finished.
    *
    * This parameter indicates the maximum amount of tasks that can be pending at any time. If a
-   * task should be scheduled and the maximum amount of pending tasks is already at the maximum
+   * task should be scheduled and the maximum amount of pending tasks is already reached
    * that new task will be skipped.
    *
    * This behavior helps to prevent cases that would lead to a infinite amount of tasks to be
    * pending. This could happen in extreme cases where the tasks would take systematically more
-   * time to execute than the triggering time.
+   * time to execute than the delay.
    *
    * Defaults to 0.
    *
@@ -152,7 +152,7 @@ class Scheduler {
    * Starts the scheduler.
    *
    * Calling this method can trigger a task immediately depending on the configuration
-   * of the startImmediate parameter.
+   * of the `startImmediate` parameter.
    *
    * If this method is called while the scheduler is already started it will have no effect.
    */
@@ -178,7 +178,7 @@ class Scheduler {
    *
    * If, for any reason, there were pending tasks in the scheduler they will be cancelled. On the other
    * hand if they are still one or more tasks that are running they will continue to run until they
-   * are finished.
+   * terminate.
    *
    * This method is safe to call in a task if necessary.
    *
