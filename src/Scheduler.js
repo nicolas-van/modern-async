@@ -71,7 +71,7 @@ class Scheduler {
   }
 
   /**
-   * The delay between two triggering of the scheduler, in ms.
+   * (Read-only) The delay between two triggering of the scheduler, in ms.
    *
    * @member {number}
    *
@@ -82,7 +82,7 @@ class Scheduler {
   }
 
   /**
-   * Whether or not a triggering of the task should occur immediately when calling start() or not.
+   * (Read-only) Whether or not a triggering of the task should occur immediately when calling start() or not.
    *
    * Defaults to false.
    *
@@ -95,7 +95,7 @@ class Scheduler {
   }
 
   /**
-   * The maximum number of asynchronous tasks that can run in parallel.
+   * (Read-only) The maximum number of asynchronous tasks that can run in parallel.
    *
    * This parameter only matters in the event where some tasks may take more time to execute
    * than the delay. If the concurrency allows it the new task will be run concurrently. If not
@@ -112,7 +112,7 @@ class Scheduler {
   }
 
   /**
-   * The maximum number of tasks that can be pending.
+   * (Read-only) The maximum number of tasks that can be pending.
    *
    * In the event where one of the tasks triggered by the scheduler takes more time to execute than
    * the delay the next task may or may not be run concurrently depending on the configuration of
@@ -138,7 +138,7 @@ class Scheduler {
   }
 
   /**
-   * Whether or not the scheduler is actually started.
+   * (Read-only) Whether or not the scheduler is actually started.
    *
    * @member {boolean}
    *

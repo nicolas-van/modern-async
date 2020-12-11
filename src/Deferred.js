@@ -30,7 +30,7 @@ class Deferred {
   }
 
   /**
-   * The promise.
+   * (Read-only) The promise.
    *
    * @member {Promise}
    *
@@ -41,7 +41,7 @@ class Deferred {
   }
 
   /**
-   * The resolve function.
+   * (Read-only) The resolve function.
    *
    * @member {Function}
    *
@@ -52,7 +52,7 @@ class Deferred {
   }
 
   /**
-   * The reject function
+   * (Read-only) The reject function
    *
    * @member {Function}
    *

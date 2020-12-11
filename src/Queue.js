@@ -56,7 +56,7 @@ class Queue {
   }
 
   /**
-   * The concurrency of the queue.
+   * (Read-only) The concurrency of the queue.
    *
    * @member {number}
    *
@@ -67,7 +67,7 @@ class Queue {
   }
 
   /**
-   * The current number of tasks that are processing.
+   * (Read-only) The current number of tasks that are processing.
    *
    * @member {number}
    *
@@ -78,7 +78,7 @@ class Queue {
   }
 
   /**
-   * The number of pending tasks.
+   * (Read-only) The number of pending tasks.
    *
    * @member {number}
    *
