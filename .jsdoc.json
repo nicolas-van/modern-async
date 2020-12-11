@@ -10,6 +10,21 @@
     "destination": "docs/",
     "recurse": true,
     "verbose": true,
-    "template": "./node_modules/clean-jsdoc-theme"
+    "template": "./node_modules/clean-jsdoc-theme",
+    "theme_opts": {
+      "theme": "light",
+      "title": "modern-async",
+      "menu": [
+        {
+          "title": "Website",
+          "link": "https://nicolas-van.github.io/modern-async"
+        },
+        {
+          "title": "Github",
+          "link": "https://github.com/nicolas-van/modern-async"
+        }
+      ],
+      "footer": "This is footer"
+    }
   }
 }
