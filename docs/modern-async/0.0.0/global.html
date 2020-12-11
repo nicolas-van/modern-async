@@ -1,0 +1,7145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Adding meta -->
+    
+      
+        
+            
+        
+            
+        
+        <meta name="author"content="Nicolas Vanhoren" />
+      
+        
+            
+        
+            
+        
+        <meta name="description"content="A modern tooling library for asynchronous operations using async/await and promises" />
+      
+    
+
+    <!-- Adding external script-->
+    
+      
+        
+            
+        
+            
+        
+            
+        
+        <script src="https://cdn.jsdelivr.net/npm/d3-require@1.2.4/dist/d3-require.min.js"integrity="sha256-In88qKaoyuekAMtipsBZ+45v7J+iEz7APZQ/9aFLV34="crossorigin="anonymous" ></script>
+      
+        
+            
+        
+            
+        
+            
+        
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="crossorigin="anonymous" ></script>
+      
+        
+            
+        
+        <script src="../../inject-script.js" ></script>
+      
+    
+
+    <!-- Adding external style-->
+    
+
+    <!-- Adding scripts-->
+    
+
+    <!-- Adding style-->
+    
+
+    <!-- Adding overlay script-->
+    
+    
+    <!-- Adding overlay style-->
+    
+
+
+    <title>Global</title>
+
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/third-party/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/third-party/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+    <link type="text/css" rel="stylesheet" href="styles/clean-jsdoc-theme-base.css">
+    <link type="text/css" rel="stylesheet" href="styles/clean-jsdoc-theme-light.css">
+    
+<svg aria-hidden="true" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="display:none">
+    <defs>
+        <symbol id="copy-icon" viewbox="0 0 488.3 488.3">
+            <g>
+                <path d="M314.25,85.4h-227c-21.3,0-38.6,17.3-38.6,38.6v325.7c0,21.3,17.3,38.6,38.6,38.6h227c21.3,0,38.6-17.3,38.6-38.6V124    C352.75,102.7,335.45,85.4,314.25,85.4z M325.75,449.6c0,6.4-5.2,11.6-11.6,11.6h-227c-6.4,0-11.6-5.2-11.6-11.6V124    c0-6.4,5.2-11.6,11.6-11.6h227c6.4,0,11.6,5.2,11.6,11.6V449.6z"/>
+                <path d="M401.05,0h-227c-21.3,0-38.6,17.3-38.6,38.6c0,7.5,6,13.5,13.5,13.5s13.5-6,13.5-13.5c0-6.4,5.2-11.6,11.6-11.6h227    c6.4,0,11.6,5.2,11.6,11.6v325.7c0,6.4-5.2,11.6-11.6,11.6c-7.5,0-13.5,6-13.5,13.5s6,13.5,13.5,13.5c21.3,0,38.6-17.3,38.6-38.6    V38.6C439.65,17.3,422.35,0,401.05,0z"/>
+            </g>
+        </symbol>
+    </defs>
+</svg>
+
+</head>
+<body>
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <h2><a href="index.html"><div class="text">modern-async</div></a></h2><div class="search-box"><input type="text" placeholder="Search..." id="search-box" /><div class="search-item-container" id="search-item-container"><ul class="search-item-ul" id="search-item-ul"></ul></div></div><div class="sidebar-list-div"><ul><li><a href='https://nicolas-van.github.io/modern-async' class='' id='' target=''>Website</a></li><li><a href='https://github.com/nicolas-van/modern-async' class='' id='' target=''>Github</a></li></ul><h3>Classes</h3><ul><li><a href="CancelledError.html">CancelledError</a></li><li><a href="Deferred.html">Deferred</a></li><li><a href="Delayer.html">Delayer</a><ul class='methods'><li data-type='method'><a href="Delayer.html#checkDelay">checkDelay</a></li><li data-type='method'><a href="Delayer.html#reset">reset</a></li></ul></li><li><a href="Queue.html">Queue</a><ul class='methods'><li data-type='method'><a href="Queue.html#cancelAllPending">cancelAllPending</a></li><li data-type='method'><a href="Queue.html#exec">exec</a></li><li data-type='method'><a href="Queue.html#execCancellable">execCancellable</a></li></ul></li><li><a href="Scheduler.html">Scheduler</a><ul class='methods'><li data-type='method'><a href="Scheduler.html#start">start</a></li><li data-type='method'><a href="Scheduler.html#stop">stop</a></li></ul></li><li><a href="TimeoutError.html">TimeoutError</a></li></ul><h3><a href="global.html">Global</a></h3><ul><li><a href="global.html#asyncRoot">asyncRoot</a></li><li><a href="global.html#asyncWrap">asyncWrap</a></li><li><a href="global.html#delay">delay</a></li><li><a href="global.html#delayCancellable">delayCancellable</a></li><li><a href="global.html#every">every</a></li><li><a href="global.html#everyLimit">everyLimit</a></li><li><a href="global.html#everySeries">everySeries</a></li><li><a href="global.html#filter">filter</a></li><li><a href="global.html#filterLimit">filterLimit</a></li><li><a href="global.html#filterSeries">filterSeries</a></li><li><a href="global.html#find">find</a></li><li><a href="global.html#findIndex">findIndex</a></li><li><a href="global.html#findIndexLimit">findIndexLimit</a></li><li><a href="global.html#findIndexSeries">findIndexSeries</a></li><li><a href="global.html#findLimit">findLimit</a></li><li><a href="global.html#findSeries">findSeries</a></li><li><a href="global.html#forEach">forEach</a></li><li><a href="global.html#forEachLimit">forEachLimit</a></li><li><a href="global.html#forEachSeries">forEachSeries</a></li><li><a href="global.html#map">map</a></li><li><a href="global.html#mapLimit">mapLimit</a></li><li><a href="global.html#mapSeries">mapSeries</a></li><li><a href="global.html#reduce">reduce</a></li><li><a href="global.html#reduceRight">reduceRight</a></li><li><a href="global.html#sleep">sleep</a></li><li><a href="global.html#sleepCancellable">sleepCancellable</a></li><li><a href="global.html#sleepPrecise">sleepPrecise</a></li><li><a href="global.html#sleepPreciseCancellable">sleepPreciseCancellable</a></li><li><a href="global.html#some">some</a></li><li><a href="global.html#someLimit">someLimit</a></li><li><a href="global.html#someSeries">someSeries</a></li><li><a href="global.html#timeout">timeout</a></li><li><a href="global.html#timeoutPrecise">timeoutPrecise</a></li></ul></div>
+</nav>
+
+<div id="main">
+    
+    <h1 id='page-title' class="page-title">Global</h1>
+    
+
+    
+
+
+
+
+<section>
+
+
+
+<article>
+    <div class="container-overview">
+    
+        
+
+        
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    <h4 class="name" id="asyncRoot">
+        <a href="#asyncRoot">#</a>
+        <span class="type-signature">(async) </span>asyncRoot<span class="signature">(fct, errorHandler)</span><span class="type-signature"></span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Immediately calls an asynchronous function and redirects to an error handler if it throws an exception.
+The error handler is optional, the default one just outputs the error in the console.</p>
+<p>This function is trivial but useful in the context of node.js when you would like to use await in the root
+scope. It is also used in most examples provided for this library.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fct</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>An asynchronous function to call.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>errorHandler</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last"><p>(Optional) A facultative error handler. This function will receive a single argument:
+the thrown exception. The default behavior is to output the exception in the console.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="asyncRoot.js.html">asyncRoot.js</a>, <a href="asyncRoot.js.html#line29">line 29</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { asyncRoot } from 'modern-async'
+
+// or
+
+const { asyncRoot } = require('modern-async')
+
+asyncRoot(async () => {
+  // any code using await
+}, (e) => {
+  console.error("An error occured", e)
+  process.exit(-1)
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="asyncWrap">
+        <a href="#asyncWrap">#</a>
+        <span class="type-signature"></span>asyncWrap<span class="signature">(fct)</span><span class="type-signature"> &rarr; {function}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Wraps a function call that may be synchronous in a function that
+is guaranted to be async. This is a stricter version of calling a
+function and wrapping its result using <code>Promise.resolve()</code> as the new function also
+handles the case where the original function throws an exception.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fct</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The function to wrap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="asyncWrap.js.html">asyncWrap.js</a>, <a href="asyncWrap.js.html#line23">line 23</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>The wrapped function.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">function</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { asyncWrap } from 'modern-async'
+
+const myFunction = () => {
+  // any kind of function that may or may not return a promise
+}
+
+const asyncFct = asyncWrap(myFunction)
+
+const promise = asyncFct()
+console.log(promise instanceof Promise) // prints true</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="delay">
+        <a href="#delay">#</a>
+        <span class="type-signature">(async) </span>delay<span class="signature">()</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>A function returning a promise that will be resolved in a later tick of the event loop.</p>
+<p>This function simply uses <code>setTimeout()</code> internally as it's the most portable solution.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="delay.js.html">delay.js</a>, <a href="delay.js.html#line19">line 19</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved on a later tick of the event loop.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { delay, asyncRoot } from 'modern-async'
+
+asyncRoot(async () => {
+  console.log('this execute in a tick of the event loop')
+  await delay()
+  console.log('this execute in another tick of the event loop')
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="delayCancellable">
+        <a href="#delayCancellable">#</a>
+        <span class="type-signature"></span>delayCancellable<span class="signature">()</span><span class="type-signature"> &rarr; {Array}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>A function returning a promise that will be resolved in a later tick of the event loop.</p>
+<p>This function returns both a promise and cancel function in order to cancel the wait time if
+necessary. If cancelled, the promise will be rejected with a CancelledError.</p>
+<p>This function simply uses <code>setTimeout()</code> internally as it's the most portable solution.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="delayCancellable.js.html">delayCancellable.js</a>, <a href="delayCancellable.js.html#line29">line 29</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A tuple of two objects:</p>
+<ul>
+<li>The promise</li>
+<li>The cancel function. It will return a boolean that will be true if the promise was effectively cancelled,
+false otherwise.</li>
+</ul>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { delayCancellable, asyncRoot, CancelledError } from 'modern-async'
+
+asyncRoot(async () => {
+  const [promise, cancel] = delayCancellable()
+  cancel()
+  try {
+    await promise
+  } catch (e) {
+    console.log(e instanceof CancelledError) // prints true
+  }
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="every">
+        <a href="#every">#</a>
+        <span class="type-signature">(async) </span>every<span class="signature">(iterable, iteratee)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Returns <code>true</code> if all elements of an iterable pass a truth test and <code>false</code> otherwise.</p>
+<p>The iteratee will be run in parallel. If any truth test returns <code>false</code> the promise is immediately resolved.</p>
+<p>In case of exception in one of the iteratee calls the promise returned by this function will be rejected
+with the exception. In the very specific case where a test returns <code>false</code> and an already started task throws
+an exception that exception will be plainly ignored.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="every.js.html">every.js</a>, <a href="every.js.html#line37">line 37</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved to <code>true</code> if all values pass the truth test and <code>false</code>
+if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
+an exception.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { every, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+
+  const result = await every(array, async (v) => {
+    // these calls will be performed in parallel
+    await sleep(10) // waits 10ms
+    return v > 0
+  })
+  console.log(result) // prints true
+  // total processing time should be ~ 10ms
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="everyLimit">
+        <a href="#everyLimit">#</a>
+        <span class="type-signature">(async) </span>everyLimit<span class="signature">(iterable, iteratee, concurrency)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Returns <code>true</code> if all elements of an iterable pass a truth test and <code>false</code> otherwise.</p>
+<p>The iteratee will be run in parallel, up to a concurrency limit. If any truth test returns <code>false</code>
+the promise is immediately resolved.</p>
+<p>Whenever a test returns <code>false</code>, all the remaining tasks will be cancelled as long
+as they didn't started already. In case of exception in one of the iteratee calls the promise
+returned by this function will be rejected with the exception and the remaining pending
+tasks will also be cancelled. In the very specific case where a test returns <code>false</code> and an
+already started task throws an exception that exception will be plainly ignored.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>concurrency</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The number of times iteratee can be called concurrently.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="everyLimit.js.html">everyLimit.js</a>, <a href="everyLimit.js.html#line42">line 42</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved to <code>true</code> if all values pass the truth test and <code>false</code>
+if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
+an exception.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { everyLimit, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+
+  const result = await everyLimit(arrar, async (v) => {
+    // these calls will be performed in parallel with a maximum of 2
+    // concurrent calls
+    await sleep(10) // waits 10ms
+    return v > 0
+  }, 2)
+  console.log(result) // prints true
+  // total processing time should be ~ 20ms
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="everySeries">
+        <a href="#everySeries">#</a>
+        <span class="type-signature">(async) </span>everySeries<span class="signature">(iterable, iteratee)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Returns <code>true</code> if all elements of an iterable pass a truth test and <code>false</code> otherwise.</p>
+<p>The iteratee will be run sequentially. If any truth test returns <code>false</code> the promise is
+immediately resolved.</p>
+<p>In case of exception in one of the iteratee calls the promise returned by this function will be
+rejected with the exception and the remaining pending tasks will be cancelled.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="everySeries.js.html">everySeries.js</a>, <a href="everySeries.js.html#line37">line 37</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved to <code>true</code> if all values pass the truth test and <code>false</code>
+if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
+an exception.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { everySeries, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+
+  const result = await everySeries(array, async (v) => {
+    // these calls will be performed sequentially
+    await sleep(10) // waits 10ms
+    return v > 0
+  })
+  console.log(result) // prints true
+  // total processing time should be ~ 30ms
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="filter">
+        <a href="#filter">#</a>
+        <span class="type-signature">(async) </span>filter<span class="signature">(iterable, iteratee)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Returns a new array of all the values in iterable which pass an asynchronous truth test.</p>
+<p>The calls to <code>iteratee</code> will perform in parallel, but the results array will be in the same order
+than the original.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of <code>iterable</code>. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="filter.js.html">filter.js</a>, <a href="filter.js.html#line32">line 32</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved with an array containing all the values that passed
+the truth test. This promise will be rejected if any of the <code>iteratee</code> calls throws an exception.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { filter, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+  const result = await filter(array, async (v) => {
+    // these calls will be performed in parallel
+    await sleep(10) // waits 10ms
+    return v % 2 === 1
+  })
+  console.log(result) // prints [1, 3]
+  // total processing time should be ~ 10ms
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="filterLimit">
+        <a href="#filterLimit">#</a>
+        <span class="type-signature">(async) </span>filterLimit<span class="signature">(iterable, iteratee, concurrency)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Returns a new array of all the values in iterable which pass an asynchronous truth test.</p>
+<p>The calls to <code>iteratee</code> will perform in parallel, up to the concurrency limit, but the results array will be
+in the same order than the original.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of <code>iterable</code>. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>concurrency</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The number of times iteratee can be called concurrently.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="filterLimit.js.html">filterLimit.js</a>, <a href="filterLimit.js.html#line35">line 35</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved with an array containing all the values that passed
+the truth test. This promise will be rejected if any of the <code>iteratee</code> calls throws an exception.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { filterLimit, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+  const result = await filterLimit(array, async (v) => {
+    // these calls will be performed in parallel with a maximum of 2
+    // concurrent calls
+    await sleep(10) // waits 10ms
+    return v % 2 === 1
+  }, 2)
+  console.log(result) // prints [1, 3]
+  // total processing time should be ~ 20ms
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="filterSeries">
+        <a href="#filterSeries">#</a>
+        <span class="type-signature">(async) </span>filterSeries<span class="signature">(iterable, iteratee)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Returns a new array of all the values in iterable which pass an asynchronous truth test.</p>
+<p>The calls to <code>iteratee</code> will perform sequentially and the results array will be in the same order
+than the original.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="filterSeries.js.html">filterSeries.js</a>, <a href="filterSeries.js.html#line32">line 32</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved with an array containing all the values that passed
+the truth test. This promise will be rejected if any of the <code>iteratee</code> calls throws an exception.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { filterSeries, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+  const result = await filterSeries(array, async (v) => {
+    // these calls will be performed sequentially
+    await sleep(10) // waits 10ms
+    return v % 2 === 1
+  })
+  console.log(result) // prints [1, 3]
+  // total processing time should be ~ 30ms
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="find">
+        <a href="#find">#</a>
+        <span class="type-signature">(async) </span>find<span class="signature">(iterable, iteratee)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Returns the first element of an iterable that passes an asynchronous truth test.</p>
+<p>The calls to <code>iteratee</code> will run in parallel. This implies that the element found by this function may not
+be the first element of the iterable able to pass the truth test. It will be the first one in time
+for which one of the parallel calls to <code>iteratee</code> was able to return a positive result. If you need
+a sequential alternative use <code>findSeries()</code>.</p>
+<p>In case of exception in one of the <code>iteratee</code> calls the promise returned by this function will be
+rejected with the exception. In the very specific case where a result is found and an
+already started task throws an exception that exception will be plainly ignored.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="find.js.html">find.js</a>, <a href="find.js.html#line37">line 37</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved with the first found value or rejected if one of the
+<code>iteratee</code> calls throws an exception before finding a value. If no value is found it will return <code>undefined</code>.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { find, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+  const result = await find(array, async (v) => {
+    // these calls will be performed in parallel
+    await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+    return v % 2 === 1
+  })
+  console.log(result) // prints 1 or 3 randomly
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="findIndex">
+        <a href="#findIndex">#</a>
+        <span class="type-signature">(async) </span>findIndex<span class="signature">(iterable, iteratee)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Returns the index of the first element of an iterable that passes an asynchronous truth test.</p>
+<p>The calls to <code>iteratee</code> will run in parallel. This implies that the element found by this function may not
+be the first element of the iterable able to pass the truth test. It will be the first one in time
+for which one of the parallel calls to <code>iteratee</code> was able to return a positive result. If you need
+a sequential alternative use <code>findIndexSeries()</code>.</p>
+<p>In case of exception in one of the <code>iteratee</code> calls the promise returned by this function will be
+rejected with the exception. In the very specific case where a result is found and an
+already started task throws an exception that exception will be plainly ignored.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="findIndex.js.html">findIndex.js</a>, <a href="findIndex.js.html#line37">line 37</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved with the index of the first found value or rejected if one of the
+<code>iteratee</code> calls throws an exception before finding a value. If no value is found it will return <code>-1</code>.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { findIndex, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+  const result = await findIndex(array, async (v) => {
+    // these calls will be performed in parallel
+    await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+    return v % 2 === 1
+  })
+  console.log(result) // prints 0 or 2 randomly
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="findIndexLimit">
+        <a href="#findIndexLimit">#</a>
+        <span class="type-signature">(async) </span>findIndexLimit<span class="signature">(iterable, iteratee, concurrency)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Returns the index of the first element of an iterable that passes an asynchronous truth test.</p>
+<p>The calls to <code>iteratee</code> will run in parallel, up to a concurrency limit. This implies that
+the element found by this function may not be the first element of the iterable able to pass the
+truth test. It will be the first one in time for which one of the parallel calls to <code>iteratee</code> was able to
+return a positive result. If you need a sequential alternative use <code>findIndexSeries()</code>.</p>
+<p>Whenever a result is found, all the remaining tasks will be cancelled as long
+as they didn't started already. In case of exception in one of the iteratee calls the promise
+returned by this function will be rejected with the exception and the remaining pending
+tasks will also be cancelled. In the very specific case where a result is found and an
+already started task throws an exception that exception will be plainly ignored.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>concurrency</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The number of times iteratee can be called concurrently.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="findIndexLimit.js.html">findIndexLimit.js</a>, <a href="findIndexLimit.js.html#line45">line 45</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved with the index of the first found value or rejected if one of the
+<code>iteratee</code> calls throws an exception before finding a value. If no value is found it will return <code>-1</code>.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { findIndexLimit, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3, 4, 5]
+  const result = await findIndexLimit(array, async (v) => {
+    // these calls will be performed in parallel with a maximum of 3
+    // concurrent calls
+    await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+    return v % 2 === 1
+  }, 3)
+  console.log(result) // prints 0, 2 or 4 randomly
+  // 4 is a potential result in this case even with a concurrency of 3 due to how
+  // randomness works, and all asynchronous operations are inherently random. The only way to ensure an
+  // order is to use a concurreny of 1 or to use findSeries() which does the same thing.
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="findIndexSeries">
+        <a href="#findIndexSeries">#</a>
+        <span class="type-signature">(async) </span>findIndexSeries<span class="signature">(iterable, iteratee)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Returns the index of the first element of an iterable that passes an asynchronous truth test.</p>
+<p>The calls to <code>iteratee</code> will run sequentially. As opposed to <code>findIndex()</code> and <code>findIndexLimit()</code> this ensures
+that if multiple values may pass the truth test it will be the first one of the iterable that will be
+returned.</p>
+<p>In case of exception in one of the <code>iteratee</code> calls the promise returned by this function will be
+rejected with the exception and the remaining pending tasks will be cancelled.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="findIndexSeries.js.html">findIndexSeries.js</a>, <a href="findIndexSeries.js.html#line35">line 35</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved with the index of the first found value or rejected if one of the
+<code>iteratee</code> calls throws an exception before finding a value. If no value is found it will return <code>-1</code>.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { findIndexSeries, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+  const result = await findIndexSeries(array, async (v) => {
+    // these calls will be performed sequentially
+    await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+    return v % 2 === 1
+  })
+  console.log(result) // always prints 0
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="findLimit">
+        <a href="#findLimit">#</a>
+        <span class="type-signature">(async) </span>findLimit<span class="signature">(iterable, iteratee, concurrency)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Returns the first element of an iterable that passes an asynchronous truth test.</p>
+<p>The calls to <code>iteratee</code> will run in parallel, up to a concurrency limit. This implies that
+the element found by this function may not be the first element of the iterable able to pass the
+truth test. It will be the first one for which one of the parallel calls to <code>iteratee</code> was able to
+return a positive result. If you need a sequential alternative use <code>findSeries()</code>.</p>
+<p>Whenever a result is found, all the remaining tasks will be cancelled as long
+as they didn't started already. In case of exception in one of the <code>iteratee</code> calls the promise
+returned by this function will be rejected with the exception and the remaining pending
+tasks will also be cancelled. In the very specific case where a result is found and an
+already started task throws an exception that exception will be plainly ignored.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>concurrency</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The number of times iteratee can be called concurrently.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="findLimit.js.html">findLimit.js</a>, <a href="findLimit.js.html#line44">line 44</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved with the first found value or rejected if one of the
+<code>iteratee</code> calls throws an exception before finding a value. If no value is found it will return <code>undefined</code>.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { findLimit, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3, 4, 5]
+  const result = await findLimit(array, async (v) => {
+    // these calls will be performed in parallel with a maximum of 3
+    // concurrent calls
+    await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+    return v % 2 === 1
+  }, 3)
+  console.log(result) // prints 1, 3 or 5 randomly
+  // 5 is a potential result in this case even with a concurrency of 3 due to how
+  // randomness works, and all asynchronous operations are inherently random. The only way to ensure an
+  // order is to use a concurreny of 1 or to use findSeries() which does the same thing.
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="findSeries">
+        <a href="#findSeries">#</a>
+        <span class="type-signature">(async) </span>findSeries<span class="signature">(iterable, iteratee)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Returns the first element of an iterable that passes an asynchronous truth test.</p>
+<p>The calls to <code>iteratee</code> will run sequentially. As opposed to <code>find()</code> and <code>findLimit()</code> this ensures
+that if multiple values may pass the truth test it will be the first one of the iterable that will be
+returned.</p>
+<p>In case of exception in one of the <code>iteratee</code> calls the promise returned by this function will be
+rejected with the exception.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="findSeries.js.html">findSeries.js</a>, <a href="findSeries.js.html#line35">line 35</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved with the first found value or rejected if one of the
+<code>iteratee</code> calls throws an exception before finding a value. If no value is found it will return <code>undefined</code>.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { findSeries, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+  const result = await findSeries(array, async (v) => {
+    // these calls will be performed sequentially
+    await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+    return v % 2 === 1
+  })
+  console.log(result) // always prints 1
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="forEach">
+        <a href="#forEach">#</a>
+        <span class="type-signature">(async) </span>forEach<span class="signature">(iterable, iteratee)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Calls a function on each element of iterable.</p>
+<p>Multiple calls to <code>iteratee</code> will be performed in parallel.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="forEach.js.html">forEach.js</a>, <a href="forEach.js.html#line30">line 30</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved when all the calls to <code>iteratee</code> have been done.
+This promise will be rejected if any call to <code>iteratee</code> throws an exception.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { forEach, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+  await forEach(array, async (v) => {
+    // these calls will be performed in parallel
+    await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+    console.log(v)
+  })
+  // prints 1, 2 and 3 in a random order
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="forEachLimit">
+        <a href="#forEachLimit">#</a>
+        <span class="type-signature">(async) </span>forEachLimit<span class="signature">(iterable, iteratee, concurrency)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Calls a function on each element of iterable.</p>
+<p>Multiple calls to <code>iteratee</code> will be performed in parallel, up to the concurrency limit.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>concurrency</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The number of times iteratee can be called concurrently.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="forEachLimit.js.html">forEachLimit.js</a>, <a href="forEachLimit.js.html#line33">line 33</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved when all the calls to <code>iteratee</code> have been done.
+This promise will be rejected if any call to <code>iteratee</code> throws an exception.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { forEachLimit, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+  await forEachLimit(array, async (v) => {
+    // these calls will be performed in parallel with a maximum of 2
+    // concurrent calls
+    await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+    console.log(v)
+  }, 2)
+  // prints 1, 2 and 3 in a random order (it will always print 1 or 2 before printing 3 due to
+  // the concurrency limit and the internal scheduling order)
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="forEachSeries">
+        <a href="#forEachSeries">#</a>
+        <span class="type-signature">(async) </span>forEachSeries<span class="signature">(iterable, iteratee)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Calls a function on each element of iterable.</p>
+<p>Multiple calls to <code>iteratee</code> will be performed sequentially.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="forEachSeries.js.html">forEachSeries.js</a>, <a href="forEachSeries.js.html#line30">line 30</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved when all the calls to <code>iteratee</code> have been done.
+This promise will be rejected if any call to <code>iteratee</code> throws an exception.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { forEachSeries, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+  await forEachSeries(array, async (v) => {
+    // these calls will be performed sequentially
+    await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+    console.log(v)
+  })
+  // prints 1, 2 and 3 in that exact order
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="map">
+        <a href="#map">#</a>
+        <span class="type-signature">(async) </span>map<span class="signature">(iterable, iteratee)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Produces a new collection of values by mapping each value in <code>iterable</code> through the <code>iteratee</code> function.</p>
+<p>Multiple calls to <code>iteratee</code> will be performed in parallel.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="map.js.html">map.js</a>, <a href="map.js.html#line31">line 31</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved with an array containing all the mapped value,
+or will be rejected if any of the calls to <code>iteratee</code> throws an exception.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { map, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+  const result = await map(array, async (v) => {
+    // these calls will be performed in parallel
+    await sleep(10) // waits 10ms
+    return v * 2
+  })
+  console.log(result) // prints [2, 4, 6]
+  // total processing time should be ~ 10ms
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="mapLimit">
+        <a href="#mapLimit">#</a>
+        <span class="type-signature">(async) </span>mapLimit<span class="signature">(iterable, iteratee, concurrency)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Produces a new collection of values by mapping each value in <code>iterable</code> through the <code>iteratee</code> function.</p>
+<p>Multiple calls to <code>iteratee</code> will be performed in parallel, up to the concurrency limit.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>concurrency</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The number of times <code>iteratee</code> can be called concurrently.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="mapLimit.js.html">mapLimit.js</a>, <a href="mapLimit.js.html#line34">line 34</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved with an array containing all the mapped value,
+or will be rejected if any of the calls to <code>iteratee</code> throws an exception.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { mapLimit, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+  const result = await mapLimit(array, async (v) => {
+    // these calls will be performed in parallel with a maximum of 2
+    // concurrent calls
+    await sleep(10) // waits 10ms
+    return v * 2
+  }, 2)
+  console.log(result) // prints [2, 4, 6]
+  // total processing time should be ~ 20ms
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="mapSeries">
+        <a href="#mapSeries">#</a>
+        <span class="type-signature">(async) </span>mapSeries<span class="signature">(iterable, iteratee)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Produces a new collection of values by mapping each value in <code>iterable</code> through the <code>iteratee</code> function.</p>
+<p>Multiple calls to <code>iteratee</code> will be performed sequentially.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="mapSeries.js.html">mapSeries.js</a>, <a href="mapSeries.js.html#line31">line 31</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved with an array containing all the mapped value,
+or will be rejected if any of the calls to <code>iteratee</code> throws an exception.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { mapSeries, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+  const result = await mapSeries(array, async (v) => {
+    // these calls will be performed sequentially
+    await sleep(10) // waits 10ms
+    return v * 2
+  }, 2)
+  console.log(result) // prints [2, 4, 6]
+  // total processing time should be ~ 30ms
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="reduce">
+        <a href="#reduce">#</a>
+        <span class="type-signature">(async) </span>reduce<span class="signature">(iterable, reducer, initial)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Performs a reduce operation as defined in the <code>Array.reduce()</code> method but using an asynchronous
+function as reducer. The reducer will be called sequentially.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>reducer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The reducer function. It will be called with four arguments:</p>
+<ul>
+<li><code>accumulator</code>: The last calculated value (or the first value of the iterable if no initial value is provided)</li>
+<li><code>value</code>: The current value</li>
+<li><code>index</code>: The current index in the iterable. Will start from 0 if no initial value is provided, 1 otherwise.</li>
+<li><code>iterable</code>: The iterable on which the reduce operation is performed.</li>
+</ul></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>initial</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The initial value that will be used as accumulator in the first call to
+<code>reducer</code>. If omitted the first element of <code>iterable</code> will be used as accumulator and <code>reducer</code>
+will only be called from from the second element of the list (as defined in the <code>Array.reduce()</code>
+function).</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="reduce.js.html">reduce.js</a>, <a href="reduce.js.html#line34">line 34</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved with the result of the reduce operation,
+or rejected if any of the calls to <code>reducer</code> throws an exception.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { reduce, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+  const result = await reduce(array, async (v, p) => {
+    // these calls will be performed sequentially
+    await sleep(10) // waits 10ms
+    return v + p
+  })
+  console.log(result) // prints 6
+  // total processing time should be ~ 20ms
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="reduceRight">
+        <a href="#reduceRight">#</a>
+        <span class="type-signature">(async) </span>reduceRight<span class="signature">(iterable, reducer, initial)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Performs a reduce operation as defined in the <code>Array.reduceRight()</code> method but using an asynchronous
+function as reducer. The reducer will be called sequentially.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>reducer</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The reducer function. It will be called with four arguments:</p>
+<ul>
+<li><code>accumulator</code>: The last calculated value (or the first value of the iterable if no initial value is provided)</li>
+<li><code>value</code>: The current value</li>
+<li><code>index</code>: The current index in the iterable. Will start from the last index if no initial value is provided,
+the last index minus 1 otherwise.</li>
+<li><code>iterable</code>: The iterable on which the reduce operation is performed.</li>
+</ul></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>initial</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">*</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The initial value that will be used as accumulator in the first call to
+reducer. If omitted the first element of <code>iterable</code> will be used as accumulator and <code>reducer</code>
+will only be called from from the second element of the list (as defined in the <code>Array.reduce()</code>
+function).</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="reduceRight.js.html">reduceRight.js</a>, <a href="reduceRight.js.html#line35">line 35</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved with the result of the reduce operation,
+or rejected if any of the calls to <code>reducer</code> throws an exception.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { reduceRight, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+  const result = await reduceRight(array, async (v, p) => {
+    // these calls will be performed sequentially
+    await sleep(10) // waits 10ms
+    return v + p
+  })
+  console.log(result) // prints 6
+  // total processing time should be ~ 20ms
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="sleep">
+        <a href="#sleep">#</a>
+        <span class="type-signature">(async) </span>sleep<span class="signature">(amount)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Waits a given amount of time.</p>
+<p>This function uses <code>setTimeout()</code> internally and has the same behavior, notably that it could resolve
+after the asked time (depending on other tasks running in the event loop) or a few milliseconds before.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An amount of time in milliseconds</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="sleep.js.html">sleep.js</a>, <a href="sleep.js.html#line28">line 28</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved after the given amount of time has passed.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Examples</strong>
+        
+    <pre class="prettyprint"><code>import { sleep, asyncRoot } from 'modern-async'
+
+asyncRoot(async () => {
+  await sleep(100) // will wait 100ms
+})</code></pre>
+
+    <pre class="prettyprint"><code>// another example that doesn't block on the sleep call
+// it's functionally identical to using setTimout but with a promise syntax
+import { sleep } from 'modern-async'
+
+sleep(10).then(() => {
+  console.log('hello')
+})
+// will print 'hello' after 10ms</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="sleepCancellable">
+        <a href="#sleepCancellable">#</a>
+        <span class="type-signature"></span>sleepCancellable<span class="signature">(amount)</span><span class="type-signature"> &rarr; {Array}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Waits a given amount of time. This function returns both a promise and cancel function in
+order to cancel the wait time if necessary. If cancelled, the promise will be rejected
+with a <code>CancelledError</code>.</p>
+<p>This function uses <code>setTimeout()</code> internally and has the same behavior, notably that it could resolve
+after the asked time (depending on other tasks running in the event loop) or a few milliseconds before.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An amount of time in milliseconds</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="sleepCancellable.js.html">sleepCancellable.js</a>, <a href="sleepCancellable.js.html#line34">line 34</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A tuple of two objects:</p>
+<ul>
+<li><code>promise</code>: The promise</li>
+<li><code>cancel</code>: The cancel function. It will return a boolean that will be <code>true</code> if the promise was effectively cancelled,
+<code>false</code> otherwise.</li>
+</ul>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { sleepCancellable, asyncRoot } from 'modern-async'
+
+asyncRoot(async () => {
+  const [promise, cancel] = sleepCancellable(100) // schedule to resolve the promise after 100ms
+
+  cancel()
+
+  try {
+    await promise
+  } catch (e) {
+    console.log(e) // prints CancelledError
+  }
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="sleepPrecise">
+        <a href="#sleepPrecise">#</a>
+        <span class="type-signature">(async) </span>sleepPrecise<span class="signature">(amount)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Waits a given amount of time.</p>
+<p>This function is similar to <code>sleep()</code> except it ensures that the amount of time measured
+using the <code>Date</code> object is always greater than or equal the asked amount of time.</p>
+<p>This function can imply additional delay that can be bad for performances. As such it is
+recommended to only use it in unit tests or very specific cases. Most applications should
+be adapted to work with the usual <code>setTimout()</code> inconsistencies even if it can trigger some
+milliseconds before the asked delay.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An amount of time in milliseconds</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="sleepPrecise.js.html">sleepPrecise.js</a>, <a href="sleepPrecise.js.html#line24">line 24</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved after the given amount of time has passed.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { sleepPrecise, asyncRoot } from 'modern-async'
+
+asyncRoot(async () => {
+  await sleepPrecise(100) // will wait 100ms
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="sleepPreciseCancellable">
+        <a href="#sleepPreciseCancellable">#</a>
+        <span class="type-signature"></span>sleepPreciseCancellable<span class="signature">(amount)</span><span class="type-signature"> &rarr; {Array}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Waits a given amount of time.</p>
+<p>This function returns both a promise and cancel function in order to cancel the
+wait time if necessary. If cancelled, the promise will be rejected with a <code>CancelledError</code>.</p>
+<p>This function is similar to <code>sleep()</code> except it ensures that the amount of time measured
+using the <code>Date</code> object is always greater than or equal the asked amount of time.</p>
+<p>This function can imply additional delay that can be bad for performances. As such it is
+recommended to only use it in unit tests or very specific cases. Most applications should
+be adapted to work with the usual <code>setTimout()</code> inconsistencies even if it can trigger some
+milliseconds before the asked delay.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An amount of time in milliseconds</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="sleepPreciseCancellable.js.html">sleepPreciseCancellable.js</a>, <a href="sleepPreciseCancellable.js.html#line40">line 40</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A tuple of two objects:</p>
+<ul>
+<li><code>promise</code>: The promise</li>
+<li><code>cancel</code>: The cancel function. It will return a boolean that will be <code>true</code> if the promise was effectively cancelled,
+<code>false</code> otherwise.</li>
+</ul>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { sleepPreciseCancellable, asyncRoot } from 'modern-async'
+
+asyncRoot(async () => {
+  const [promise, cancel] = sleepPreciseCancellable(100) // schedule to resolve the promise after 100ms
+
+  cancel()
+
+  try {
+    await promise
+  } catch (e) {
+    console.log(e) // prints CancelledError
+  }
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="some">
+        <a href="#some">#</a>
+        <span class="type-signature">(async) </span>some<span class="signature">(iterable, iteratee)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Returns <code>true</code> if at least one element of an iterable pass a truth test and <code>false</code> otherwise.</p>
+<p>The calls to <code>iteratee</code> will run in parallel. If any truth test returns <code>true</code> the promise is immediately resolved.</p>
+<p>In case of exception in one of the <code>iteratee</code> calls the promise returned by this function will be rejected
+with the exception. In the very specific case where a test returns <code>true</code> and an already started task throws
+an exception that exception will be plainly ignored.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="some.js.html">some.js</a>, <a href="some.js.html#line36">line 36</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved to <code>true</code> if at least one value pass the truth test and <code>false</code>
+if none of them do. That promise will be rejected if one of the truth test throws an exception.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { some, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+
+  const result = await some(array, async (v) => {
+    // these calls will be performed in parallel
+    await sleep(10) // waits 10ms
+    return v % 2 === 0
+  })
+  console.log(result) // prints true
+  // total processing time should be ~ 10ms
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="someLimit">
+        <a href="#someLimit">#</a>
+        <span class="type-signature">(async) </span>someLimit<span class="signature">(iterable, iteratee, concurrency)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Returns <code>true</code> if at least one element of an iterable pass a truth test and <code>false</code> otherwise.</p>
+<p>The calls to <code>iteratee</code> will run in parallel, up to a concurrency limit. If any truth test returns <code>true</code>
+the promise is immediately resolved.</p>
+<p>Whenever a test returns <code>true</code>, all the remaining tasks will be cancelled as long
+as they didn't started already. In case of exception in one of the <code>iteratee</code> calls the promise
+returned by this function will be rejected with the exception and the remaining pending
+tasks will also be cancelled. In the very specific case where a test returns <code>true</code> and an
+already started task throws an exception that exception will be plainly ignored.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>concurrency</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The number of times <code>iteratee</code> can be called concurrently.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="someLimit.js.html">someLimit.js</a>, <a href="someLimit.js.html#line41">line 41</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved to <code>true</code> if at least one value pass the truth test and <code>false</code>
+if none of them do. That promise will be rejected if one of the truth test throws an exception.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { someLimit, asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+
+  const result = await someLimit(array, async (v) => {
+    // these calls will be performed in parallel with a maximum of 2
+    // concurrent calls
+    await sleep(10) // waits 10ms
+    return v % 2 === 0
+  }, 2)
+  console.log(result) // prints true
+  // total processing time should be ~ 10ms
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="someSeries">
+        <a href="#someSeries">#</a>
+        <span class="type-signature">(async) </span>someSeries<span class="signature">(iterable, iteratee)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Returns <code>true</code> if all elements of an iterable pass a truth test and <code>false</code> otherwise.</p>
+<p>The calls to <code>iteratee</code> will run sequentially. If any truth test returns <code>true</code> the promise is
+immediately resolved.</p>
+<p>In case of exception in one of the iteratee calls the promise returned by this function will be
+rejected with the exception and the remaining pending tasks will be cancelled.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterable</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Iterable</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An iterable object.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iteratee</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>A function that will be called with each member of the iterable. It will receive
+three arguments:</p>
+<ul>
+<li><code>value</code>: The current value to process</li>
+<li><code>index</code>: The index in the iterable. Will start from 0.</li>
+<li><code>iterable</code>: The iterable on which the operation is being performed.</li>
+</ul></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="someSeries.js.html">someSeries.js</a>, <a href="someSeries.js.html#line36">line 36</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved to <code>true</code> if at least one value pass the truth test and <code>false</code>
+if none of them do. That promise will be rejected if one of the truth test throws an exception.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { someSeries asyncRoot, sleep } from 'modern-async'
+
+asyncRoot(async () => {
+  const array = [1, 2, 3]
+
+  const result = await someSeries(array, async (v) => {
+    // these calls will be performed sequentially
+    await sleep(10) // waits 10ms
+    return v % 2 === 0
+  })
+  console.log(result) // prints true
+  // total processing time should be ~ 20ms
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="timeout">
+        <a href="#timeout">#</a>
+        <span class="type-signature">(async) </span>timeout<span class="signature">(fct, amount)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Wraps a call to an asynchronous function to add a timer on it. If the delay is exceeded
+the returned promise will be rejected with a <code>TimeoutError</code>.</p>
+<p>This function uses <code>setTimeout()</code> internally and has the same behavior, notably that it could reject
+after the asked time (depending on other tasks running in the event loop) or a few milliseconds before.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fct</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An asynchronous function that will be called immediately without arguments.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An amount of time in milliseconds</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="timeout.js.html">timeout.js</a>, <a href="timeout.js.html#line39">line 39</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved or rejected according to the result of the call
+to <code>fct</code>. If <code>amount</code> milliseconds pass before the call to <code>fct</code> returns or rejects, this promise will
+be rejected with a <code>TimeoutError</code>.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { timeout, sleep, asyncRoot } from 'modern-async'
+
+asyncRoot(async () => {
+  // the following statement will perform successfully because
+  // the function will return before the delay
+  await timeout(async () => {
+    await sleep(10)
+  }, 100)
+
+  try {
+    // the following statement will throw after 10ms
+    await timeout(async () => {
+      await sleep(100)
+    }, 10)
+  } catch (e) {
+    print(e.name) // prints TimeoutError
+  }
+})</code></pre>
+
+    </div>
+
+
+        
+            
+
+    
+
+    <h4 class="name" id="timeoutPrecise">
+        <a href="#timeoutPrecise">#</a>
+        <span class="type-signature">(async) </span>timeoutPrecise<span class="signature">(fct, amount)</span><span class="type-signature"> &rarr; {Promise}</span>
+    </h4>
+
+    
+
+
+
+    <div class="description">
+        <p>Wraps a call to an asynchronous function to add a timer on it. If the delay is exceeded
+the returned promise will be rejected with a <code>TimeoutError</code>.</p>
+<p>This function is similar to <code>timeout()</code> except it ensures that the amount of time measured
+using the <code>Date</code> object is always greater than or equal the asked amount of time.</p>
+<p>This function can imply additional delay that can be bad for performances. As such it is
+recommended to only use it in unit tests or very specific cases. Most applications should
+be adapted to work with the usual <code>setTimout()</code> inconsistencies even if it can trigger some
+milliseconds before the asked delay.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Parameters:</strong>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fct</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An asynchronous function that will be called immediately without arguments.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>amount</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>An amount of time in milliseconds</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    </div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <div class="details-item-container">
+            <dt class="tag-source">Source:</dt>
+            <dd class="tag-source"><ul class="dummy"><li>
+                <a href="timeoutPrecise.js.html">timeoutPrecise.js</a>, <a href="timeoutPrecise.js.html#line44">line 44</a>
+            </li></ul></dd>
+        </div>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="method-member-container mt-20">
+    <strong>Returns:</strong>
+        
+            
+<div class="param-desc">
+    <p>A promise that will be resolved or rejected according to the result of the call
+to <code>fct</code>. If <code>amount</code> milliseconds pass before the call to <code>fct</code> returns or rejects, this promise will
+be rejected with a <code>TimeoutError</code>.</p>
+</div>
+
+
+
+<dl class="param-type">
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+    </dd>
+</dl>
+
+    </div>
+
+
+
+    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
+        <strong>Example</strong>
+        
+    <pre class="prettyprint"><code>import { timeoutPrecise, sleep, asyncRoot } from 'modern-async'
+
+asyncRoot(async () => {
+  // the following statement will perform successfully because
+  // the function will return before the delay
+  await timeoutPrecise(async () => {
+    await sleep(10)
+  }, 100)
+
+  try {
+    // the following statement will throw after 10ms
+    await timeoutPrecise(async () => {
+      await sleep(100)
+    }, 10)
+  } catch (e) {
+    print(e.name) // prints TimeoutError
+  }
+})</code></pre>
+
+    </div>
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<footer id="footer">
+  modern-async is licensed under the terms of the MIT license
+</footer>
+
+<script src="scripts/third-party/prettify.js"></script>
+<script src="scripts/third-party/lang-css.js"></script>
+<script src="scripts/search.js"></script>
+<script src="scripts/third-party/fuse.js"></script>
+<script type="text/javascript" src="scripts/misc.js"></script>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+<script src="scripts/fix-code-block.js"></script>
+<script>
+  var list = [{"title":"CancelledError","link":"<a href=\"CancelledError.html\">CancelledError</a>"},{"title":"Deferred","link":"<a href=\"Deferred.html\">Deferred</a>"},{"title":"Delayer","link":"<a href=\"Delayer.html\">Delayer</a>"},{"title":"Delayer#checkDelay","link":"<a href=\"Delayer.html#checkDelay\">Delayer &rtrif; checkDelay</a>"},{"title":"Delayer#reset","link":"<a href=\"Delayer.html#reset\">Delayer &rtrif; reset</a>"},{"title":"Queue","link":"<a href=\"Queue.html\">Queue</a>"},{"title":"Queue#cancelAllPending","link":"<a href=\"Queue.html#cancelAllPending\">Queue &rtrif; cancelAllPending</a>"},{"title":"Queue#exec","link":"<a href=\"Queue.html#exec\">Queue &rtrif; exec</a>"},{"title":"Queue#execCancellable","link":"<a href=\"Queue.html#execCancellable\">Queue &rtrif; execCancellable</a>"},{"title":"Scheduler","link":"<a href=\"Scheduler.html\">Scheduler</a>"},{"title":"Scheduler#start","link":"<a href=\"Scheduler.html#start\">Scheduler &rtrif; start</a>"},{"title":"Scheduler#stop","link":"<a href=\"Scheduler.html#stop\">Scheduler &rtrif; stop</a>"},{"title":"TimeoutError","link":"<a href=\"TimeoutError.html\">TimeoutError</a>"},{"title":"asyncRoot","link":"<a href=\"global.html#asyncRoot\">Global &rtrif; asyncRoot</a>"},{"title":"asyncWrap","link":"<a href=\"global.html#asyncWrap\">Global &rtrif; asyncWrap</a>"},{"title":"delay","link":"<a href=\"global.html#delay\">Global &rtrif; delay</a>"},{"title":"delayCancellable","link":"<a href=\"global.html#delayCancellable\">Global &rtrif; delayCancellable</a>"},{"title":"every","link":"<a href=\"global.html#every\">Global &rtrif; every</a>"},{"title":"everyLimit","link":"<a href=\"global.html#everyLimit\">Global &rtrif; everyLimit</a>"},{"title":"everySeries","link":"<a href=\"global.html#everySeries\">Global &rtrif; everySeries</a>"},{"title":"filter","link":"<a href=\"global.html#filter\">Global &rtrif; filter</a>"},{"title":"filterLimit","link":"<a href=\"global.html#filterLimit\">Global &rtrif; filterLimit</a>"},{"title":"filterSeries","link":"<a href=\"global.html#filterSeries\">Global &rtrif; filterSeries</a>"},{"title":"find","link":"<a href=\"global.html#find\">Global &rtrif; find</a>"},{"title":"findIndex","link":"<a href=\"global.html#findIndex\">Global &rtrif; findIndex</a>"},{"title":"findIndexLimit","link":"<a href=\"global.html#findIndexLimit\">Global &rtrif; findIndexLimit</a>"},{"title":"findIndexSeries","link":"<a href=\"global.html#findIndexSeries\">Global &rtrif; findIndexSeries</a>"},{"title":"findLimit","link":"<a href=\"global.html#findLimit\">Global &rtrif; findLimit</a>"},{"title":"findSeries","link":"<a href=\"global.html#findSeries\">Global &rtrif; findSeries</a>"},{"title":"forEach","link":"<a href=\"global.html#forEach\">Global &rtrif; forEach</a>"},{"title":"forEachLimit","link":"<a href=\"global.html#forEachLimit\">Global &rtrif; forEachLimit</a>"},{"title":"forEachSeries","link":"<a href=\"global.html#forEachSeries\">Global &rtrif; forEachSeries</a>"},{"title":"map","link":"<a href=\"global.html#map\">Global &rtrif; map</a>"},{"title":"mapLimit","link":"<a href=\"global.html#mapLimit\">Global &rtrif; mapLimit</a>"},{"title":"mapSeries","link":"<a href=\"global.html#mapSeries\">Global &rtrif; mapSeries</a>"},{"title":"reduce","link":"<a href=\"global.html#reduce\">Global &rtrif; reduce</a>"},{"title":"reduceRight","link":"<a href=\"global.html#reduceRight\">Global &rtrif; reduceRight</a>"},{"title":"sleep","link":"<a href=\"global.html#sleep\">Global &rtrif; sleep</a>"},{"title":"sleepCancellable","link":"<a href=\"global.html#sleepCancellable\">Global &rtrif; sleepCancellable</a>"},{"title":"sleepPrecise","link":"<a href=\"global.html#sleepPrecise\">Global &rtrif; sleepPrecise</a>"},{"title":"sleepPreciseCancellable","link":"<a href=\"global.html#sleepPreciseCancellable\">Global &rtrif; sleepPreciseCancellable</a>"},{"title":"some","link":"<a href=\"global.html#some\">Global &rtrif; some</a>"},{"title":"someLimit","link":"<a href=\"global.html#someLimit\">Global &rtrif; someLimit</a>"},{"title":"someSeries","link":"<a href=\"global.html#someSeries\">Global &rtrif; someSeries</a>"},{"title":"timeout","link":"<a href=\"global.html#timeout\">Global &rtrif; timeout</a>"},{"title":"timeoutPrecise","link":"<a href=\"global.html#timeoutPrecise\">Global &rtrif; timeoutPrecise</a>"}];
+  setupSearch(list)
+</script>
+
+ 
+
+
+
+
+
+
+</body>
+</html>

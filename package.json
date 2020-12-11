@@ -10,7 +10,7 @@
     "coverage": "jest --coverage",
     "lint": "eslint \"*.js\" \"src/**/*.js\"",
     "jest": "jest",
-    "docs": "rm -rf docs && jsdoc -c .jsdoc.json -d docs -r"
+    "docs": "jsdoc -c .jsdoc.json && node dev/docs-collect-version-numbers.js"
   },
   "repository": {
     "type": "git",
@@ -26,7 +26,7 @@
     "@babel/core": "^7.12.3",
     "@babel/preset-env": "^7.12.1",
     "babel-jest": "^26.6.3",
-    "clean-jsdoc-theme": "^2.2.15",
+    "clean-jsdoc-theme": "^3.0.0",
     "eslint": "^6.6.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-plugin-import": "^2.18.2",
@@ -38,7 +38,8 @@
     "jest": "^26.6.3",
     "jsdoc": "^3.6.6",
     "lodash": "^4.17.20",
-    "rollup": "^2.33.1"
+    "rollup": "^2.33.1",
+    "semver-sort": "0.0.4"
   },
   "dependencies": {
     "assert": "^2.0.0"
