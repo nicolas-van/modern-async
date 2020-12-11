@@ -1,6 +1,6 @@
 {
   "name": "modern-async",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A modern tooling library for asynchronous operations using async/await and promises",
   "main": "dist/modern-async.cjs.js",
   "module": "src/modern-async.js",
