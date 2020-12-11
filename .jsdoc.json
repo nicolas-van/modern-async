@@ -44,6 +44,12 @@
         },
         {
           "src": "../../inject-script.js"
+        },
+        {
+          "src": "https://www.googletagmanager.com/gtag/js?id=G-707LQFBQY9"
+        },
+        {
+          "src": "../../ga.js"
         }
       ]
     }
