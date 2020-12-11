@@ -247,7 +247,7 @@ class _InternalQueuePriority {
         this._running -= 1
         this._iqueue = this._iqueue.filter((v) => v !== task)
         // the following check is delayed to give the opportunity to components
-        // listening for promises to cancel pending promises before they are
+        // listening for promises to cancel pending tasks before they are
         // started
         delay().then(() => {
           this._checkQueue()
