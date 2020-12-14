@@ -1,7 +1,7 @@
 
 import { expect, test } from '@jest/globals'
 import { AssertionError } from 'assert'
-import asyncWrap from './asyncWrap'
+import asyncWrap from './asyncWrap.mjs'
 
 test('asyncWrap problem', () => {
   const fct = () => {

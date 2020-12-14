@@ -1,8 +1,8 @@
 
 import { expect, test } from '@jest/globals'
-import map from './map'
+import map from './map.mjs'
 import _ from 'lodash'
-import sleepPrecise from './sleepPrecise'
+import sleepPrecise from './sleepPrecise.mjs'
 
 test('map base', async () => {
   const arr = _.range(6)

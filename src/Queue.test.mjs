@@ -1,10 +1,10 @@
 
 import { expect, test } from '@jest/globals'
-import Queue from './Queue'
-import sleepPrecise from './sleepPrecise'
+import Queue from './Queue.mjs'
+import sleepPrecise from './sleepPrecise.mjs'
 import _ from 'lodash'
-import delay from './delay'
-import CancelledError from './CancelledError'
+import delay from './delay.mjs'
+import CancelledError from './CancelledError.mjs'
 
 test('Queue base 1', async () => {
   const unit = 30

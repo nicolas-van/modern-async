@@ -1,5 +1,5 @@
 
-import findLimit from './findLimit'
+import findLimit from './findLimit.mjs'
 
 /**
  * Returns the first element of an iterable that passes an asynchronous truth test.

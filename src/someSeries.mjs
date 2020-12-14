@@ -1,5 +1,5 @@
 
-import someLimit from './someLimit'
+import someLimit from './someLimit.mjs'
 
 /**
  * Returns `true` if all elements of an iterable pass a truth test and `false` otherwise.

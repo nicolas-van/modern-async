@@ -1,5 +1,5 @@
 
-import sleepCancellable from './sleepCancellable'
+import sleepCancellable from './sleepCancellable.mjs'
 
 /**
  * Waits a given amount of time.

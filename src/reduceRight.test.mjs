@@ -1,6 +1,6 @@
 
 import { expect, test } from '@jest/globals'
-import reduceRight from './reduceRight'
+import reduceRight from './reduceRight.mjs'
 import _ from 'lodash'
 
 test('reduceRight base', async () => {

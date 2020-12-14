@@ -1,6 +1,6 @@
 
 import { expect, test } from '@jest/globals'
-import sleepPrecise from './sleepPrecise'
+import sleepPrecise from './sleepPrecise.mjs'
 
 test('sleepPrecise', async () => {
   const start = new Date().getTime()

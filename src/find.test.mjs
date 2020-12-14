@@ -1,8 +1,8 @@
 
 import { expect, test } from '@jest/globals'
-import find from './find'
+import find from './find.mjs'
 import _ from 'lodash'
-import sleepPrecise from './sleepPrecise'
+import sleepPrecise from './sleepPrecise.mjs'
 
 test('find', async () => {
   const arr = ['a', 'b', 'c']

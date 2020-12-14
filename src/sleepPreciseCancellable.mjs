@@ -1,7 +1,7 @@
 
 import assert from 'assert'
-import sleepCancellable from './sleepCancellable'
-import Deferred from './Deferred'
+import sleepCancellable from './sleepCancellable.mjs'
+import Deferred from './Deferred.mjs'
 
 /**
  * Waits a given amount of time.

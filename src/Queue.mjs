@@ -1,8 +1,8 @@
 import assert from 'assert'
-import Deferred from './Deferred'
-import asyncWrap from './asyncWrap'
-import CancelledError from './CancelledError'
-import delay from './delay'
+import Deferred from './Deferred.mjs'
+import asyncWrap from './asyncWrap.mjs'
+import CancelledError from './CancelledError.mjs'
+import delay from './delay.mjs'
 
 /**
  * A class representing a queue.

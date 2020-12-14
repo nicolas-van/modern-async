@@ -1,8 +1,8 @@
 
 import { expect, test } from '@jest/globals'
-import timeoutPrecise from './timeoutPrecise'
-import sleepPrecise from './sleepPrecise'
-import TimeoutError from './TimeoutError'
+import timeoutPrecise from './timeoutPrecise.mjs'
+import sleepPrecise from './sleepPrecise.mjs'
+import TimeoutError from './TimeoutError.mjs'
 
 test('timeoutPrecise no timeout', async () => {
   const result = await timeoutPrecise(async () => {

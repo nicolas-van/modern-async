@@ -1,8 +1,8 @@
 
 import { expect, test } from '@jest/globals'
-import forEachLimit from './forEachLimit'
+import forEachLimit from './forEachLimit.mjs'
 import _ from 'lodash'
-import sleepPrecise from './sleepPrecise'
+import sleepPrecise from './sleepPrecise.mjs'
 
 test('forEachLimit base', async () => {
   const arr = _.range(6)

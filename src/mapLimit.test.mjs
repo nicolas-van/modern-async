@@ -1,8 +1,8 @@
 
 import { expect, test } from '@jest/globals'
-import mapLimit from './mapLimit'
+import mapLimit from './mapLimit.mjs'
 import _ from 'lodash'
-import sleepPrecise from './sleepPrecise'
+import sleepPrecise from './sleepPrecise.mjs'
 
 test('mapLimit base', async () => {
   const arr = _.range(6)

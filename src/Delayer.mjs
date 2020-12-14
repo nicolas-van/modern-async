@@ -1,5 +1,5 @@
 
-import delay from './delay'
+import delay from './delay.mjs'
 import assert from 'assert'
 
 /**

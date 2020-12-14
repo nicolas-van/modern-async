@@ -1,6 +1,6 @@
 
 import { expect, test } from '@jest/globals'
-import Delayer from './Delayer'
+import Delayer from './Delayer.mjs'
 
 test('Delayer', async () => {
   const unit = 10

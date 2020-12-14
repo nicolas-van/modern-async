@@ -1,5 +1,5 @@
 
-import findIndexLimit from './findIndexLimit'
+import findIndexLimit from './findIndexLimit.mjs'
 
 /**
  * Returns `true` if all elements of an iterable pass a truth test and `false` otherwise.

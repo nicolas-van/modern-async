@@ -1,8 +1,8 @@
 
 import { expect, test } from '@jest/globals'
-import findLimit from './findLimit'
+import findLimit from './findLimit.mjs'
 import _ from 'lodash'
-import sleepPrecise from './sleepPrecise'
+import sleepPrecise from './sleepPrecise.mjs'
 
 test('findLimit', async () => {
   const arr = ['a', 'b', 'c']

@@ -1,7 +1,7 @@
 
 import { expect, test } from '@jest/globals'
-import sleepPrecise from './sleepPrecise'
-import reduce from './reduce'
+import sleepPrecise from './sleepPrecise.mjs'
+import reduce from './reduce.mjs'
 import _ from 'lodash'
 
 test('reduce base', async () => {

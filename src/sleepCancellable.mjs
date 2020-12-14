@@ -1,7 +1,7 @@
 
 import assert from 'assert'
-import Deferred from './Deferred'
-import CancelledError from './CancelledError'
+import Deferred from './Deferred.mjs'
+import CancelledError from './CancelledError.mjs'
 
 /**
  * Waits a given amount of time. This function returns both a promise and cancel function in

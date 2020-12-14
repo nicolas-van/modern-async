@@ -1,8 +1,8 @@
 
-import sleepPreciseCancellable from './sleepPreciseCancellable'
-import TimeoutError from './TimeoutError'
-import asyncWrap from './asyncWrap'
-import Deferred from './Deferred'
+import sleepPreciseCancellable from './sleepPreciseCancellable.mjs'
+import TimeoutError from './TimeoutError.mjs'
+import asyncWrap from './asyncWrap.mjs'
+import Deferred from './Deferred.mjs'
 
 /**
  * Wraps a call to an asynchronous function to add a timer on it. If the delay is exceeded

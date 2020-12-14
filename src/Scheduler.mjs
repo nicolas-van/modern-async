@@ -1,9 +1,9 @@
 
-import sleepCancellable from './sleepCancellable'
-import Queue from './Queue'
+import sleepCancellable from './sleepCancellable.mjs'
+import Queue from './Queue.mjs'
 import assert from 'assert'
-import asyncWrap from './asyncWrap'
-import CancelledError from './CancelledError'
+import asyncWrap from './asyncWrap.mjs'
+import CancelledError from './CancelledError.mjs'
 
 /**
  * A class implementing a scheduler.

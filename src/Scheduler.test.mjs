@@ -1,8 +1,8 @@
 
 import { expect, test } from '@jest/globals'
-import sleep from './sleep'
-import sleepPrecise from './sleepPrecise'
-import Scheduler from './Scheduler'
+import sleep from './sleep.mjs'
+import sleepPrecise from './sleepPrecise.mjs'
+import Scheduler from './Scheduler.mjs'
 
 test('Scheduler base', async () => {
   const unit = 30

@@ -1,8 +1,8 @@
 
 import { expect, test } from '@jest/globals'
-import CancelledError from './CancelledError'
-import asyncRoot from './asyncRoot'
-import Deferred from './Deferred'
+import CancelledError from './CancelledError.mjs'
+import asyncRoot from './asyncRoot.mjs'
+import Deferred from './Deferred.mjs'
 
 const baseErrorFct = console.error
 

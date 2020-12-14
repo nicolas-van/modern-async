@@ -1,6 +1,6 @@
 
 import { expect, test } from '@jest/globals'
-import Deferred from './Deferred'
+import Deferred from './Deferred.mjs'
 
 test('Deferred', async () => {
   const d = new Deferred()

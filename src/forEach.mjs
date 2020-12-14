@@ -1,5 +1,5 @@
 
-import forEachLimit from './forEachLimit'
+import forEachLimit from './forEachLimit.mjs'
 
 /**
  * Calls a function on each element of iterable.

@@ -1,5 +1,5 @@
 
-import findIndexLimit from './findIndexLimit'
+import findIndexLimit from './findIndexLimit.mjs'
 
 /**
  * Returns the index of the first element of an iterable that passes an asynchronous truth test.

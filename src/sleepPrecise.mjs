@@ -1,5 +1,5 @@
 
-import sleepPreciseCancellable from './sleepPreciseCancellable'
+import sleepPreciseCancellable from './sleepPreciseCancellable.mjs'
 
 /**
  * Waits a given amount of time.

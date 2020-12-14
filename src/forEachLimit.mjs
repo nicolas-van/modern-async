@@ -1,5 +1,5 @@
 
-import mapLimit from './mapLimit'
+import mapLimit from './mapLimit.mjs'
 
 /**
  * Calls a function on each element of iterable.

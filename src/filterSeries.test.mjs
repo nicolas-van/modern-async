@@ -1,8 +1,8 @@
 
 import { expect, test } from '@jest/globals'
-import filterSeries from './filterSeries'
+import filterSeries from './filterSeries.mjs'
 import _ from 'lodash'
-import sleepPrecise from './sleepPrecise'
+import sleepPrecise from './sleepPrecise.mjs'
 
 test('filterSeries base', async () => {
   const arr = _.range(6)

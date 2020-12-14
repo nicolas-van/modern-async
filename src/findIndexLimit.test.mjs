@@ -1,8 +1,8 @@
 
 import { expect, test } from '@jest/globals'
-import findIndexLimit from './findIndexLimit'
+import findIndexLimit from './findIndexLimit.mjs'
 import _ from 'lodash'
-import sleepPrecise from './sleepPrecise'
+import sleepPrecise from './sleepPrecise.mjs'
 
 test('findIndexLimit compatibility', async () => {
   let res = await findIndexLimit(_.range(3), async (v) => {

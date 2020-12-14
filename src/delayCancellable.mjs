@@ -1,5 +1,5 @@
 
-import sleepCancellable from './sleepCancellable'
+import sleepCancellable from './sleepCancellable.mjs'
 
 /**
  * A function returning a promise that will be resolved in a later tick of the event loop.

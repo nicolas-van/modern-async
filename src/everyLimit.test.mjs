@@ -1,8 +1,8 @@
 
 import { expect, test } from '@jest/globals'
-import everyLimit from './everyLimit'
+import everyLimit from './everyLimit.mjs'
 import _ from 'lodash'
-import sleepPrecise from './sleepPrecise'
+import sleepPrecise from './sleepPrecise.mjs'
 
 test('everyLimit compatibility', async () => {
   let res = await everyLimit(_.range(3), async (v) => {

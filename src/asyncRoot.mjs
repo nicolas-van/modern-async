@@ -1,5 +1,5 @@
 
-import asyncWrap from './asyncWrap'
+import asyncWrap from './asyncWrap.mjs'
 
 /**
  * Immediately calls an asynchronous function and redirects to an error handler if it throws an exception.

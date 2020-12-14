@@ -1,6 +1,6 @@
 
 import { expect, test } from '@jest/globals'
-import TimeoutError from './TimeoutError'
+import TimeoutError from './TimeoutError.mjs'
 
 test('TimeoutError', async () => {
   try {

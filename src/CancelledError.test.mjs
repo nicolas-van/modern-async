@@ -1,6 +1,6 @@
 
 import { expect, test } from '@jest/globals'
-import CancelledError from './CancelledError'
+import CancelledError from './CancelledError.mjs'
 
 test('CancelledError', async () => {
   try {

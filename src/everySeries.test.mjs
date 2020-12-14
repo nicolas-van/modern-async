@@ -1,8 +1,8 @@
 
 import { expect, test } from '@jest/globals'
-import everySeries from './everySeries'
+import everySeries from './everySeries.mjs'
 import _ from 'lodash'
-import sleepPrecise from './sleepPrecise'
+import sleepPrecise from './sleepPrecise.mjs'
 
 test('everySeries all pass', async () => {
   const callCount = {}

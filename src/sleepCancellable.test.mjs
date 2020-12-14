@@ -1,7 +1,7 @@
 
 import { expect, test } from '@jest/globals'
-import sleepCancellable from './sleepCancellable'
-import CancelledError from './CancelledError'
+import sleepCancellable from './sleepCancellable.mjs'
+import CancelledError from './CancelledError.mjs'
 
 test('sleepCancellable base', async () => {
   const start = new Date().getTime()

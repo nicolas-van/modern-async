@@ -1,7 +1,7 @@
 
 import { expect, test } from '@jest/globals'
-import sleepPreciseCancellable, { _innerWaitPreciseCancellable } from './sleepPreciseCancellable'
-import CancelledError from './CancelledError'
+import sleepPreciseCancellable, { _innerWaitPreciseCancellable } from './sleepPreciseCancellable.mjs'
+import CancelledError from './CancelledError.mjs'
 
 test('sleepPreciseCancellable base', async () => {
   const start = new Date().getTime()

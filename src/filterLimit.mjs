@@ -1,5 +1,5 @@
 
-import mapLimit from './mapLimit'
+import mapLimit from './mapLimit.mjs'
 import assert from 'assert'
 
 /**

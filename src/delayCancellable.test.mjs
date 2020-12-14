@@ -1,7 +1,7 @@
 
 import { expect, test } from '@jest/globals'
-import delayCancellable from './delayCancellable'
-import CancelledError from './CancelledError'
+import delayCancellable from './delayCancellable.mjs'
+import CancelledError from './CancelledError.mjs'
 
 test('delayCancellable', async () => {
   const [p] = delayCancellable()

@@ -1,5 +1,5 @@
 
-import mapLimit from './mapLimit'
+import mapLimit from './mapLimit.mjs'
 
 /**
  * Produces a new collection of values by mapping each value in `iterable` through the `iteratee` function.

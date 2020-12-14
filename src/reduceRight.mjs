@@ -1,5 +1,5 @@
 
-import reduce from './reduce'
+import reduce from './reduce.mjs'
 
 /**
  * Performs a reduce operation as defined in the `Array.reduceRight()` method but using an asynchronous

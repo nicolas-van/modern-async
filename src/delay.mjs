@@ -1,5 +1,5 @@
 
-import delayCancellable from './delayCancellable'
+import delayCancellable from './delayCancellable.mjs'
 
 /**
  * A function returning a promise that will be resolved in a later tick of the event loop.
