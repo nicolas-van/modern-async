@@ -11,13 +11,15 @@
   },
   "browser": "./src/dist/modern-async.umd.js",
   "scripts": {
-    "build": "rollup -c rollup.config.js",
+    "build": "npm run set-babel-browser && rollup -c rollup.config.js",
     "test": "npm run lint && npm run coverage",
     "coverage": "npm run jest-node -- --coverage",
     "lint": "eslint -c .eslintrc.cjs \"src/**/*.mjs\"",
-    "jest-node": "jest --config=./jest-node.config.cjs",
+    "jest-node": "npm run set-babel-node && jest --config=./jest-node.config.cjs",
     "docs": "jsdoc -c .jsdoc.json && node dev/docs-collect-version-numbers.cjs",
-    "babel": "babel --ignore \"**/*.test.js\" --out-dir dist/babel --config-file ./babel.config.js src"
+    "babel": "babel --ignore \"**/*.test.js\" --out-dir dist/babel --config-file ./babel.config.js src",
+    "set-babel-node": "cp babel-node.config.cjs babel.config.cjs",
+    "set-babel-browser": "cp babel-browser.config.cjs babel.config.cjs"
   },
   "repository": {
     "type": "git",

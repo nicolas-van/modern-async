@@ -1,7 +1,7 @@
 
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
-import { getBabelOutputPlugin } from '@rollup/plugin-babel'
+import babel from '@rollup/plugin-babel'
 
 export default [{
   input: 'src/modern-async.mjs',
@@ -14,26 +14,12 @@ export default [{
   input: 'src/modern-async-umd.mjs',
   output: {
     file: 'dist/modern-async.umd.js',
-    format: 'esm'
+    format: 'umd',
+    name: 'modernAsync'
   },
   plugins: [
     nodeResolve(),
     commonjs(),
-    getBabelOutputPlugin({
-      presets: [
-        ['@babel/preset-env', {
-          targets: {
-            ie: '8'
-          }
-        }]
-      ],
-      plugins: [
-        ['@babel/plugin-transform-modules-umd',{
-          globals: {
-            unknown: 'modernAsync'
-          }
-        }]
-      ]
-    })
+    babel({ babelHelpers: 'bundled' })
   ]
 }]
