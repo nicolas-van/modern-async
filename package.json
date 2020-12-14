@@ -6,12 +6,12 @@
   "module": "src/modern-async.js",
   "scripts": {
     "build": "rollup -c rollup.config.js",
-    "test": "npm run lint && npm run jest-puppeteer && npm run coverage",
+    "test": "npm run lint && npm run coverage",
     "coverage": "npm run jest-node -- --coverage",
     "lint": "eslint \"*.js\" \"src/**/*.js\"",
     "jest-node": "jest --config=./jest-node.config.js",
-    "jest-puppeteer": "jest --config=./jest-puppeteer.config.js",
-    "docs": "jsdoc -c .jsdoc.json && node dev/docs-collect-version-numbers.js"
+    "docs": "jsdoc -c .jsdoc.json && node dev/docs-collect-version-numbers.js",
+    "babel": "babel --ignore \"**/*.test.js\" --out-dir dist/babel --config-file ./babel.config.js src"
   },
   "repository": {
     "type": "git",
@@ -24,8 +24,9 @@
   },
   "homepage": "https://github.com/nicolas-van/modern-async#readme",
   "devDependencies": {
-    "@babel/core": "^7.12.3",
-    "@babel/preset-env": "^7.12.1",
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/preset-env": "^7.12.10",
     "babel-jest": "^26.6.3",
     "clean-jsdoc-theme": "^3.0.0",
     "eslint": "^6.6.0",
@@ -37,10 +38,8 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "jest": "^26.6.3",
-    "jest-puppeteer": "^4.4.0",
     "jsdoc": "^3.6.6",
     "lodash": "^4.17.20",
-    "puppeteer": "^5.5.0",
     "rollup": "^2.33.1",
     "semver-sort": "0.0.4"
   },
