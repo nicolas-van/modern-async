@@ -16,7 +16,7 @@ This library is a modernized alternative to a lot of libraries like [Async.js](h
 
 ## This project accepts feature requests !
 
-The goal of modern-async is to be as complete as possible. I coded everything I missed in past while developing, yet it's difficult to know what people would really need. So if you would like some more feature start by [reading the contribution guide](https://github.com/nicolas-van/modern-async/blob/master/CONTRIBUTING.md).
+The goal of modern-async is to be as complete as possible. I coded everything I missed in the past while developing, yet it's difficult to know what other people would really need. So if you would like some more feature start by [reading the contribution guide](https://github.com/nicolas-van/modern-async/blob/master/CONTRIBUTING.md).
 
 ## Installation
 
