@@ -1,6 +1,6 @@
 
 import Queue from './Queue.mjs'
-import assert from 'assert'
+import assert from 'nanoassert'
 
 /**
  * Returns the index of the first element of an iterable that passes an asynchronous truth test.

@@ -1,6 +1,6 @@
 
 import mapLimit from './mapLimit.mjs'
-import assert from 'assert'
+import assert from 'nanoassert'
 
 /**
  * Returns a new array of all the values in iterable which pass an asynchronous truth test.

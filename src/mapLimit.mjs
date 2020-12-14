@@ -1,6 +1,6 @@
 
 import Queue from './Queue.mjs'
-import assert from 'assert'
+import assert from 'nanoassert'
 
 /**
  * Produces a new collection of values by mapping each value in `iterable` through the `iteratee` function.

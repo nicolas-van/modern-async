@@ -1,4 +1,4 @@
-import assert from 'assert'
+import assert from 'nanoassert'
 import Deferred from './Deferred.mjs'
 import asyncWrap from './asyncWrap.mjs'
 import CancelledError from './CancelledError.mjs'

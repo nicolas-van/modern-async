@@ -1,5 +1,5 @@
 
-import assert from 'assert'
+import assert from 'nanoassert'
 
 /**
  * Performs a reduce operation as defined in the `Array.reduce()` method but using an asynchronous

@@ -1,7 +1,7 @@
 
 import sleepCancellable from './sleepCancellable.mjs'
 import Queue from './Queue.mjs'
-import assert from 'assert'
+import assert from 'nanoassert'
 import asyncWrap from './asyncWrap.mjs'
 import CancelledError from './CancelledError.mjs'
 

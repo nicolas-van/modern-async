@@ -1,5 +1,5 @@
 
-import assert from 'assert'
+import assert from 'nanoassert'
 import sleepCancellable from './sleepCancellable.mjs'
 import Deferred from './Deferred.mjs'
 

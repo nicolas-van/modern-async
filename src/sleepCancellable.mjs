@@ -1,5 +1,5 @@
 
-import assert from 'assert'
+import assert from 'nanoassert'
 import Deferred from './Deferred.mjs'
 import CancelledError from './CancelledError.mjs'
 

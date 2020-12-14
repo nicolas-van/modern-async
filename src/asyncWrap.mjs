@@ -1,4 +1,4 @@
-import assert from 'assert'
+import assert from 'nanoassert'
 
 /**
  * Wraps a function call that may be synchronous in a function that

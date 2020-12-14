@@ -1,6 +1,6 @@
 
 import delay from './delay.mjs'
-import assert from 'assert'
+import assert from 'nanoassert'
 
 /**
  * A class used to spread time or cpu intensive operations on multiple tasks in the event loop in order
