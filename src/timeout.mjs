@@ -32,7 +32,7 @@ import Deferred from './Deferred.mjs'
  *       await sleep(100)
  *     }, 10)
  *   } catch (e) {
- *     print(e.name) // prints TimeoutError
+ *     console.log(e.name) // prints TimeoutError
  *   }
  * })
  */

@@ -33,7 +33,7 @@ import Deferred from './Deferred.mjs'
  *   try {
  *     await promise
  *   } catch (e) {
- *     console.log(e) // prints CancelledError
+ *     console.log(e.name) // prints CancelledError
  *   }
  * })
  */

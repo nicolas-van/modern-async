@@ -29,7 +29,7 @@ import findIndexLimit from './findIndexLimit.mjs'
  * asyncRoot(async () => {
  *   const array = [1, 2, 3]
  *
- *   const result = await everyLimit(arrar, async (v) => {
+ *   const result = await everyLimit(array, async (v) => {
  *     // these calls will be performed in parallel with a maximum of 2
  *     // concurrent calls
  *     await sleep(10) // waits 10ms

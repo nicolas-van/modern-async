@@ -301,7 +301,7 @@ the thrown exception. The default behavior is to output the exception in the con
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="asyncRoot.js.html">asyncRoot.js</a>, <a href="asyncRoot.js.html#line29">line 29</a>
+                <a href="asyncRoot.mjs.html">asyncRoot.mjs</a>, <a href="asyncRoot.mjs.html#line29">line 29</a>
             </li></ul></dd>
         </div>
     
@@ -460,7 +460,7 @@ handles the case where the original function throws an exception.</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="asyncWrap.js.html">asyncWrap.js</a>, <a href="asyncWrap.js.html#line23">line 23</a>
+                <a href="asyncWrap.mjs.html">asyncWrap.mjs</a>, <a href="asyncWrap.mjs.html#line23">line 23</a>
             </li></ul></dd>
         </div>
     
@@ -588,7 +588,7 @@ console.log(promise instanceof Promise) // prints true</code></pre>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="delay.js.html">delay.js</a>, <a href="delay.js.html#line19">line 19</a>
+                <a href="delay.mjs.html">delay.mjs</a>, <a href="delay.mjs.html#line19">line 19</a>
             </li></ul></dd>
         </div>
     
@@ -644,9 +644,9 @@ console.log(promise instanceof Promise) // prints true</code></pre>
     <pre class="prettyprint"><code>import { delay, asyncRoot } from 'modern-async'
 
 asyncRoot(async () => {
-  console.log('this execute in a tick of the event loop')
+  console.log('this executes in a tick of the event loop')
   await delay()
-  console.log('this execute in another tick of the event loop')
+  console.log('this executes in another tick of the event loop')
 })</code></pre>
 
     </div>
@@ -715,7 +715,7 @@ necessary. If cancelled, the promise will be rejected with a CancelledError.</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="delayCancellable.js.html">delayCancellable.js</a>, <a href="delayCancellable.js.html#line29">line 29</a>
+                <a href="delayCancellable.mjs.html">delayCancellable.mjs</a>, <a href="delayCancellable.mjs.html#line29">line 29</a>
             </li></ul></dd>
         </div>
     
@@ -932,7 +932,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="every.js.html">every.js</a>, <a href="every.js.html#line37">line 37</a>
+                <a href="every.mjs.html">every.mjs</a>, <a href="every.mjs.html#line37">line 37</a>
             </li></ul></dd>
         </div>
     
@@ -1174,7 +1174,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="everyLimit.js.html">everyLimit.js</a>, <a href="everyLimit.js.html#line42">line 42</a>
+                <a href="everyLimit.mjs.html">everyLimit.mjs</a>, <a href="everyLimit.mjs.html#line42">line 42</a>
             </li></ul></dd>
         </div>
     
@@ -1234,7 +1234,7 @@ an exception.</p>
 asyncRoot(async () => {
   const array = [1, 2, 3]
 
-  const result = await everyLimit(arrar, async (v) => {
+  const result = await everyLimit(array, async (v) => {
     // these calls will be performed in parallel with a maximum of 2
     // concurrent calls
     await sleep(10) // waits 10ms
@@ -1391,7 +1391,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="everySeries.js.html">everySeries.js</a>, <a href="everySeries.js.html#line37">line 37</a>
+                <a href="everySeries.mjs.html">everySeries.mjs</a>, <a href="everySeries.mjs.html#line37">line 37</a>
             </li></ul></dd>
         </div>
     
@@ -1605,7 +1605,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="filter.js.html">filter.js</a>, <a href="filter.js.html#line32">line 32</a>
+                <a href="filter.mjs.html">filter.mjs</a>, <a href="filter.mjs.html#line32">line 32</a>
             </li></ul></dd>
         </div>
     
@@ -1840,7 +1840,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="filterLimit.js.html">filterLimit.js</a>, <a href="filterLimit.js.html#line35">line 35</a>
+                <a href="filterLimit.mjs.html">filterLimit.mjs</a>, <a href="filterLimit.mjs.html#line35">line 35</a>
             </li></ul></dd>
         </div>
     
@@ -2053,7 +2053,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="filterSeries.js.html">filterSeries.js</a>, <a href="filterSeries.js.html#line32">line 32</a>
+                <a href="filterSeries.mjs.html">filterSeries.mjs</a>, <a href="filterSeries.mjs.html#line32">line 32</a>
             </li></ul></dd>
         </div>
     
@@ -2270,7 +2270,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="find.js.html">find.js</a>, <a href="find.js.html#line37">line 37</a>
+                <a href="find.mjs.html">find.mjs</a>, <a href="find.mjs.html#line37">line 37</a>
             </li></ul></dd>
         </div>
     
@@ -2486,7 +2486,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="findIndex.js.html">findIndex.js</a>, <a href="findIndex.js.html#line37">line 37</a>
+                <a href="findIndex.mjs.html">findIndex.mjs</a>, <a href="findIndex.mjs.html#line37">line 37</a>
             </li></ul></dd>
         </div>
     
@@ -2727,7 +2727,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="findIndexLimit.js.html">findIndexLimit.js</a>, <a href="findIndexLimit.js.html#line45">line 45</a>
+                <a href="findIndexLimit.mjs.html">findIndexLimit.mjs</a>, <a href="findIndexLimit.mjs.html#line45">line 45</a>
             </li></ul></dd>
         </div>
     
@@ -2945,7 +2945,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="findIndexSeries.js.html">findIndexSeries.js</a>, <a href="findIndexSeries.js.html#line35">line 35</a>
+                <a href="findIndexSeries.mjs.html">findIndexSeries.mjs</a>, <a href="findIndexSeries.mjs.html#line35">line 35</a>
             </li></ul></dd>
         </div>
     
@@ -3186,7 +3186,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="findLimit.js.html">findLimit.js</a>, <a href="findLimit.js.html#line44">line 44</a>
+                <a href="findLimit.mjs.html">findLimit.mjs</a>, <a href="findLimit.mjs.html#line44">line 44</a>
             </li></ul></dd>
         </div>
     
@@ -3404,7 +3404,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="findSeries.js.html">findSeries.js</a>, <a href="findSeries.js.html#line35">line 35</a>
+                <a href="findSeries.mjs.html">findSeries.mjs</a>, <a href="findSeries.mjs.html#line35">line 35</a>
             </li></ul></dd>
         </div>
     
@@ -3614,7 +3614,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="forEach.js.html">forEach.js</a>, <a href="forEach.js.html#line30">line 30</a>
+                <a href="forEach.mjs.html">forEach.mjs</a>, <a href="forEach.mjs.html#line30">line 30</a>
             </li></ul></dd>
         </div>
     
@@ -3847,7 +3847,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="forEachLimit.js.html">forEachLimit.js</a>, <a href="forEachLimit.js.html#line33">line 33</a>
+                <a href="forEachLimit.mjs.html">forEachLimit.mjs</a>, <a href="forEachLimit.mjs.html#line33">line 33</a>
             </li></ul></dd>
         </div>
     
@@ -4059,7 +4059,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="forEachSeries.js.html">forEachSeries.js</a>, <a href="forEachSeries.js.html#line30">line 30</a>
+                <a href="forEachSeries.mjs.html">forEachSeries.mjs</a>, <a href="forEachSeries.mjs.html#line30">line 30</a>
             </li></ul></dd>
         </div>
     
@@ -4269,7 +4269,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="map.js.html">map.js</a>, <a href="map.js.html#line31">line 31</a>
+                <a href="map.mjs.html">map.mjs</a>, <a href="map.mjs.html#line31">line 31</a>
             </li></ul></dd>
         </div>
     
@@ -4503,7 +4503,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="mapLimit.js.html">mapLimit.js</a>, <a href="mapLimit.js.html#line34">line 34</a>
+                <a href="mapLimit.mjs.html">mapLimit.mjs</a>, <a href="mapLimit.mjs.html#line34">line 34</a>
             </li></ul></dd>
         </div>
     
@@ -4715,7 +4715,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="mapSeries.js.html">mapSeries.js</a>, <a href="mapSeries.js.html#line31">line 31</a>
+                <a href="mapSeries.mjs.html">mapSeries.mjs</a>, <a href="mapSeries.mjs.html#line31">line 31</a>
             </li></ul></dd>
         </div>
     
@@ -4952,7 +4952,7 @@ function).</p></td>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="reduce.js.html">reduce.js</a>, <a href="reduce.js.html#line34">line 34</a>
+                <a href="reduce.mjs.html">reduce.mjs</a>, <a href="reduce.mjs.html#line34">line 34</a>
             </li></ul></dd>
         </div>
     
@@ -5190,7 +5190,7 @@ function).</p></td>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="reduceRight.js.html">reduceRight.js</a>, <a href="reduceRight.js.html#line35">line 35</a>
+                <a href="reduceRight.mjs.html">reduceRight.mjs</a>, <a href="reduceRight.mjs.html#line35">line 35</a>
             </li></ul></dd>
         </div>
     
@@ -5373,7 +5373,7 @@ after the asked time (depending on other tasks running in the event loop) or a f
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="sleep.js.html">sleep.js</a>, <a href="sleep.js.html#line28">line 28</a>
+                <a href="sleep.mjs.html">sleep.mjs</a>, <a href="sleep.mjs.html#line28">line 28</a>
             </li></ul></dd>
         </div>
     
@@ -5559,7 +5559,7 @@ after the asked time (depending on other tasks running in the event loop) or a f
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="sleepCancellable.js.html">sleepCancellable.js</a>, <a href="sleepCancellable.js.html#line34">line 34</a>
+                <a href="sleepCancellable.mjs.html">sleepCancellable.mjs</a>, <a href="sleepCancellable.mjs.html#line34">line 34</a>
             </li></ul></dd>
         </div>
     
@@ -5627,7 +5627,7 @@ asyncRoot(async () => {
   try {
     await promise
   } catch (e) {
-    console.log(e) // prints CancelledError
+    console.log(e.name) // prints CancelledError
   }
 })</code></pre>
 
@@ -5751,7 +5751,7 @@ milliseconds before the asked delay.</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="sleepPrecise.js.html">sleepPrecise.js</a>, <a href="sleepPrecise.js.html#line24">line 24</a>
+                <a href="sleepPrecise.mjs.html">sleepPrecise.mjs</a>, <a href="sleepPrecise.mjs.html#line24">line 24</a>
             </li></ul></dd>
         </div>
     
@@ -5932,7 +5932,7 @@ milliseconds before the asked delay.</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="sleepPreciseCancellable.js.html">sleepPreciseCancellable.js</a>, <a href="sleepPreciseCancellable.js.html#line40">line 40</a>
+                <a href="sleepPreciseCancellable.mjs.html">sleepPreciseCancellable.mjs</a>, <a href="sleepPreciseCancellable.mjs.html#line40">line 40</a>
             </li></ul></dd>
         </div>
     
@@ -6000,7 +6000,7 @@ asyncRoot(async () => {
   try {
     await promise
   } catch (e) {
-    console.log(e) // prints CancelledError
+    console.log(e.name) // prints CancelledError
   }
 })</code></pre>
 
@@ -6151,7 +6151,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="some.js.html">some.js</a>, <a href="some.js.html#line36">line 36</a>
+                <a href="some.mjs.html">some.mjs</a>, <a href="some.mjs.html#line36">line 36</a>
             </li></ul></dd>
         </div>
     
@@ -6392,7 +6392,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="someLimit.js.html">someLimit.js</a>, <a href="someLimit.js.html#line41">line 41</a>
+                <a href="someLimit.mjs.html">someLimit.mjs</a>, <a href="someLimit.mjs.html#line41">line 41</a>
             </li></ul></dd>
         </div>
     
@@ -6608,7 +6608,7 @@ three arguments:</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="someSeries.js.html">someSeries.js</a>, <a href="someSeries.js.html#line36">line 36</a>
+                <a href="someSeries.mjs.html">someSeries.mjs</a>, <a href="someSeries.mjs.html#line36">line 36</a>
             </li></ul></dd>
         </div>
     
@@ -6662,7 +6662,7 @@ if none of them do. That promise will be rejected if one of the truth test throw
     <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
         <strong>Example</strong>
         
-    <pre class="prettyprint"><code>import { someSeries asyncRoot, sleep } from 'modern-async'
+    <pre class="prettyprint"><code>import { someSeries, asyncRoot, sleep } from 'modern-async'
 
 asyncRoot(async () => {
   const array = [1, 2, 3]
@@ -6816,7 +6816,7 @@ after the asked time (depending on other tasks running in the event loop) or a f
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="timeout.js.html">timeout.js</a>, <a href="timeout.js.html#line39">line 39</a>
+                <a href="timeout.mjs.html">timeout.mjs</a>, <a href="timeout.mjs.html#line39">line 39</a>
             </li></ul></dd>
         </div>
     
@@ -6886,7 +6886,7 @@ asyncRoot(async () => {
       await sleep(100)
     }, 10)
   } catch (e) {
-    print(e.name) // prints TimeoutError
+    console.log(e.name) // prints TimeoutError
   }
 })</code></pre>
 
@@ -7034,7 +7034,7 @@ milliseconds before the asked delay.</p>
         <div class="details-item-container">
             <dt class="tag-source">Source:</dt>
             <dd class="tag-source"><ul class="dummy"><li>
-                <a href="timeoutPrecise.js.html">timeoutPrecise.js</a>, <a href="timeoutPrecise.js.html#line44">line 44</a>
+                <a href="timeoutPrecise.mjs.html">timeoutPrecise.mjs</a>, <a href="timeoutPrecise.mjs.html#line44">line 44</a>
             </li></ul></dd>
         </div>
     
@@ -7104,7 +7104,7 @@ asyncRoot(async () => {
       await sleep(100)
     }, 10)
   } catch (e) {
-    print(e.name) // prints TimeoutError
+    console.log(e.name) // prints TimeoutError
   }
 })</code></pre>
 

@@ -77,7 +77,7 @@
     
 
 
-    <title>Deferred</title>
+    <title>Delayer.mjs</title>
 
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -114,408 +114,109 @@
 
 <div id="main">
     
-    <h1 id='page-title' class="page-title">Deferred</h1>
-    
-
-    
-
-
-
-
-<section>
-
-
-<header>
-    
-        
-        <h2>
-        
-        Deferred
-        
-        </h2>
-        
-        
-            <div class="class-description"><p>A basic class to create a promise with its resolve and reject function in the same object.</p>
-<p>Instances of this class are never returned by any function of this library but it is used
-internally and can be useful to code other asynchronous helpers.</p></div>
-            <hr/>
-        
-    
-</header>
-
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-        <h2>Constructor</h2>
-    
-
-    <h4 class="name" id="Deferred">
-        <a href="#Deferred">#</a>
-        <span class="type-signature"></span>new Deferred<span class="signature">()</span><span class="type-signature"></span>
-    </h4>
-
-    
-
-
-
-    <div class="description">
-        <p>Constructs a deferred object.</p>
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class="details-item-container">
-            <dt class="tag-source">Source:</dt>
-            <dd class="tag-source"><ul class="dummy"><li>
-                <a href="Deferred.mjs.html">Deferred.mjs</a>, <a href="Deferred.mjs.html#line21">line 21</a>
-            </li></ul></dd>
-        </div>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
-        <strong>Example</strong>
-        
-    <pre class="prettyprint"><code>import { Deferred, asyncRoot, sleep } from 'modern-async'
-
-asyncRoot(async () => {
-  const deferred = new Deferred()
-
-  sleep(10).then(() => {
-    deferred.resolve('test')
-  })
-
-  console.log(await deferred.promise) // will wait 10ms before printing 'test'
-})</code></pre>
-
-    </div>
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="promise">
-    <a href="#promise">#</a>
-    <span class="type-signature"></span>promise<span class="type-signature"> :Promise</span>
-</h4>
-
-
-
-
-<div class="description">
-    <p>(Read-only) The promise.</p>
-</div>
-
-
-
-    <div class="member-item-container flex">
-        <strong>Type: </strong>
-        <ul>
-            <li>
-                
-<span class="param-type">Promise</span>
-
-
-            </li>
-        </ul>
-    </div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class="details-item-container">
-            <dt class="tag-source">Source:</dt>
-            <dd class="tag-source"><ul class="dummy"><li>
-                <a href="Deferred.mjs.html">Deferred.mjs</a>, <a href="Deferred.mjs.html#line39">line 39</a>
-            </li></ul></dd>
-        </div>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="reject">
-    <a href="#reject">#</a>
-    <span class="type-signature"></span>reject<span class="type-signature"> :function</span>
-</h4>
-
-
-
-
-<div class="description">
-    <p>(Read-only) The reject function</p>
-</div>
-
-
-
-    <div class="member-item-container flex">
-        <strong>Type: </strong>
-        <ul>
-            <li>
-                
-<span class="param-type">function</span>
-
-
-            </li>
-        </ul>
-    </div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class="details-item-container">
-            <dt class="tag-source">Source:</dt>
-            <dd class="tag-source"><ul class="dummy"><li>
-                <a href="Deferred.mjs.html">Deferred.mjs</a>, <a href="Deferred.mjs.html#line61">line 61</a>
-            </li></ul></dd>
-        </div>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="resolve">
-    <a href="#resolve">#</a>
-    <span class="type-signature"></span>resolve<span class="type-signature"> :function</span>
-</h4>
-
-
-
-
-<div class="description">
-    <p>(Read-only) The resolve function.</p>
-</div>
-
-
-
-    <div class="member-item-container flex">
-        <strong>Type: </strong>
-        <ul>
-            <li>
-                
-<span class="param-type">function</span>
-
-
-            </li>
-        </ul>
-    </div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class="details-item-container">
-            <dt class="tag-source">Source:</dt>
-            <dd class="tag-source"><ul class="dummy"><li>
-                <a href="Deferred.mjs.html">Deferred.mjs</a>, <a href="Deferred.mjs.html#line50">line 50</a>
-            </li></ul></dd>
-        </div>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 id='page-title' class="page-title">Delayer.mjs</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+import delay from './delay.mjs'
+import assert from 'assert'
+
+/**
+ * A class used to spread time or cpu intensive operations on multiple tasks in the event loop in order
+ * to avoid blocking other tasks that may need to be executed.
+ *
+ * It is configured with a trigger time, which represents the maximum amount of time your tasks should
+ * monopolize the event loop. Choosing an appropriate trigger time is both important and hard. If too low
+ * it will impact the performances of your long running algorithm. If too high it will impact the other
+ * tasks that need to run in the event loop.
+ *
+ * When using Delayer your code should contain frequent calls to `await delayer.checkDelay()`, usually
+ * at the end of every loop. `checkDelay()` will check the amount of time that ellasped since the last time
+ * your called it. If the amount of time is below the trigger time it returns immediately. If not it will
+ * call the `delay()` function that will retrigger the operation in a later task of the event loop.
+ *
+ * @example
+ * import { Delayer, asyncRoot } from 'modern-async'
+ *
+ * asyncRoot(async () => {
+ *   const delayer = new Delayer(10) // a delayer with 10ms trigger time
+ *
+ *   // some cpu intensive operation that will run for a long time
+ *   for (let i = 0; i &lt; 100000000; i += 1) {
+ *     // some code
+ *     await delayer.checkDelay()
+ *   }
+ * })
+ */
+class Delayer {
+  /**
+   * Constructs a new `Delayer` by specifying its trigger time.
+   *
+   * @param {number} triggerTime The trigger time.
+   */
+  constructor (triggerTime) {
+    this.triggerTime = triggerTime
+    this.reset()
+  }
+
+  /**
+   * The trigger time of this `Delayer` in milliseconds. The trigger time represent the
+   * maximum amount of time before a call to `checkDelay()` decide to schedule a new task in the event loop.
+   *
+   * @member {number}
+   *
+   * @returns {number} ignore
+   */
+  get triggerTime () {
+    return this._triggerTime
+  }
+
+  /**
+   * @ignore
+   *
+   * @param {number} triggerTime ignore
+   */
+  set triggerTime (triggerTime) {
+    assert(typeof triggerTime === 'number', 'trigger time must be a number')
+    this._triggerTime = triggerTime
+  }
+
+  /**
+   * Resets the internal timer to the current time.
+   */
+  reset () {
+    this._last = new Date().getTime()
+  }
+
+  /**
+   * Checks if a delay must be applied according to the internal timer. If that's the case this method
+   * will call `delay()` and return `true`. If not it will do nothing and return `false`.
+   *
+   * @returns {boolean} `true` if a new task was scheduled in the event loop, `false` otherwise.
+   */
+  async checkDelay () {
+    const current = new Date().getTime()
+    if (current - this._last >= this.triggerTime) {
+      await delay()
+      this.reset()
+      return true
+    } else {
+      return false
+    }
+  }
+}
+
+export default Delayer
+</code></pre>
+        </article>
+    </section>
 
 
 

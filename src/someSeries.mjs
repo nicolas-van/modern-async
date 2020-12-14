@@ -19,7 +19,7 @@ import someLimit from './someLimit.mjs'
  * @returns {Promise} A promise that will be resolved to `true` if at least one value pass the truth test and `false`
  * if none of them do. That promise will be rejected if one of the truth test throws an exception.
  * @example
- * import { someSeries asyncRoot, sleep } from 'modern-async'
+ * import { someSeries, asyncRoot, sleep } from 'modern-async'
  *
  * asyncRoot(async () => {
  *   const array = [1, 2, 3]

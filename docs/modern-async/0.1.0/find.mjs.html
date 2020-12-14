@@ -77,7 +77,7 @@
     
 
 
-    <title>Deferred</title>
+    <title>find.mjs</title>
 
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -114,408 +114,60 @@
 
 <div id="main">
     
-    <h1 id='page-title' class="page-title">Deferred</h1>
-    
-
-    
-
-
-
-
-<section>
-
-
-<header>
-    
-        
-        <h2>
-        
-        Deferred
-        
-        </h2>
-        
-        
-            <div class="class-description"><p>A basic class to create a promise with its resolve and reject function in the same object.</p>
-<p>Instances of this class are never returned by any function of this library but it is used
-internally and can be useful to code other asynchronous helpers.</p></div>
-            <hr/>
-        
-    
-</header>
-
-
-<article>
-    <div class="container-overview">
-    
-        
-
-    
-        <h2>Constructor</h2>
-    
-
-    <h4 class="name" id="Deferred">
-        <a href="#Deferred">#</a>
-        <span class="type-signature"></span>new Deferred<span class="signature">()</span><span class="type-signature"></span>
-    </h4>
-
-    
-
-
-
-    <div class="description">
-        <p>Constructs a deferred object.</p>
-    </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class="details-item-container">
-            <dt class="tag-source">Source:</dt>
-            <dd class="tag-source"><ul class="dummy"><li>
-                <a href="Deferred.mjs.html">Deferred.mjs</a>, <a href="Deferred.mjs.html#line21">line 21</a>
-            </li></ul></dd>
-        </div>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class="method-member-container flex flex-col w-100 overflow-auto mt-20">
-        <strong>Example</strong>
-        
-    <pre class="prettyprint"><code>import { Deferred, asyncRoot, sleep } from 'modern-async'
-
-asyncRoot(async () => {
-  const deferred = new Deferred()
-
-  sleep(10).then(() => {
-    deferred.resolve('test')
-  })
-
-  console.log(await deferred.promise) // will wait 10ms before printing 'test'
-})</code></pre>
-
-    </div>
-
-
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<h4 class="name" id="promise">
-    <a href="#promise">#</a>
-    <span class="type-signature"></span>promise<span class="type-signature"> :Promise</span>
-</h4>
-
-
-
-
-<div class="description">
-    <p>(Read-only) The promise.</p>
-</div>
-
-
-
-    <div class="member-item-container flex">
-        <strong>Type: </strong>
-        <ul>
-            <li>
-                
-<span class="param-type">Promise</span>
-
-
-            </li>
-        </ul>
-    </div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class="details-item-container">
-            <dt class="tag-source">Source:</dt>
-            <dd class="tag-source"><ul class="dummy"><li>
-                <a href="Deferred.mjs.html">Deferred.mjs</a>, <a href="Deferred.mjs.html#line39">line 39</a>
-            </li></ul></dd>
-        </div>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="reject">
-    <a href="#reject">#</a>
-    <span class="type-signature"></span>reject<span class="type-signature"> :function</span>
-</h4>
-
-
-
-
-<div class="description">
-    <p>(Read-only) The reject function</p>
-</div>
-
-
-
-    <div class="member-item-container flex">
-        <strong>Type: </strong>
-        <ul>
-            <li>
-                
-<span class="param-type">function</span>
-
-
-            </li>
-        </ul>
-    </div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class="details-item-container">
-            <dt class="tag-source">Source:</dt>
-            <dd class="tag-source"><ul class="dummy"><li>
-                <a href="Deferred.mjs.html">Deferred.mjs</a>, <a href="Deferred.mjs.html#line61">line 61</a>
-            </li></ul></dd>
-        </div>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="resolve">
-    <a href="#resolve">#</a>
-    <span class="type-signature"></span>resolve<span class="type-signature"> :function</span>
-</h4>
-
-
-
-
-<div class="description">
-    <p>(Read-only) The resolve function.</p>
-</div>
-
-
-
-    <div class="member-item-container flex">
-        <strong>Type: </strong>
-        <ul>
-            <li>
-                
-<span class="param-type">function</span>
-
-
-            </li>
-        </ul>
-    </div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-        <div class="details-item-container">
-            <dt class="tag-source">Source:</dt>
-            <dd class="tag-source"><ul class="dummy"><li>
-                <a href="Deferred.mjs.html">Deferred.mjs</a>, <a href="Deferred.mjs.html#line50">line 50</a>
-            </li></ul></dd>
-        </div>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <h1 id='page-title' class="page-title">find.mjs</h1>
+    
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+import findLimit from './findLimit.mjs'
+
+/**
+ * Returns the first element of an iterable that passes an asynchronous truth test.
+ *
+ * The calls to `iteratee` will run in parallel. This implies that the element found by this function may not
+ * be the first element of the iterable able to pass the truth test. It will be the first one in time
+ * for which one of the parallel calls to `iteratee` was able to return a positive result. If you need
+ * a sequential alternative use `findSeries()`.
+ *
+ * In case of exception in one of the `iteratee` calls the promise returned by this function will be
+ * rejected with the exception. In the very specific case where a result is found and an
+ * already started task throws an exception that exception will be plainly ignored.
+ *
+ * @param {Iterable} iterable An iterable object.
+ * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
+ * three arguments:
+ *   * `value`: The current value to process
+ *   * `index`: The index in the iterable. Will start from 0.
+ *   * `iterable`: The iterable on which the operation is being performed.
+ * @returns {Promise} A promise that will be resolved with the first found value or rejected if one of the
+ * `iteratee` calls throws an exception before finding a value. If no value is found it will return `undefined`.
+ * @example
+ * import { find, asyncRoot, sleep } from 'modern-async'
+ *
+ * asyncRoot(async () => {
+ *   const array = [1, 2, 3]
+ *   const result = await find(array, async (v) => {
+ *     // these calls will be performed in parallel
+ *     await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+ *     return v % 2 === 1
+ *   })
+ *   console.log(result) // prints 1 or 3 randomly
+ * })
+ */
+async function find (iterable, iteratee) {
+  return findLimit(iterable, iteratee, Number.POSITIVE_INFINITY)
+}
+
+export default find
+</code></pre>
+        </article>
+    </section>
 
 
 

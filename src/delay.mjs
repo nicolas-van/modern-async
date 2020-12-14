@@ -11,9 +11,9 @@ import delayCancellable from './delayCancellable.mjs'
  * import { delay, asyncRoot } from 'modern-async'
  *
  * asyncRoot(async () => {
- *   console.log('this execute in a tick of the event loop')
+ *   console.log('this executes in a tick of the event loop')
  *   await delay()
- *   console.log('this execute in another tick of the event loop')
+ *   console.log('this executes in another tick of the event loop')
  * })
  */
 async function delay () {
