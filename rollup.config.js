@@ -1,8 +1,8 @@
 
 export default {
-  input: 'src/modern-async.js',
+  input: 'src/modern-async.mjs',
   output: {
-    file: 'dist/modern-async.cjs.js',
+    file: 'dist/modern-async.cjs',
     format: 'cjs'
   },
   plugins: []

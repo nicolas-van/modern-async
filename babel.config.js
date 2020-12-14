@@ -1,3 +1,3 @@
 module.exports = {
-  presets: [['@babel/preset-env', { targets: { node: '14.15.1' } }]]
+  presets: [['@babel/preset-env', { targets: { node: '15.4.0' } }]]
 }
