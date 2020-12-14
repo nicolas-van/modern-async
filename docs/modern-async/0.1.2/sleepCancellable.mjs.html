@@ -77,7 +77,7 @@
     
 
 
-    <title>findIndexSeries.js</title>
+    <title>sleepCancellable.mjs</title>
 
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -114,7 +114,7 @@
 
 <div id="main">
     
-    <h1 id='page-title' class="page-title">findIndexSeries.js</h1>
+    <h1 id='page-title' class="page-title">sleepCancellable.mjs</h1>
     
 
     
@@ -125,44 +125,59 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>
-import findIndexLimit from './findIndexLimit'
+import assert from 'nanoassert'
+import Deferred from './Deferred.mjs'
+import CancelledError from './CancelledError.mjs'
 
 /**
- * Returns the index of the first element of an iterable that passes an asynchronous truth test.
+ * Waits a given amount of time. This function returns both a promise and cancel function in
+ * order to cancel the wait time if necessary. If cancelled, the promise will be rejected
+ * with a `CancelledError`.
  *
- * The calls to `iteratee` will run sequentially. As opposed to `findIndex()` and `findIndexLimit()` this ensures
- * that if multiple values may pass the truth test it will be the first one of the iterable that will be
- * returned.
+ * This function uses `setTimeout()` internally and has the same behavior, notably that it could resolve
+ * after the asked time (depending on other tasks running in the event loop) or a few milliseconds before.
  *
- * In case of exception in one of the `iteratee` calls the promise returned by this function will be
- * rejected with the exception and the remaining pending tasks will be cancelled.
- *
- * @param {Iterable} iterable An iterable object.
- * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
- * three arguments:
- *   * `value`: The current value to process
- *   * `index`: The index in the iterable. Will start from 0.
- *   * `iterable`: The iterable on which the operation is being performed.
- * @returns {Promise} A promise that will be resolved with the index of the first found value or rejected if one of the
- * `iteratee` calls throws an exception before finding a value. If no value is found it will return `-1`.
+ * @param {number} amount An amount of time in milliseconds
+ * @returns {Array} A tuple of two objects:
+ *   * `promise`: The promise
+ *   * `cancel`: The cancel function. It will return a boolean that will be `true` if the promise was effectively cancelled,
+ *     `false` otherwise.
  * @example
- * import { findIndexSeries, asyncRoot, sleep } from 'modern-async'
+ * import { sleepCancellable, asyncRoot } from 'modern-async'
  *
  * asyncRoot(async () => {
- *   const array = [1, 2, 3]
- *   const result = await findIndexSeries(array, async (v) => {
- *     // these calls will be performed sequentially
- *     await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
- *     return v % 2 === 1
- *   })
- *   console.log(result) // always prints 0
+ *   const [promise, cancel] = sleepCancellable(100) // schedule to resolve the promise after 100ms
+ *
+ *   cancel()
+ *
+ *   try {
+ *     await promise
+ *   } catch (e) {
+ *     console.log(e.name) // prints CancelledError
+ *   }
  * })
  */
-async function findIndexSeries (iterable, iteratee) {
-  return findIndexLimit(iterable, iteratee, 1)
+function sleepCancellable (amount) {
+  assert(typeof amount === 'number', 'amount must be a number')
+  let id
+  const deferred = new Deferred()
+  setTimeout(deferred.resolve, amount)
+  let terminated = false
+  return [deferred.promise.finally(() => {
+    terminated = true
+  }), () => {
+    if (terminated) {
+      return false
+    } else {
+      terminated = true
+      deferred.reject(new CancelledError())
+      clearTimeout(id)
+      return true
+    }
+  }]
 }
 
-export default findIndexSeries
+export default sleepCancellable
 </code></pre>
         </article>
     </section>

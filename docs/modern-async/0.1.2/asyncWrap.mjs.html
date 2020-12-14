@@ -77,7 +77,7 @@
     
 
 
-    <title>delay.js</title>
+    <title>asyncWrap.mjs</title>
 
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -114,7 +114,7 @@
 
 <div id="main">
     
-    <h1 id='page-title' class="page-title">delay.js</h1>
+    <h1 id='page-title' class="page-title">asyncWrap.mjs</h1>
     
 
     
@@ -124,29 +124,36 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>
-import delayCancellable from './delayCancellable'
+            <pre class="prettyprint source linenums"><code>import assert from 'nanoassert'
 
 /**
- * A function returning a promise that will be resolved in a later tick of the event loop.
+ * Wraps a function call that may be synchronous in a function that
+ * is guaranted to be async. This is a stricter version of calling a
+ * function and wrapping its result using `Promise.resolve()` as the new function also
+ * handles the case where the original function throws an exception.
  *
- * This function simply uses `setTimeout()` internally as it's the most portable solution.
- *
- * @returns {Promise} A promise that will be resolved on a later tick of the event loop.
+ * @param {Function} fct The function to wrap.
+ * @returns {Function} The wrapped function.
  * @example
- * import { delay, asyncRoot } from 'modern-async'
+ * import { asyncWrap } from 'modern-async'
  *
- * asyncRoot(async () => {
- *   console.log('this execute in a tick of the event loop')
- *   await delay()
- *   console.log('this execute in another tick of the event loop')
- * })
+ * const myFunction = () => {
+ *   // any kind of function that may or may not return a promise
+ * }
+ *
+ * const asyncFct = asyncWrap(myFunction)
+ *
+ * const promise = asyncFct()
+ * console.log(promise instanceof Promise) // prints true
  */
-async function delay () {
-  return delayCancellable()[0]
+function asyncWrap (fct) {
+  assert(typeof fct === 'function', 'fct must be a function')
+  return async function () {
+    return fct(...arguments)
+  }
 }
 
-export default delay
+export default asyncWrap
 </code></pre>
         </article>
     </section>

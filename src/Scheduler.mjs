@@ -222,15 +222,19 @@ class Scheduler {
     const reachedMaxConcurrency = this._queue.running === this._queue.concurrency
     const forecastPending = reachedMaxConcurrency ? this._queue.pending + 1 : 0
     if (forecastPending <= this.maxPending) {
-      this._queue.exec(this._asyncFct).catch((e) => {
-        if (e instanceof CancelledError) {
-          // ignore
-        } else {
-          throw e
-        }
-      })
+      this._queue.exec(this._asyncFct).catch(exceptionHandler)
     }
   }
 }
 
 export default Scheduler
+
+const exceptionHandler = (e) => {
+  if (e instanceof CancelledError) {
+    // ignore
+  } else {
+    throw e
+  }
+}
+
+export { exceptionHandler }

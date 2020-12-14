@@ -77,7 +77,7 @@
     
 
 
-    <title>mapLimit.mjs</title>
+    <title>Delayer.mjs</title>
 
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -114,7 +114,7 @@
 
 <div id="main">
     
-    <h1 id='page-title' class="page-title">mapLimit.mjs</h1>
+    <h1 id='page-title' class="page-title">Delayer.mjs</h1>
     
 
     
@@ -125,54 +125,95 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>
-import Queue from './Queue.mjs'
-import assert from 'assert'
+import delay from './delay.mjs'
+import assert from 'nanoassert'
 
 /**
- * Produces a new collection of values by mapping each value in `iterable` through the `iteratee` function.
+ * A class used to spread time or cpu intensive operations on multiple tasks in the event loop in order
+ * to avoid blocking other tasks that may need to be executed.
  *
- * Multiple calls to `iteratee` will be performed in parallel, up to the concurrency limit.
+ * It is configured with a trigger time, which represents the maximum amount of time your tasks should
+ * monopolize the event loop. Choosing an appropriate trigger time is both important and hard. If too low
+ * it will impact the performances of your long running algorithm. If too high it will impact the other
+ * tasks that need to run in the event loop.
  *
- * @param {Iterable} iterable An iterable object.
- * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
- * three arguments:
- *   * `value`: The current value to process
- *   * `index`: The index in the iterable. Will start from 0.
- *   * `iterable`: The iterable on which the operation is being performed.
- * @param {number} concurrency The number of times `iteratee` can be called concurrently.
- * @returns {Promise} A promise that will be resolved with an array containing all the mapped value,
- * or will be rejected if any of the calls to `iteratee` throws an exception.
+ * When using Delayer your code should contain frequent calls to `await delayer.checkDelay()`, usually
+ * at the end of every loop. `checkDelay()` will check the amount of time that ellasped since the last time
+ * your called it. If the amount of time is below the trigger time it returns immediately. If not it will
+ * call the `delay()` function that will retrigger the operation in a later task of the event loop.
+ *
  * @example
- * import { mapLimit, asyncRoot, sleep } from 'modern-async'
+ * import { Delayer, asyncRoot } from 'modern-async'
  *
  * asyncRoot(async () => {
- *   const array = [1, 2, 3]
- *   const result = await mapLimit(array, async (v) => {
- *     // these calls will be performed in parallel with a maximum of 2
- *     // concurrent calls
- *     await sleep(10) // waits 10ms
- *     return v * 2
- *   }, 2)
- *   console.log(result) // prints [2, 4, 6]
- *   // total processing time should be ~ 20ms
+ *   const delayer = new Delayer(10) // a delayer with 10ms trigger time
+ *
+ *   // some cpu intensive operation that will run for a long time
+ *   for (let i = 0; i &lt; 100000000; i += 1) {
+ *     // some code
+ *     await delayer.checkDelay()
+ *   }
  * })
  */
-async function mapLimit (iterable, iteratee, concurrency) {
-  assert(typeof iteratee === 'function', 'iteratee must be a function')
-  const queue = new Queue(concurrency)
-  const promises = []
-  let i = 0
-  for (const el of iterable) {
-    const index = i
-    promises.push(queue.exec(async () => {
-      return iteratee(el, index, iterable)
-    }))
-    i += 1
+class Delayer {
+  /**
+   * Constructs a new `Delayer` by specifying its trigger time.
+   *
+   * @param {number} triggerTime The trigger time.
+   */
+  constructor (triggerTime) {
+    this.triggerTime = triggerTime
+    this.reset()
   }
-  return Promise.all(promises)
+
+  /**
+   * The trigger time of this `Delayer` in milliseconds. The trigger time represent the
+   * maximum amount of time before a call to `checkDelay()` decide to schedule a new task in the event loop.
+   *
+   * @member {number}
+   *
+   * @returns {number} ignore
+   */
+  get triggerTime () {
+    return this._triggerTime
+  }
+
+  /**
+   * @ignore
+   *
+   * @param {number} triggerTime ignore
+   */
+  set triggerTime (triggerTime) {
+    assert(typeof triggerTime === 'number', 'trigger time must be a number')
+    this._triggerTime = triggerTime
+  }
+
+  /**
+   * Resets the internal timer to the current time.
+   */
+  reset () {
+    this._last = new Date().getTime()
+  }
+
+  /**
+   * Checks if a delay must be applied according to the internal timer. If that's the case this method
+   * will call `delay()` and return `true`. If not it will do nothing and return `false`.
+   *
+   * @returns {boolean} `true` if a new task was scheduled in the event loop, `false` otherwise.
+   */
+  async checkDelay () {
+    const current = new Date().getTime()
+    if (current - this._last >= this.triggerTime) {
+      await delay()
+      this.reset()
+      return true
+    } else {
+      return false
+    }
+  }
 }
 
-export default mapLimit
+export default Delayer
 </code></pre>
         </article>
     </section>

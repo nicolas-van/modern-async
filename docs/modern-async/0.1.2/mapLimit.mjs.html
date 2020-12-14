@@ -77,7 +77,7 @@
     
 
 
-    <title>map.js</title>
+    <title>mapLimit.mjs</title>
 
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -114,7 +114,7 @@
 
 <div id="main">
     
-    <h1 id='page-title' class="page-title">map.js</h1>
+    <h1 id='page-title' class="page-title">mapLimit.mjs</h1>
     
 
     
@@ -125,12 +125,13 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>
-import mapLimit from './mapLimit'
+import Queue from './Queue.mjs'
+import assert from 'nanoassert'
 
 /**
  * Produces a new collection of values by mapping each value in `iterable` through the `iteratee` function.
  *
- * Multiple calls to `iteratee` will be performed in parallel.
+ * Multiple calls to `iteratee` will be performed in parallel, up to the concurrency limit.
  *
  * @param {Iterable} iterable An iterable object.
  * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
@@ -138,27 +139,40 @@ import mapLimit from './mapLimit'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
+ * @param {number} concurrency The number of times `iteratee` can be called concurrently.
  * @returns {Promise} A promise that will be resolved with an array containing all the mapped value,
  * or will be rejected if any of the calls to `iteratee` throws an exception.
  * @example
- * import { map, asyncRoot, sleep } from 'modern-async'
+ * import { mapLimit, asyncRoot, sleep } from 'modern-async'
  *
  * asyncRoot(async () => {
  *   const array = [1, 2, 3]
- *   const result = await map(array, async (v) => {
- *     // these calls will be performed in parallel
+ *   const result = await mapLimit(array, async (v) => {
+ *     // these calls will be performed in parallel with a maximum of 2
+ *     // concurrent calls
  *     await sleep(10) // waits 10ms
  *     return v * 2
- *   })
+ *   }, 2)
  *   console.log(result) // prints [2, 4, 6]
- *   // total processing time should be ~ 10ms
+ *   // total processing time should be ~ 20ms
  * })
  */
-async function map (iterable, iteratee) {
-  return mapLimit(iterable, iteratee, Number.POSITIVE_INFINITY)
+async function mapLimit (iterable, iteratee, concurrency) {
+  assert(typeof iteratee === 'function', 'iteratee must be a function')
+  const queue = new Queue(concurrency)
+  const promises = []
+  let i = 0
+  for (const el of iterable) {
+    const index = i
+    promises.push(queue.exec(async () => {
+      return iteratee(el, index, iterable)
+    }))
+    i += 1
+  }
+  return Promise.all(promises)
 }
 
-export default map
+export default mapLimit
 </code></pre>
         </article>
     </section>

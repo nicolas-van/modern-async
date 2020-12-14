@@ -2,7 +2,8 @@
 import { expect, test } from '@jest/globals'
 import sleep from './sleep.mjs'
 import sleepPrecise from './sleepPrecise.mjs'
-import Scheduler from './Scheduler.mjs'
+import Scheduler, { exceptionHandler } from './Scheduler.mjs'
+import CancelledError from './CancelledError.mjs'
 
 test('Scheduler base', async () => {
   const unit = 30
@@ -127,4 +128,11 @@ test('Scheduler concurrency 2', async () => {
   expect(callCount).toBe(4)
   await sleepPrecise(150)
   expect(callCount).toBe(4)
+})
+
+test('Scheduler exceptionHandler', async () => {
+  expect(() => {
+    exceptionHandler(new Error())
+  }).toThrow()
+  exceptionHandler(new CancelledError())
 })

@@ -77,7 +77,7 @@
     
 
 
-    <title>timeoutPrecise.js</title>
+    <title>sleepPreciseCancellable.mjs</title>
 
     <!--[if lt IE 9]>
       <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -114,7 +114,7 @@
 
 <div id="main">
     
-    <h1 id='page-title' class="page-title">timeoutPrecise.js</h1>
+    <h1 id='page-title' class="page-title">sleepPreciseCancellable.mjs</h1>
     
 
     
@@ -125,16 +125,17 @@
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>
-import sleepPreciseCancellable from './sleepPreciseCancellable'
-import TimeoutError from './TimeoutError'
-import asyncWrap from './asyncWrap'
-import Deferred from './Deferred'
+import assert from 'nanoassert'
+import sleepCancellable from './sleepCancellable.mjs'
+import Deferred from './Deferred.mjs'
 
 /**
- * Wraps a call to an asynchronous function to add a timer on it. If the delay is exceeded
- * the returned promise will be rejected with a `TimeoutError`.
+ * Waits a given amount of time.
  *
- * This function is similar to `timeout()` except it ensures that the amount of time measured
+ * This function returns both a promise and cancel function in order to cancel the
+ * wait time if necessary. If cancelled, the promise will be rejected with a `CancelledError`.
+ *
+ * This function is similar to `sleep()` except it ensures that the amount of time measured
  * using the `Date` object is always greater than or equal the asked amount of time.
  *
  * This function can imply additional delay that can be bad for performances. As such it is
@@ -142,52 +143,68 @@ import Deferred from './Deferred'
  * be adapted to work with the usual `setTimout()` inconsistencies even if it can trigger some
  * milliseconds before the asked delay.
  *
- * @param {Function} fct An asynchronous function that will be called immediately without arguments.
  * @param {number} amount An amount of time in milliseconds
- * @returns {Promise} A promise that will be resolved or rejected according to the result of the call
- * to `fct`. If `amount` milliseconds pass before the call to `fct` returns or rejects, this promise will
- * be rejected with a `TimeoutError`.
+ * @returns {Array} A tuple of two objects:
+ *   * `promise`: The promise
+ *   * `cancel`: The cancel function. It will return a boolean that will be `true` if the promise was effectively cancelled,
+ *     `false` otherwise.
  * @example
- * import { timeoutPrecise, sleep, asyncRoot } from 'modern-async'
+ * import { sleepPreciseCancellable, asyncRoot } from 'modern-async'
  *
  * asyncRoot(async () => {
- *   // the following statement will perform successfully because
- *   // the function will return before the delay
- *   await timeoutPrecise(async () => {
- *     await sleep(10)
- *   }, 100)
+ *   const [promise, cancel] = sleepPreciseCancellable(100) // schedule to resolve the promise after 100ms
+ *
+ *   cancel()
  *
  *   try {
- *     // the following statement will throw after 10ms
- *     await timeoutPrecise(async () => {
- *       await sleep(100)
- *     }, 10)
+ *     await promise
  *   } catch (e) {
- *     print(e.name) // prints TimeoutError
+ *     console.log(e.name) // prints CancelledError
  *   }
  * })
  */
-async function timeoutPrecise (fct, amount) {
-  const asyncFct = asyncWrap(fct)
-
-  const [timoutPromise, cancelTimeout] = sleepPreciseCancellable(amount)
-
-  const basePromise = asyncFct()
-
-  const deferred = new Deferred()
-
-  basePromise.then(deferred.resolve, deferred.reject)
-
-  timoutPromise.then(() => {
-    deferred.reject(new TimeoutError())
-  }, () => {
-    // ignore CancelledError
+function sleepPreciseCancellable (amount) {
+  return _innerWaitPreciseCancellable(amount, (ellasped, amount) => {
+    return ellasped >= amount
   })
-
-  return deferred.promise.finally(cancelTimeout)
 }
 
-export default timeoutPrecise
+export default sleepPreciseCancellable
+
+/**
+ * @ignore
+ *
+ * @param {*} amount ignored
+ * @param {*} checkPassed ignored
+ * @returns {*} ignored
+ */
+function _innerWaitPreciseCancellable (amount, checkPassed) {
+  assert(typeof amount === 'number', 'amount must be a number')
+  const start = new Date().getTime()
+  const [p, cancel] = sleepCancellable(amount)
+  let lastCancel = cancel
+  const deferred = new Deferred()
+  const reject = (e) => {
+    deferred.reject(e)
+  }
+  const resolve = () => {
+    const now = new Date().getTime()
+    const ellasped = now - start
+    if (checkPassed(ellasped, amount)) {
+      deferred.resolve()
+    } else {
+      const [np, ncancel] = sleepCancellable(amount - ellasped)
+      lastCancel = ncancel
+      np.then(resolve, reject)
+    }
+  }
+  p.then(resolve, reject)
+  return [deferred.promise, () => {
+    return lastCancel()
+  }]
+}
+
+export { _innerWaitPreciseCancellable }
 </code></pre>
         </article>
     </section>
