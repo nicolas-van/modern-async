@@ -1,7 +1,18 @@
 {
   "name": "modern-async",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A modern tooling library for asynchronous operations using async/await and promises",
+  "keywords": [
+    "async",
+    "await",
+    "promises",
+    "asynchronous",
+    "utility",
+    "util",
+    "async/await",
+    "queue",
+    "scheduler"
+  ],
   "type": "module",
   "main": "dist/modern-async.cjs",
   "module": "src/modern-async.mjs",
@@ -36,7 +47,7 @@
   "bugs": {
     "url": "https://github.com/nicolas-van/modern-async/issues"
   },
-  "homepage": "https://github.com/nicolas-van/modern-async#readme",
+  "homepage": "https://nicolas-van.github.io/modern-async",
   "devDependencies": {
     "@babel/cli": "^7.12.10",
     "@babel/core": "^7.12.10",
