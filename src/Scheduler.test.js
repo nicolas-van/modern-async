@@ -5,11 +5,12 @@ import sleepPrecise from './sleepPrecise'
 import Scheduler from './Scheduler'
 
 test('Scheduler base', async () => {
+  const unit = 30
   let callCount = 0
   const scheduler = new Scheduler(async () => {
     callCount += 1
     await sleep(10)
-  }, 30)
+  }, unit)
   expect(scheduler.delay).toBe(30)
   expect(scheduler.startImmediate).toBe(false)
   expect(scheduler.concurrency).toBe(1)
@@ -17,18 +18,19 @@ test('Scheduler base', async () => {
   expect(scheduler.started).toBe(false)
   scheduler.start()
   expect(scheduler.started).toBe(true)
-  await sleepPrecise(105)
+  await sleepPrecise(unit * 1.5 * 3)
   scheduler.stop()
   expect(scheduler.started).toBe(false)
-  expect(callCount).toBe(3)
+  expect(callCount).toBeGreaterThanOrEqual(3)
 })
 
 test('Scheduler multi start stop', async () => {
+  const unit = 30
   let callCount = 0
   const scheduler = new Scheduler(async () => {
     callCount += 1
     await sleep(10)
-  }, 30)
+  }, unit)
   expect(scheduler.delay).toBe(30)
   expect(scheduler.startImmediate).toBe(false)
   expect(scheduler.concurrency).toBe(1)
@@ -38,20 +40,21 @@ test('Scheduler multi start stop', async () => {
   expect(scheduler.started).toBe(true)
   scheduler.start()
   expect(scheduler.started).toBe(true)
-  await sleepPrecise(105)
+  await sleepPrecise(unit * 1.5 * 3)
   scheduler.stop()
   expect(scheduler.started).toBe(false)
   scheduler.stop()
   expect(scheduler.started).toBe(false)
-  expect(callCount).toBe(3)
+  expect(callCount).toBeGreaterThanOrEqual(3)
 })
 
 test('Scheduler startImmediate', async () => {
+  const unit = 30
   let callCount = 0
   const scheduler = new Scheduler(async () => {
     callCount += 1
     await sleep(10)
-  }, 30, {
+  }, unit, {
     startImmediate: true
   })
   expect(scheduler.delay).toBe(30)
@@ -61,10 +64,10 @@ test('Scheduler startImmediate', async () => {
   expect(scheduler.started).toBe(false)
   scheduler.start()
   expect(scheduler.started).toBe(true)
-  await sleepPrecise(105)
+  await sleepPrecise(unit * 1.5 * 3)
   scheduler.stop()
   expect(scheduler.started).toBe(false)
-  expect(callCount).toBe(4)
+  expect(callCount).toBeGreaterThanOrEqual(4)
 })
 
 test('Scheduler concurrency 1', async () => {
