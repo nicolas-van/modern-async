@@ -1,6 +1,6 @@
 {
   "name": "modern-async",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A modern tooling library for asynchronous operations using async/await and promises",
   "type": "module",
   "main": "dist/modern-async.cjs",
@@ -10,6 +10,12 @@
     "require": "./dist/modern-async.cjs"
   },
   "browser": "./src/dist/modern-async.umd.js",
+  "files": [
+    "src/*",
+    "dist/*",
+    "README.md",
+    "LICENSE.md"
+  ],
   "scripts": {
     "build": "npm run set-babel-browser && rollup -c rollup.config.js",
     "test": "npm run lint && npm run coverage",
