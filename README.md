@@ -48,6 +48,10 @@ asyncRoot(async () => {
 
 [See the documentation for the rest](https://nicolas-van.github.io/modern-async).
 
+## Changelog
+
+[See the changelog](https://github.com/nicolas-van/modern-async/blob/master/CHANGELOG.md).
+
 ## License
 
-[See the license here](https://github.com/nicolas-van/modern-async/blob/master/LICENSE.md)
+[See the license here](https://github.com/nicolas-van/modern-async/blob/master/LICENSE.md).
