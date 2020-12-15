@@ -12,7 +12,7 @@ This library is a modernized alternative to a lot of libraries like [Async.js](h
 * Has almost no dependencies.
 * Has 100% code coverage.
 * Bundled for ESM modules, CommonJS and UMD.
-* Works in node >= 10.0 and in the vast majority of browsers (if using Babel or the UMD version).
+* Works in node >= 10.0 and in the vast majority of browsers (old browser compatibility can be achieved using Babel or the UMD version).
 
 ## This project accepts feature requests !
 
@@ -24,7 +24,7 @@ The goal of modern-async is to be as complete as possible. I coded everything I 
 npm install --save modern-async
 ```
 
-Or use [jsDelivr](https://www.jsdelivr.com/package/npm/modern-async) to get the UMD version. The content of the library will be available under the `modernAsync` global variable.
+Or use [jsDelivr](https://www.jsdelivr.com/package/npm/modern-async) to get the Babelized UMD version. The content of the library will be available under the `modernAsync` global variable.
 
 ## Usage
 
