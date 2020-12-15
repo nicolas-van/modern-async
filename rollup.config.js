@@ -11,7 +11,7 @@ export default [{
   },
   plugins: []
 }, {
-  input: 'src/modern-async-umd.mjs',
+  input: 'src/modern-async.mjs',
   output: {
     file: 'dist/modern-async.umd.js',
     format: 'umd',
