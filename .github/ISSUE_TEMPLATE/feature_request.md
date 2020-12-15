@@ -11,7 +11,7 @@ assignees: ''
 
 
 
-**Please describe the use case where you would need that feature (the general situation or program where that would be helpful):**
+**Please describe the use case where you would need that feature (the general situation or type of program where that would be helpful):**
 
 
 
