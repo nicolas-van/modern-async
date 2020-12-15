@@ -12,7 +12,7 @@ This library is a modernized alternative to a lot of libraries like [Async.js](h
 * Has almost no dependencies.
 * Has 100% code coverage.
 * Bundled for ESM modules, CommonJS and UMD.
-* Works in node >= 10.0 and in the vast majority of browsers (if using babel or the UMD version).
+* Works in node >= 10.0 and in the vast majority of browsers (if using Babel or the UMD version).
 
 ## This project accepts feature requests !
 
