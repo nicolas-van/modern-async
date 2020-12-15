@@ -20,8 +20,8 @@
     "import": "./src/modern-async.mjs",
     "require": "./dist/modern-async.cjs"
   },
-  "browser": "./src/dist/modern-async.umd.js",
-  "jsdelivr": "./src/dist/modern-async.umd.js",
+  "browser": "dist/modern-async.umd.js",
+  "jsdelivr": "dist/modern-async.umd.js",
   "files": [
     "src/*",
     "dist/*",
