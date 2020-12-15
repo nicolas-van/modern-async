@@ -6,6 +6,9 @@ import mapLimit from './mapLimit.mjs'
  *
  * Multiple calls to `iteratee` will be performed sequentially.
  *
+ * If any of the calls to iteratee throws an exception the returned promised will be rejected and the remaining
+ * pending tasks will be cancelled.
+ *
  * @param {Iterable} iterable An iterable object.
  * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
  * three arguments:
