@@ -21,6 +21,7 @@
     "require": "./dist/modern-async.cjs"
   },
   "browser": "./src/dist/modern-async.umd.js",
+  "jsdelivr": "./src/dist/modern-async.umd.js",
   "files": [
     "src/*",
     "dist/*",
