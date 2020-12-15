@@ -15,13 +15,14 @@
   ],
   "type": "module",
   "main": "dist/modern-async.cjs",
+  "browser": "src/modern-async.mjs",
   "module": "src/modern-async.mjs",
   "exports": {
     "import": "./src/modern-async.mjs",
     "require": "./dist/modern-async.cjs"
   },
-  "browser": "dist/modern-async.umd.js",
   "jsdelivr": "dist/modern-async.umd.js",
+  "unpkg": "dist/modern-async.umd.js",
   "files": [
     "src/*",
     "dist/*",
