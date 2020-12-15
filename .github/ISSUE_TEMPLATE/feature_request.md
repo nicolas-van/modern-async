@@ -20,5 +20,3 @@ assignees: ''
 
 
 **If you know another library similar to this one that already propose that feature please provide a link:**
-
-
