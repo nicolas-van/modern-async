@@ -24,6 +24,8 @@ The goal of modern-async is to be as complete as possible. I coded everything I 
 npm install --save modern-async
 ```
 
+Or use [jsDelivr](https://www.jsdelivr.com/package/npm/modern-async).
+
 ## Usage
 
 ```javascript
