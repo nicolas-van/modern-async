@@ -1,13 +1,8 @@
 /* eslint-disable */
 
-
-Promise.all([
-  d3.require('vue@2.6.12'),
-  d3.require('axios@0.21.0'),
-  new Promise((resolve) => {
-    $(resolve)
-  })
-]).then((modules) => ((Vue, axios) => {
+new Promise((resolve) => {
+  $(resolve)
+}).then(() => {
   'use strict'
 
   // style
@@ -89,4 +84,4 @@ Promise.all([
     components: { App }
   })
 
-}).apply(null, modules))
+})
