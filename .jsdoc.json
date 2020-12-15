@@ -63,7 +63,7 @@
           "src": "../../ga.js"
         },
         {
-          "src": "https://cdn.jsdelivr.net/npm/modern-async/"
+          "src": "https://cdn.jsdelivr.net/npm/modern-async"
         }
       ]
     }
