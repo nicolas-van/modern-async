@@ -24,7 +24,7 @@ The goal of modern-async is to be as complete as possible. I coded everything I 
 npm install --save modern-async
 ```
 
-Or use [jsDelivr](https://www.jsdelivr.com/package/npm/modern-async) to get the UMD version. The content of the library will be available under the `modernAsync` global variable.
+Or use [jsDelivr](https://www.jsdelivr.com/package/npm/modern-async) to get the Babelized UMD version. The content of the library will be available under the `modernAsync` global variable.
 
 ## Usage
 
