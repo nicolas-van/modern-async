@@ -7,6 +7,9 @@ import assert from 'nanoassert'
  *
  * Multiple calls to `iteratee` will be performed in parallel, up to the concurrency limit.
  *
+ * If any of the calls to iteratee throws an exception the returned promised will be rejected and the remaining
+ * pending tasks will be cancelled.
+ *
  * @param {Iterable} iterable An iterable object.
  * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
  * three arguments:
@@ -43,7 +46,11 @@ async function mapLimit (iterable, iteratee, concurrency) {
     }))
     i += 1
   }
-  return Promise.all(promises)
+  try {
+    return await Promise.all(promises)
+  } finally {
+    queue.cancelAllPending()
+  }
 }
 
 export default mapLimit
