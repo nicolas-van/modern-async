@@ -314,7 +314,8 @@ nav h3 {
 /* If search box is there then more space is required */
 
 .search-box + .sidebar-list-div {
-    top: 200px;
+    bottom: 2rem;
+    top: 10.625rem;
 }
 
 .sidebar-list-div ul,
