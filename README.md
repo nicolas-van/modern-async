@@ -10,7 +10,7 @@ This library is a modernized alternative to a lot of libraries like [Async.js](h
 [See the documentation](https://nicolas-van.github.io/modern-async).
 
 * Exclusively uses async/await and promises in its code, tests and documentation.
-* Has almost no dependencies.
+* Has low bundle size.
 * Has 100% code coverage.
 * Bundled for ESM modules, CommonJS and UMD.
 * Works in node >= 10.0 and in the vast majority of browsers (old browser compatibility can be achieved using Babel and shims).
