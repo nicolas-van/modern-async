@@ -1,7 +1,7 @@
 # modern-async
 
 [![Website](https://img.shields.io/website.svg?url=http%3A%2F%2Fnicolas-van.github.io%2Fmodern-async)](https://nicolas-van.github.io/modern-async)
-[![Node.js CI](https://github.com/nicolas-van/modern-async/workflows/Node.js%20CI/badge.svg)](https://github.com/nicolas-van/modern-async/actions) [![npm](https://img.shields.io/npm/v/modern-async)](https://www.npmjs.com/package/modern-async) ![Coveralls github branch](https://img.shields.io/coveralls/github/nicolas-van/modern-async/master)
+[![Node.js CI](https://github.com/nicolas-van/modern-async/workflows/Node.js%20CI/badge.svg)](https://github.com/nicolas-van/modern-async/actions) [![npm](https://img.shields.io/npm/v/modern-async)](https://www.npmjs.com/package/modern-async) [![Coveralls github branch](https://img.shields.io/coveralls/github/nicolas-van/modern-async/master)](https://coveralls.io/github/nicolas-van/modern-async)
 
 A modern JavaScript tooling library for asynchronous operations using async/await and promises.
 
