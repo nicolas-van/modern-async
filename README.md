@@ -17,7 +17,7 @@ This library is a modernized alternative to a lot of libraries like [Async.js](h
 
 ## This project accepts feature requests !
 
-The goal of modern-async is to be as complete as possible. I coded everything I missed in the past while developing, yet it's difficult to know what other people would really need. So if you would like some more feature start by reading [the contribution guide](https://github.com/nicolas-van/modern-async/blob/master/CONTRIBUTING.md).
+The goal of modern-async is to be as complete as possible. I coded everything I missed in the past while developing, yet it's difficult to know what other people would really need. So if you would like some more feature [the issue tracker is available](https://github.com/nicolas-van/modern-async/issues/new/choose). (Read also [the contribution guide](https://github.com/nicolas-van/modern-async/blob/master/CONTRIBUTING.md)).
 
 ## Installation
 
@@ -50,8 +50,12 @@ asyncRoot(async () => {
 
 ## Changelog
 
-[See the changelog](https://github.com/nicolas-van/modern-async/blob/master/CHANGELOG.md).
+[The changelog](https://github.com/nicolas-van/modern-async/blob/master/CHANGELOG.md).
+
+## Contribution Guide
+
+[The contribution guide](https://github.com/nicolas-van/modern-async/blob/master/CONTRIBUTING.md)
 
 ## License
 
-[See the license here](https://github.com/nicolas-van/modern-async/blob/master/LICENSE.md).
+[The license](https://github.com/nicolas-van/modern-async/blob/master/LICENSE.md).
