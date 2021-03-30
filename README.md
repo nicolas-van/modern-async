@@ -7,8 +7,6 @@ A modern JavaScript tooling library for asynchronous operations using async/awai
 
 This library is a modernized alternative to a lot of libraries like [Async.js](https://caolan.github.io/async/v3/) that were created using the legacy callback style to handle asynchronous operations. Its goal is to be as complete as any of those libraries while being built from the very beginning with async/await and promises in mind.
 
-[![Stargazers repo roster for @nicolas-van/modern-async](https://reporoster.com/stars/nicolas-van/modern-async)](https://github.com/nicolas-van/modern-async/stargazers)
-
 [See the documentation](https://nicolas-van.github.io/modern-async).
 
 * Exclusively uses async/await and promises in its code, tests and documentation.
@@ -16,6 +14,8 @@ This library is a modernized alternative to a lot of libraries like [Async.js](h
 * Has 100% code coverage.
 * Bundled for ESM modules, CommonJS and UMD.
 * Works in node >= 10.0 and in the vast majority of browsers (very old browser compatibility can be achieved using Babel and shims).
+
+[![Stargazers repo roster for @nicolas-van/modern-async](https://reporoster.com/stars/nicolas-van/modern-async)](https://github.com/nicolas-van/modern-async/stargazers)
 
 ## This project accepts feature requests !
 
