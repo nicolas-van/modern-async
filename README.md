@@ -1,6 +1,6 @@
 # modern-async [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Meet%20this%20awesome%20library&url=https://github.com/nicolas-van/modern-async&via=nicolasvanhoren&hashtags=javascript,asyncawait,async,libraries,programming)
 
-![logo](https://github.com/nicolas-van/modern-async/raw/master/img/modern-async-logo.png)
+![logo](https://github.com/nicolas-van/modern-async/raw/master/img/modern-async-logo-680.png)
 
 [![GitHub Repo stars](https://img.shields.io/github/stars/nicolas-van/modern-async?style=social)](https://github.com/nicolas-van/modern-async/stargazers) [![Website](https://img.shields.io/website.svg?url=http%3A%2F%2Fnicolas-van.github.io%2Fmodern-async)](https://nicolas-van.github.io/modern-async)
 [![Node.js CI](https://github.com/nicolas-van/modern-async/workflows/Node.js%20CI/badge.svg)](https://github.com/nicolas-van/modern-async/actions) [![npm](https://img.shields.io/npm/v/modern-async)](https://www.npmjs.com/package/modern-async) [![Coverage Status](https://coveralls.io/repos/github/nicolas-van/modern-async/badge.svg?branch=master)](https://coveralls.io/github/nicolas-van/modern-async?branch=master) [![](https://data.jsdelivr.com/v1/package/npm/modern-async/badge)](https://www.jsdelivr.com/package/npm/modern-async)
