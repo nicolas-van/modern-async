@@ -15,7 +15,7 @@ test('timeout no timeout', async () => {
 test('timeout with timeout', async () => {
   try {
     await timeout(async () => {
-      await sleepPrecise(50)
+      await sleepPrecise(150)
     }, 10)
     expect(false).toBe(true)
   } catch (e) {

@@ -1,24 +1,30 @@
 
 import { expect, test } from '@jest/globals'
-import sleepPrecise from './sleepPrecise.mjs'
+import Deferred from './Deferred.mjs'
 import reduce from './reduce.mjs'
 import _ from 'lodash'
 
 test('reduce base', async () => {
   const arr = _.range(6)
-  const result = await reduce(arr, async (p, v) => {
-    await sleepPrecise(1)
+  const d = new Deferred()
+  const p = reduce(arr, async (p, v) => {
+    await d.promise
     return p + v
   }, 0)
+  d.resolve()
+  const result = await p
   expect(result).toEqual(arr.reduce((p, v) => p + v), 0)
 })
 
 test('reduce no accumulator', async () => {
   const arr = _.range(6)
-  const result = await reduce(arr, async (p, v) => {
-    await sleepPrecise(1)
+  const d = new Deferred()
+  const p = reduce(arr, async (p, v) => {
+    await d.promise
     return p + v
   })
+  d.resolve()
+  const result = await p
   expect(result).toEqual(arr.reduce((p, v) => p + v))
 })
 
