@@ -1,6 +1,6 @@
 # Changelog
 
-## To be released
+## 1.0.3
 
 * Performance improvements. Notably the `Queue` class will now avoid calling the `delay()` function and will immediately trigger any
   pending task as soon as a task is finished. This change indirectly impacts most functions in this library as they internally use
