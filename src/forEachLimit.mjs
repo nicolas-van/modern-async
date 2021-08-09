@@ -6,7 +6,7 @@ import mapLimit from './mapLimit.mjs'
  *
  * Multiple calls to `iteratee` will be performed in parallel, up to the concurrency limit.
  *
- * If any of the calls to iteratee throws an exception the returned promised will be rejected and the remaining
+ * If any of the calls to iteratee throws an exception the returned promise will be rejected and the remaining
  * pending tasks will be cancelled.
  *
  * @param {Iterable} iterable An iterable object.

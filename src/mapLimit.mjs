@@ -1,13 +1,14 @@
 
 import Queue from './Queue.mjs'
 import assert from 'nanoassert'
+import CancelledError from './CancelledError.mjs'
 
 /**
  * Produces a new collection of values by mapping each value in `iterable` through the `iteratee` function.
  *
  * Multiple calls to `iteratee` will be performed in parallel, up to the concurrency limit.
  *
- * If any of the calls to iteratee throws an exception the returned promised will be rejected and the remaining
+ * If any of the calls to iteratee throws an exception the returned promise will be rejected and the remaining
  * pending tasks will be cancelled.
  *
  * @param {Iterable} iterable An iterable object.
@@ -37,20 +38,67 @@ import assert from 'nanoassert'
 async function mapLimit (iterable, iteratee, concurrency) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   const queue = new Queue(concurrency)
+  queue._cancelledErrorClass = CustomCancelledError
   const promises = []
+  let current = promises
+  let finalized = false
+  const finalize = () => {
+    if (!finalized) {
+      current.forEach((p) => {
+        p.catch(() => {
+          // ignore the exception
+        })
+      })
+      queue.cancelAllPending()
+    }
+    finalized = true
+  }
   let i = 0
   for (const el of iterable) {
     const index = i
-    promises.push(queue.exec(async () => {
-      return iteratee(el, index, iterable)
-    }))
+    promises.push((async () => {
+      try {
+        const gres = await queue.exec(async () => {
+          try {
+            const res = await iteratee(el, index, iterable)
+            return res
+          } catch (e) {
+            finalize()
+            throw e
+          }
+        })
+        return [index, 'resolved', gres]
+      } catch (e) {
+        return [index, 'rejected', e]
+      }
+    })())
     i += 1
   }
+
+  const results = []
+
   try {
-    return await Promise.all(promises)
+    while (current.length > 0) {
+      const [index, state, result] = await Promise.race(current)
+      if (state === 'resolved') {
+        results[index] = result
+      } else { // error
+        if (!(result instanceof CustomCancelledError)) {
+          throw result
+        }
+      }
+      promises[index] = null
+      current = promises.filter((p) => p !== null)
+    }
+    return results
   } finally {
-    queue.cancelAllPending()
+    finalize()
   }
 }
+
+/**
+ * @ignore
+ */
+class CustomCancelledError extends CancelledError {}
 
 export default mapLimit

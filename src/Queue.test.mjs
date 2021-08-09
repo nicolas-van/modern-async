@@ -1,24 +1,22 @@
 
 import { expect, test } from '@jest/globals'
 import Queue from './Queue.mjs'
-import sleepPrecise from './sleepPrecise.mjs'
+import Deferred from './Deferred.mjs'
 import _ from 'lodash'
-import delay from './delay.mjs'
 import CancelledError from './CancelledError.mjs'
 
 test('Queue base 1', async () => {
-  const unit = 30
-  const start = new Date().getTime()
   const queue = new Queue(1)
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(0)
   const promises = []
   const callCount = {}
+  const ds = _.range(3).map(() => new Deferred())
   for (const x of _.range(3)) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
-      await sleepPrecise(unit)
+      await ds[x].promise
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
@@ -29,47 +27,38 @@ test('Queue base 1', async () => {
   expect(callCount[0]).toBe(1)
   expect(callCount[1]).toBe(0)
   expect(callCount[2]).toBe(0)
+  ds[0].resolve()
   await promises[0]
-  await delay()
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(1)
   expect(callCount[0]).toBe(1)
   expect(callCount[1]).toBe(1)
   expect(callCount[2]).toBe(0)
-  let now = new Date().getTime()
-  expect(now - start).toBeGreaterThanOrEqual(unit * 1)
-  expect(now - start).toBeLessThan(unit * 1 * 3)
+  ds[1].resolve()
   await promises[1]
-  await delay()
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)
   expect(callCount[1]).toBe(1)
   expect(callCount[2]).toBe(1)
-  now = new Date().getTime()
-  expect(now - start).toBeGreaterThanOrEqual(unit * 2)
-  expect(now - start).toBeLessThan(unit * 2 * 3)
+  ds[2].resolve()
   await promises[2]
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(0)
-  now = new Date().getTime()
-  expect(now - start).toBeGreaterThanOrEqual(unit * 3)
-  expect(now - start).toBeLessThan(unit * 3 * 3)
 })
 
 test('Queue base 2', async () => {
-  const unit = 30
-  const start = new Date().getTime()
   const queue = new Queue(2)
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(0)
   const promises = []
   const callCount = {}
+  const ds = _.range(6).map(() => new Deferred())
   for (const x of _.range(6)) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
-      await sleepPrecise(unit)
+      await ds[x].promise
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
@@ -83,9 +72,10 @@ test('Queue base 2', async () => {
   expect(callCount[3]).toBe(0)
   expect(callCount[4]).toBe(0)
   expect(callCount[5]).toBe(0)
+  ds[0].resolve()
+  ds[1].resolve()
   await promises[0]
   await promises[1]
-  await delay()
   expect(queue.running).toBe(2)
   expect(queue.pending).toBe(2)
   expect(callCount[0]).toBe(1)
@@ -94,12 +84,10 @@ test('Queue base 2', async () => {
   expect(callCount[3]).toBe(1)
   expect(callCount[4]).toBe(0)
   expect(callCount[5]).toBe(0)
-  let now = new Date().getTime()
-  expect(now - start).toBeGreaterThanOrEqual(unit * 1)
-  expect(now - start).toBeLessThan(unit * 1 * 3)
+  ds[2].resolve()
+  ds[3].resolve()
   await promises[2]
   await promises[3]
-  await delay()
   expect(queue.running).toBe(2)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -108,16 +96,12 @@ test('Queue base 2', async () => {
   expect(callCount[3]).toBe(1)
   expect(callCount[4]).toBe(1)
   expect(callCount[5]).toBe(1)
-  now = new Date().getTime()
-  expect(now - start).toBeGreaterThanOrEqual(unit * 2)
-  expect(now - start).toBeLessThan(unit * 2 * 3)
+  ds[4].resolve()
+  ds[5].resolve()
   await promises[4]
   await promises[5]
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(0)
-  now = new Date().getTime()
-  expect(now - start).toBeGreaterThanOrEqual(unit * 3)
-  expect(now - start).toBeLessThan(unit * 3 * 3)
   expect(callCount[0]).toBe(1)
   expect(callCount[1]).toBe(1)
   expect(callCount[2]).toBe(1)
@@ -127,19 +111,18 @@ test('Queue base 2', async () => {
 })
 
 test('Queue infinity', async () => {
-  const unit = 30
-  const start = new Date().getTime()
   const queue = new Queue(Number.POSITIVE_INFINITY)
   expect(queue.concurrency).toBe(Number.POSITIVE_INFINITY)
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(0)
   const promises = []
   const callCount = {}
+  const ds = _.range(6).map(() => new Deferred())
   for (const x of _.range(6)) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
-      await sleepPrecise(unit)
+      await ds[x].promise
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
@@ -153,12 +136,10 @@ test('Queue infinity', async () => {
   expect(callCount[3]).toBe(1)
   expect(callCount[4]).toBe(1)
   expect(callCount[5]).toBe(1)
+  ds.forEach((d) => d.resolve())
   await Promise.all(promises)
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(0)
-  const now = new Date().getTime()
-  expect(now - start).toBeGreaterThanOrEqual(unit * 1)
-  expect(now - start).toBeLessThan(unit * 1 * 3)
   expect(callCount[0]).toBe(1)
   expect(callCount[1]).toBe(1)
   expect(callCount[2]).toBe(1)
@@ -168,8 +149,6 @@ test('Queue infinity', async () => {
 })
 
 test('Queue infinity race', async () => {
-  const unit = 30
-  const start = new Date().getTime()
   const queue = new Queue(Number.POSITIVE_INFINITY)
   expect(queue.concurrency).toBe(Number.POSITIVE_INFINITY)
   expect(queue.running).toBe(0)
@@ -177,12 +156,13 @@ test('Queue infinity race', async () => {
   const promises = []
   const callCount = {}
   const completeCount = {}
+  const ds = _.range(6).map(() => new Deferred())
   for (const x of _.range(6)) {
     callCount[x] = 0
     completeCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
-      await sleepPrecise(unit)
+      await ds[x].promise
       completeCount[x] += 1
     })
     expect(p).toBeInstanceOf(Promise)
@@ -197,15 +177,18 @@ test('Queue infinity race', async () => {
   expect(callCount[3]).toBe(1)
   expect(callCount[4]).toBe(1)
   expect(callCount[5]).toBe(1)
+  ds[2].resolve()
+  ds[4].resolve()
+  ds[5].resolve()
   await Promise.race(promises)
   expect(queue.running).toBe(6 - Object.values(completeCount).reduce((p, c) => p + c, 0))
   expect(queue.pending).toBe(0)
+  ds[0].resolve()
+  ds[1].resolve()
+  ds[3].resolve()
   await Promise.all(promises)
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(0)
-  const now = new Date().getTime()
-  expect(now - start).toBeGreaterThanOrEqual(unit * 1)
-  expect(now - start).toBeLessThan(unit * 1 * 3)
   expect(callCount[0]).toBe(1)
   expect(callCount[1]).toBe(1)
   expect(callCount[2]).toBe(1)
@@ -215,18 +198,17 @@ test('Queue infinity race', async () => {
 })
 
 test('Queue throws', async () => {
-  const unit = 30
-  const start = new Date().getTime()
   const queue = new Queue(2)
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(0)
   const promises = []
   const callCount = {}
+  const ds = _.range(6).map(() => new Deferred())
   for (const x of _.range(6)) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
-      await sleepPrecise(unit)
+      await ds[x].promise
       if (x % 2 === 1) {
         throw new Error()
       }
@@ -247,12 +229,10 @@ test('Queue throws', async () => {
   expect(callCount[3]).toBe(0)
   expect(callCount[4]).toBe(0)
   expect(callCount[5]).toBe(0)
+  ds.forEach(d => d.resolve())
   const results = await Promise.all(promises)
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(0)
-  const now = new Date().getTime()
-  expect(now - start).toBeGreaterThanOrEqual(unit * 3)
-  expect(now - start).toBeLessThan(unit * 3 * 3)
   expect(results[0]).toBe('success')
   expect(results[1]).toBe('fail')
   expect(results[2]).toBe('success')
@@ -278,8 +258,6 @@ test('Queue all cancels', async () => {
 })
 
 test('Queue priority', async () => {
-  const unit = 30
-  const start = new Date().getTime()
   const queue = new Queue(1)
   expect(queue.concurrency).toBe(1)
   expect(queue.running).toBe(0)
@@ -288,55 +266,56 @@ test('Queue priority', async () => {
   const callCount = {}
 
   callCount[0] = 0
+  const d0 = new Deferred()
   promises.push(queue.exec(async () => {
     callCount[0] += 1
-    await sleepPrecise(unit)
+    await d0.promise
   }, 0))
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)
 
   callCount[1] = 0
+  const d1 = new Deferred()
   promises.push(queue.exec(async () => {
     callCount[1] += 1
-    await sleepPrecise(unit)
+    await d1.promise
   }, 1))
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(1)
+  expect(callCount[0]).toBe(1)
   expect(callCount[1]).toBe(0)
 
   callCount[2] = 0
+  const d2 = new Deferred()
   promises.push(queue.exec(async () => {
     callCount[2] += 1
-    await sleepPrecise(unit)
+    await d2.promise
   }, 2))
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(2)
+  expect(callCount[0]).toBe(1)
+  expect(callCount[1]).toBe(0)
   expect(callCount[2]).toBe(0)
 
+  d0.resolve()
   await promises[0]
-  await delay()
-  let now = new Date().getTime()
-  expect(now - start).toBeGreaterThanOrEqual(unit * 1)
-  expect(now - start).toBeLessThan(unit * 1 * 3)
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(1)
+  expect(callCount[0]).toBe(1)
   expect(callCount[1]).toBe(0)
   expect(callCount[2]).toBe(1)
 
+  d2.resolve()
   await promises[2]
-  await delay()
-  now = new Date().getTime()
-  expect(now - start).toBeGreaterThanOrEqual(unit * 2)
-  expect(now - start).toBeLessThan(unit * 2 * 3)
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(0)
+  expect(callCount[0]).toBe(1)
   expect(callCount[1]).toBe(1)
+  expect(callCount[2]).toBe(1)
 
+  d1.resolve()
   await promises[1]
-  now = new Date().getTime()
-  expect(now - start).toBeGreaterThanOrEqual(unit * 3)
-  expect(now - start).toBeLessThan(unit * 3 * 3)
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -345,16 +324,16 @@ test('Queue priority', async () => {
 })
 
 test('Queue cancel', async () => {
-  const unit = 30
   const queue = new Queue(1)
   const promises = []
   const cancels = []
   const callCount = {}
+  const ds = _.range(3).map(() => new Deferred())
   for (const x in _.range(3)) {
     callCount[x] = 0
     const [p, cancel] = queue.execCancellable(async () => {
       callCount[x] += 1
-      await sleepPrecise(unit)
+      await ds[x].promise
       return 'test'
     }, 0)
     const p2 = p.catch((e) => {
@@ -396,6 +375,7 @@ test('Queue cancel', async () => {
   expect(callCount[1]).toBe(0)
   expect(callCount[2]).toBe(0)
 
+  ds.forEach((d) => d.resolve())
   const results = await Promise.all(promises)
 
   expect(queue.running).toBe(0)
@@ -415,15 +395,15 @@ test('Queue cancel', async () => {
 })
 
 test('Queue cancelAllPending', async () => {
-  const unit = 30
   const queue = new Queue(1)
   const promises = []
   const callCount = {}
+  const ds = _.range(3).map(() => new Deferred())
   for (const x in _.range(3)) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
-      await sleepPrecise(unit)
+      await ds[x].promise
       return 'test'
     }, 0).catch((e) => {
       expect(e).toBeInstanceOf(CancelledError)
@@ -443,6 +423,10 @@ test('Queue cancelAllPending', async () => {
 
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(0)
+
+  ds[0].resolve()
+  ds[1].resolve()
+  ds[2].resolve()
 
   expect(await promises[0]).toBe('test')
   expect(await promises[1]).toBeInstanceOf(CancelledError)
@@ -464,18 +448,17 @@ test('Queue infinity cancel', async () => {
 })
 
 test('Queue concurrency 1', async () => {
-  const unit = 30
-  const start = new Date().getTime()
   const mutex = new Queue(1)
   expect(mutex.running).toBe(0)
   expect(mutex.pending).toBe(0)
   const promises = []
   const callCount = {}
+  const ds = _.range(3).map(() => new Deferred())
   for (const x of _.range(3)) {
     callCount[x] = 0
     const p = mutex.exec(async () => {
       callCount[x] += 1
-      await sleepPrecise(unit)
+      await ds[x].promise
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
@@ -486,32 +469,24 @@ test('Queue concurrency 1', async () => {
   expect(callCount[0]).toBe(1)
   expect(callCount[1]).toBe(0)
   expect(callCount[2]).toBe(0)
+  ds[0].resolve()
   await promises[0]
-  await delay()
   expect(mutex.running).toBe(1)
   expect(mutex.pending).toBe(1)
   expect(callCount[0]).toBe(1)
   expect(callCount[1]).toBe(1)
   expect(callCount[2]).toBe(0)
-  let now = new Date().getTime()
-  expect(now - start).toBeGreaterThanOrEqual(unit * 1)
-  expect(now - start).toBeLessThan(unit * 1 * 3)
+  ds[1].resolve()
   await promises[1]
-  await delay()
   expect(mutex.running).toBe(1)
   expect(mutex.pending).toBe(0)
   expect(callCount[0]).toBe(1)
   expect(callCount[1]).toBe(1)
   expect(callCount[2]).toBe(1)
-  now = new Date().getTime()
-  expect(now - start).toBeGreaterThanOrEqual(unit * 2)
-  expect(now - start).toBeLessThan(unit * 2 * 3)
+  ds[2].resolve()
   await promises[2]
   expect(mutex.running).toBe(0)
   expect(mutex.pending).toBe(0)
-  now = new Date().getTime()
-  expect(now - start).toBeGreaterThanOrEqual(unit * 3)
-  expect(now - start).toBeLessThan(unit * 3 * 3)
 })
 
 test('Queue concurrency 1 all cancels', async () => {
@@ -525,18 +500,17 @@ test('Queue concurrency 1 all cancels', async () => {
 })
 
 test('Queue concurrency 1 priority', async () => {
-  const unit = 30
-  const start = new Date().getTime()
   const mutex = new Queue(1)
   expect(mutex.running).toBe(0)
   expect(mutex.pending).toBe(0)
   const promises = []
   const callCount = {}
+  const ds = _.range(3).map(() => new Deferred())
   for (const x of _.range(3)) {
     callCount[x] = 0
     const p = mutex.exec(async () => {
       callCount[x] += 1
-      await sleepPrecise(unit)
+      await ds[x].promise
     }, 10)
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
@@ -547,32 +521,24 @@ test('Queue concurrency 1 priority', async () => {
   expect(callCount[0]).toBe(1)
   expect(callCount[1]).toBe(0)
   expect(callCount[2]).toBe(0)
+  ds[0].resolve()
   await promises[0]
-  await delay()
   expect(mutex.running).toBe(1)
   expect(mutex.pending).toBe(1)
   expect(callCount[0]).toBe(1)
   expect(callCount[1]).toBe(1)
   expect(callCount[2]).toBe(0)
-  let now = new Date().getTime()
-  expect(now - start).toBeGreaterThanOrEqual(unit * 1)
-  expect(now - start).toBeLessThan(unit * 1 * 3)
+  ds[1].resolve()
   await promises[1]
-  await delay()
   expect(mutex.running).toBe(1)
   expect(mutex.pending).toBe(0)
   expect(callCount[0]).toBe(1)
   expect(callCount[1]).toBe(1)
   expect(callCount[2]).toBe(1)
-  now = new Date().getTime()
-  expect(now - start).toBeGreaterThanOrEqual(unit * 2)
-  expect(now - start).toBeLessThan(unit * 2 * 3)
+  ds[2].resolve()
   await promises[2]
   expect(mutex.running).toBe(0)
   expect(mutex.pending).toBe(0)
-  now = new Date().getTime()
-  expect(now - start).toBeGreaterThanOrEqual(unit * 3)
-  expect(now - start).toBeLessThan(unit * 3 * 3)
 })
 
 test('Queue concurrency 1 priority all cancels', async () => {

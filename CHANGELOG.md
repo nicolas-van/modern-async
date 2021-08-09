@@ -1,5 +1,12 @@
 # Changelog
 
+## To be released
+
+* Performance improvements. Notably the `Queue` class will now avoid calling the `delay()` function and will immediately trigger any
+  pending task as soon as a task is finished. This change indirectly impacts most functions in this library as they internally use
+  `Queue`. This change can produce minor behavior changes but is not considered a breaking change.
+* Improved tests.
+
 ## 1.0.2
 
 * Altered UMD deployment to only support browsers that support async/await language feature. The reason is that

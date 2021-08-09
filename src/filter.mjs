@@ -7,7 +7,7 @@ import filterLimit from './filterLimit.mjs'
  * The calls to `iteratee` will perform in parallel, but the results array will be in the same order
  * than the original.
  *
- * If any of the calls to iteratee throws an exception the returned promised will be rejected.
+ * If any of the calls to iteratee throws an exception the returned promise will be rejected.
  *
  * @param {Iterable} iterable An iterable object.
  * @param {Function} iteratee A function that will be called with each member of `iterable`. It will receive
