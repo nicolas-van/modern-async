@@ -2,7 +2,6 @@ import assert from 'nanoassert'
 import Deferred from './Deferred.mjs'
 import asyncWrap from './asyncWrap.mjs'
 import CancelledError from './CancelledError.mjs'
-import delay from './delay.mjs'
 
 /**
  * A class representing a queue.
@@ -136,6 +135,14 @@ class Queue {
   cancelAllPending () {
     return this._queue.cancelAllPending()
   }
+
+  /**
+   * @ignore
+   * @param {any} errClass ignore
+   */
+  set _cancelledErrorClass (errClass) {
+    this._queue._errorClass = errClass
+  }
 }
 
 export default Queue
@@ -153,6 +160,7 @@ class _InternalQueuePriority {
     this._concurrency = concurrency
     this._iqueue = []
     this._running = 0
+    this._errorClass = CancelledError
   }
 
   /**
@@ -223,7 +231,7 @@ class _InternalQueuePriority {
         const filtered = this._iqueue.filter((v) => v !== task)
         if (filtered.length < this._iqueue.length) {
           this._iqueue = filtered
-          deferred.reject(new CancelledError())
+          deferred.reject(new this._errorClass())
           return true
         } else {
           return false
@@ -251,12 +259,7 @@ class _InternalQueuePriority {
       task.asyncFct().finally(() => {
         this._running -= 1
         this._iqueue = this._iqueue.filter((v) => v !== task)
-        // the following check is delayed to give the opportunity to components
-        // listening for promises to cancel pending tasks before they are
-        // started
-        delay().then(() => {
-          this._checkQueue()
-        })
+        this._checkQueue()
       }).then(task.deferred.resolve, task.deferred.reject)
     }
   }
@@ -269,7 +272,7 @@ class _InternalQueuePriority {
     const toCancel = this._iqueue.filter((task) => !task.running)
     this._iqueue = this._iqueue.filter((task) => task.running)
     toCancel.forEach((task) => {
-      task.deferred.reject(new CancelledError())
+      task.deferred.reject(new this._errorClass())
     })
     return toCancel.length
   }
