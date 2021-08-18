@@ -135,14 +135,6 @@ class Queue {
   cancelAllPending () {
     return this._queue.cancelAllPending()
   }
-
-  /**
-   * @ignore
-   * @param {any} errClass ignore
-   */
-  set _cancelledErrorClass (errClass) {
-    this._queue._errorClass = errClass
-  }
 }
 
 export default Queue
@@ -160,7 +152,6 @@ class _InternalQueuePriority {
     this._concurrency = concurrency
     this._iqueue = []
     this._running = 0
-    this._errorClass = CancelledError
   }
 
   /**
@@ -231,7 +222,7 @@ class _InternalQueuePriority {
         const filtered = this._iqueue.filter((v) => v !== task)
         if (filtered.length < this._iqueue.length) {
           this._iqueue = filtered
-          deferred.reject(new this._errorClass())
+          deferred.reject(new CancelledError())
           return true
         } else {
           return false
@@ -272,7 +263,7 @@ class _InternalQueuePriority {
     const toCancel = this._iqueue.filter((task) => !task.running)
     this._iqueue = this._iqueue.filter((task) => task.running)
     toCancel.forEach((task) => {
-      task.deferred.reject(new this._errorClass())
+      task.deferred.reject(new CancelledError())
     })
     return toCancel.length
   }

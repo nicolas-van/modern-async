@@ -1,7 +1,6 @@
 
 import Queue from './Queue.mjs'
 import assert from 'nanoassert'
-import CancelledError from './CancelledError.mjs'
 
 /**
  * @ignore
@@ -13,70 +12,42 @@ import CancelledError from './CancelledError.mjs'
 async function findLimitInternal (iterable, iteratee, concurrency) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   const queue = new Queue(concurrency)
-  queue._cancelledErrorClass = CustomCancelledError
-  const promises = []
-  let current = promises
-  let finalized = false
-  const finalize = () => {
-    if (!finalized) {
-      current.forEach((p) => {
-        p.catch(() => {
-          // ignore the exception
-        })
-      })
-      queue.cancelAllPending()
-    }
-    finalized = true
-  }
+  let running = []
+  const it = iterable[Symbol.iterator]()
   let i = 0
-  for (const el of iterable) {
-    const index = i
-    promises.push((async () => {
-      try {
-        const gres = await queue.exec(async () => {
-          try {
-            const res = await iteratee(el, index, iterable)
-            if (res) {
-              finalize()
-            }
-            return res
-          } catch (e) {
-            finalize()
-            throw e
-          }
-        })
-        return [index, 'resolved', gres, el]
-      } catch (e) {
-        return [index, 'rejected', e, null]
+  let exhausted = false
+  while (true) {
+    while (!exhausted && queue.running < queue.concurrency) {
+      const index = i
+      const itval = it.next()
+      if (itval.done) {
+        exhausted = true
+        break
       }
-    })())
-    i += 1
-  }
-
-  try {
-    while (current.length > 0) {
-      const [index, state, result, val] = await Promise.race(current)
-      if (state === 'resolved') {
-        if (result) {
-          return [index, val]
+      const el = itval.value
+      const promise = queue.exec(async () => {
+        try {
+          return [index, 'resolved', await iteratee(el, index, iterable), el]
+        } catch (e) {
+          return [index, 'rejected', e, el]
         }
-      } else { // error
-        if (!(result instanceof CustomCancelledError)) {
-          throw result
-        }
-      }
-      promises[index] = null
-      current = promises.filter((p) => p !== null)
+      })
+      running.push([index, promise])
+      i += 1
     }
-    return [-1, undefined]
-  } finally {
-    finalize()
+    if (exhausted && running.length === 0) {
+      return [-1, undefined]
+    }
+    const [index, state, result, val] = await Promise.race(running.map(([i, p]) => p))
+    running = running.filter(([i, p]) => i !== index)
+    if (state === 'resolved') {
+      if (result) {
+        return [index, val]
+      }
+    } else { // error
+      throw result
+    }
   }
 }
-
-/**
- * @ignore
- */
-class CustomCancelledError extends CancelledError {}
 
 export default findLimitInternal
