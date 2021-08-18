@@ -1,5 +1,5 @@
 
-import findIndexLimit from './findIndexLimit.mjs'
+import findLimitInternal from './findLimitInternal.mjs'
 
 /**
  * Returns the first element of an iterable that passes an asynchronous truth test.
@@ -42,9 +42,8 @@ import findIndexLimit from './findIndexLimit.mjs'
  * })
  */
 async function findLimit (iterable, iteratee, concurrency) {
-  const arr = Array.from(iterable)
-  const index = await findIndexLimit(iterable, iteratee, concurrency)
-  return index === -1 ? undefined : arr[index]
+  const res = await findLimitInternal(iterable, iteratee, concurrency)
+  return res[1]
 }
 
 export default findLimit

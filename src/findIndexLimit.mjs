@@ -1,7 +1,5 @@
 
-import Queue from './Queue.mjs'
-import assert from 'nanoassert'
-import CancelledError from './CancelledError.mjs'
+import findLimitInternal from './findLimitInternal.mjs'
 
 /**
  * Returns the index of the first element of an iterable that passes an asynchronous truth test.
@@ -44,72 +42,8 @@ import CancelledError from './CancelledError.mjs'
  * })
  */
 async function findIndexLimit (iterable, iteratee, concurrency) {
-  assert(typeof iteratee === 'function', 'iteratee must be a function')
-  const queue = new Queue(concurrency)
-  queue._cancelledErrorClass = CustomCancelledError
-  const promises = []
-  let current = promises
-  let finalized = false
-  const finalize = () => {
-    if (!finalized) {
-      current.forEach((p) => {
-        p.catch(() => {
-          // ignore the exception
-        })
-      })
-      queue.cancelAllPending()
-    }
-    finalized = true
-  }
-  let i = 0
-  for (const el of iterable) {
-    const index = i
-    promises.push((async () => {
-      try {
-        const gres = await queue.exec(async () => {
-          try {
-            const res = await iteratee(el, index, iterable)
-            if (res) {
-              finalize()
-            }
-            return res
-          } catch (e) {
-            finalize()
-            throw e
-          }
-        })
-        return [index, 'resolved', gres]
-      } catch (e) {
-        return [index, 'rejected', e]
-      }
-    })())
-    i += 1
-  }
-
-  try {
-    while (current.length > 0) {
-      const [index, state, result] = await Promise.race(current)
-      if (state === 'resolved') {
-        if (result) {
-          return index
-        }
-      } else { // error
-        if (!(result instanceof CustomCancelledError)) {
-          throw result
-        }
-      }
-      promises[index] = null
-      current = promises.filter((p) => p !== null)
-    }
-    return -1
-  } finally {
-    finalize()
-  }
+  const res = await findLimitInternal(iterable, iteratee, concurrency)
+  return res[0]
 }
-
-/**
- * @ignore
- */
-class CustomCancelledError extends CancelledError {}
 
 export default findIndexLimit
