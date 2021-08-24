@@ -42,7 +42,7 @@
     "type": "git",
     "url": "git+https://github.com/nicolas-van/modern-async.git"
   },
-  "author": "",
+  "author": "Nicolas Vanhoren",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/nicolas-van/modern-async/issues"
