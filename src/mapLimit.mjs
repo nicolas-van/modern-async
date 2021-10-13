@@ -1,6 +1,7 @@
 
 import Queue from './Queue.mjs'
 import assert from 'nanoassert'
+import mapLimitInternal from './mapLimitInternal.mjs'
 
 /**
  * Produces a new collection of values by mapping each value in `iterable` through the `iteratee` function.
@@ -37,41 +38,7 @@ import assert from 'nanoassert'
 async function mapLimit (iterable, iteratee, concurrency) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   const queue = new Queue(concurrency)
-  let running = []
-  const it = iterable[Symbol.iterator]()
-  let i = 0
-  const results = []
-  let exhausted = false
-  while (true) {
-    while (!exhausted && queue.running < queue.concurrency) {
-      const index = i
-      const itval = it.next()
-      if (itval.done) {
-        exhausted = true
-        break
-      }
-      const el = itval.value
-      const promise = queue.exec(async () => {
-        try {
-          return [index, 'resolved', await iteratee(el, index, iterable)]
-        } catch (e) {
-          return [index, 'rejected', e]
-        }
-      })
-      running.push([index, promise])
-      i += 1
-    }
-    if (exhausted && running.length === 0) {
-      return results
-    }
-    const [index, state, result] = await Promise.race(running.map(([i, p]) => p))
-    running = running.filter(([i, p]) => i !== index)
-    if (state === 'resolved') {
-      results[index] = result
-    } else { // error
-      throw result
-    }
-  }
+  return mapLimitInternal(iterable, iteratee, queue)
 }
 
 export default mapLimit
