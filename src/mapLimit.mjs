@@ -38,7 +38,11 @@ import mapLimitInternal from './mapLimitInternal.mjs'
 async function mapLimit (iterable, iteratee, concurrency) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   const queue = new Queue(concurrency)
-  return mapLimitInternal(iterable, iteratee, queue)
+  const results = []
+  for await (const el of mapLimitInternal(iterable, iteratee, queue)) {
+    results.push(el)
+  }
+  return results
 }
 
 export default mapLimit
