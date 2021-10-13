@@ -1,10 +1,8 @@
 
-import delayCancellable from './delayCancellable.mjs'
-
 /**
  * A function returning a promise that will be resolved in a later tick of the event loop.
  *
- * This function simply uses `setTimeout()` internally as it's the most portable solution.
+ * This function simply uses `Promise.resolve()` internally.
  *
  * @returns {Promise} A promise that will be resolved on a later tick of the event loop.
  * @example
@@ -17,7 +15,7 @@ import delayCancellable from './delayCancellable.mjs'
  * })
  */
 async function delay () {
-  return delayCancellable()[0]
+  return Promise.resolve()
 }
 
 export default delay

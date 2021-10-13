@@ -551,59 +551,66 @@ test('Queue concurrency 1 priority all cancels', async () => {
   await p
 })
 
-test('Queue waitSlotIsAvailable infinity', async () => {
-  const queue = new Queue(Number.POSITIVE_INFINITY)
-  let t1 = false
-  const p2 = queue.waitSlotIsAvailable()
-  p2.then(() => {
-    t1 = true
-  })
-  expect(t1).toBe(false)
-  await p2
-  expect(queue.running).toStrictEqual(0)
-})
-
-test('Queue waitSlotIsAvailable limit simple', async () => {
+test('Queue events', async () => {
   const queue = new Queue(1)
-  const d1 = new Deferred()
-  let t1 = false
-  const p1 = queue.exec(async () => {
-    await d1.promise
+  const scheduledD = new Deferred()
+  const startedD = new Deferred()
+  const finishedD = new Deferred()
+  const events = []
+  queue.on('taskScheduled', () => {
+    events.push('taskScheduled')
+    scheduledD.resolve()
   })
-  const p2 = queue.waitSlotIsAvailable()
-  p2.then(() => {
-    t1 = true
+  queue.on('taskStarted', () => {
+    events.push('taskStarted')
+    startedD.resolve()
   })
-  expect(t1).toBe(false)
-  d1.resolve()
-  await p1
-  await p2
-  expect(queue.running).toStrictEqual(0)
-})
-
-test('Queue waitSlotIsAvailable limit multiple', async () => {
-  const queue = new Queue(1)
-  const d1 = new Deferred()
-  const pr1 = queue.exec(async () => {
-    await d1.promise
+  queue.on('taskFinished', () => {
+    events.push('taskFinished')
+    finishedD.resolve()
   })
-  const d2 = new Deferred()
-  const pr2 = queue.exec(async () => {
-    await d2.promise
+  const d = new Deferred()
+  queue.exec(async () => {
+    await d
   })
-  let t1 = false
-  const p1 = queue.waitSlotIsAvailable()
-  p1.then(() => {
-    t1 = true
-  })
-  expect(t1).toBe(false)
-  d1.resolve()
-  await pr1
   expect(queue.running).toStrictEqual(1)
-  expect(t1).toStrictEqual(false)
-  d2.resolve()
-  await pr2
-  await p1
+  await scheduledD.promise
+  await startedD.promise
+  expect(events).toStrictEqual(['taskScheduled', 'taskStarted'])
+  d.resolve()
+  await finishedD.promise
   expect(queue.running).toStrictEqual(0)
-  expect(t1).toStrictEqual(true)
+  expect(events).toStrictEqual(['taskScheduled', 'taskStarted', 'taskFinished'])
+})
+
+test('Queue infinity events', async () => {
+  const queue = new Queue(Number.POSITIVE_INFINITY)
+  const scheduledD = new Deferred()
+  const startedD = new Deferred()
+  const finishedD = new Deferred()
+  const events = []
+  queue.on('taskScheduled', () => {
+    events.push('taskScheduled')
+    scheduledD.resolve()
+  })
+  queue.on('taskStarted', () => {
+    events.push('taskStarted')
+    startedD.resolve()
+  })
+  queue.on('taskFinished', () => {
+    events.push('taskFinished')
+    finishedD.resolve()
+  })
+  const d = new Deferred()
+  queue.exec(async () => {
+    await d
+  })
+  expect(queue.running).toStrictEqual(1)
+  await scheduledD.promise
+  await startedD.promise
+  expect(events).toStrictEqual(['taskScheduled', 'taskStarted'])
+  d.resolve()
+  await finishedD.promise
+  expect(queue.running).toStrictEqual(0)
+  expect(events).toStrictEqual(['taskScheduled', 'taskStarted', 'taskFinished'])
 })

@@ -2,6 +2,8 @@ import assert from 'nanoassert'
 import Deferred from './Deferred.mjs'
 import asyncWrap from './asyncWrap.mjs'
 import CancelledError from './CancelledError.mjs'
+import EventEmitter from 'events'
+import delay from './delay.mjs'
 
 /**
  * A class representing a queue.
@@ -36,7 +38,7 @@ import CancelledError from './CancelledError.mjs'
  *   console.log(results) // will display an array with the result of the execution of each separate task
  * })
  */
-class Queue {
+class Queue extends EventEmitter {
   /**
    * Constructs a queue with the given concurrency
    *
@@ -44,6 +46,7 @@ class Queue {
    * `Number.POSITIVE_INFINITY`.
    */
   constructor (concurrency) {
+    super()
     assert(Number.isInteger(concurrency) || concurrency === Number.POSITIVE_INFINITY,
       'concurrency must be an integer or positive infinity')
     assert(concurrency > 0, 'concurrency must be greater than 0')
@@ -52,6 +55,15 @@ class Queue {
     } else {
       this._queue = new _InternalInfinityQueue()
     }
+    this._queue.on('taskScheduled', (...args) => {
+      this.emit('taskScheduled', ...args)
+    })
+    this._queue.on('taskStarted', (...args) => {
+      this.emit('taskStarted', ...args)
+    })
+    this._queue.on('taskFinished', (...args) => {
+      this.emit('taskFinished', ...args)
+    })
   }
 
   /**
@@ -135,29 +147,6 @@ class Queue {
   cancelAllPending () {
     return this._queue.cancelAllPending()
   }
-
-  /**
-   * Returns a promise that will be resolved when the queue has a least one available slot.
-   *
-   * When tasks are scheduled at multiple places some code may trigger a new task *after* this promise
-   * resolves but *before* the callbacks bound to this promise have time to execute. To prevent this
-   * possibility it is recommended to always wrap this function in a loop that checks there is
-   * effectively available slots in the queue (see example).
-   *
-   * Also be warned that if multiple different pieces of code try to infinitely schedule new tasks as
-   * soon as as slot is available in the same queue it can't be predicted what will happen. One code could
-   * win over the others and infinitely schedule its own tasks.
-   *
-   * @returns {Promise} A promise that will be resolved when the queue has a least one available slot.
-   * @example
-   * // given an instance of Queue
-   * while (queue.running === queue.concurrency) {
-   *   await queue.waitSlotIsAvailable()
-   * }
-   */
-  async waitSlotIsAvailable () {
-    return this._queue.waitSlotIsAvailable()
-  }
 }
 
 export default Queue
@@ -165,17 +154,17 @@ export default Queue
 /**
  * @ignore
  */
-class _InternalQueuePriority {
+class _InternalQueuePriority extends EventEmitter {
   /**
    * @ignore
    *
    * @param {number} concurrency ignore
    */
   constructor (concurrency) {
+    super()
     this._concurrency = concurrency
     this._iqueue = []
     this._running = 0
-    this._taskFinished = new Deferred()
   }
 
   /**
@@ -238,6 +227,7 @@ class _InternalQueuePriority {
       priority
     }
     this._iqueue.splice(i, 0, task)
+    delay().then(() => this.emit('taskScheduled'))
     this._checkQueue()
     return [deferred.promise, () => {
       if (task.running) {
@@ -272,12 +262,12 @@ class _InternalQueuePriority {
       task.running = true
       this._running += 1
       task.asyncFct().finally(() => {
+        delay().then(() => this.emit('taskFinished'))
         this._running -= 1
         this._iqueue = this._iqueue.filter((v) => v !== task)
         this._checkQueue()
-        this._taskFinished.resolve()
-        this._taskFinished = new Deferred()
       }).then(task.deferred.resolve, task.deferred.reject)
+      delay().then(() => this.emit('taskStarted'))
     }
   }
 
@@ -293,31 +283,17 @@ class _InternalQueuePriority {
     })
     return toCancel.length
   }
-
-  /**
-   * @ignore
-   * @returns {*} ignore
-   */
-  async waitSlotIsAvailable () {
-    while (true) {
-      assert(this.running >= 0, 'invalid state')
-      assert(this.running <= this.concurrency, 'invalid state')
-      if (this.running < this.concurrency) {
-        return
-      }
-      await this._taskFinished.promise
-    }
-  }
 }
 
 /**
  * @ignore
  */
-class _InternalInfinityQueue {
+class _InternalInfinityQueue extends EventEmitter {
   /**
    * @ignore
    */
   constructor () {
+    super()
     this._running = 0
   }
 
@@ -364,8 +340,11 @@ class _InternalInfinityQueue {
   execCancellable (fct) {
     this._running += 1
     const asyncFct = asyncWrap(fct)
+    delay().then(() => this.emit('taskScheduled'))
     const p = asyncFct()
+    delay().then(() => this.emit('taskStarted'))
     return [p.finally(() => {
+      delay().then(() => this.emit('taskFinished'))
       this._running -= 1
     }), () => false]
   }
@@ -377,10 +356,4 @@ class _InternalInfinityQueue {
   cancelAllPending () {
     return 0
   }
-
-  /**
-   * @ignore
-   * @returns {*} ignore
-   */
-  async waitSlotIsAvailable () {}
 }
