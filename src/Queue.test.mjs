@@ -550,3 +550,60 @@ test('Queue concurrency 1 priority all cancels', async () => {
   queue.cancelAllPending()
   await p
 })
+
+test('Queue waitSlotIsAvailable infinity', async () => {
+  const queue = new Queue(Number.POSITIVE_INFINITY)
+  let t1 = false
+  const p2 = queue.waitSlotIsAvailable()
+  p2.then(() => {
+    t1 = true
+  })
+  expect(t1).toBe(false)
+  await p2
+  expect(queue.running).toStrictEqual(0)
+})
+
+test('Queue waitSlotIsAvailable limit simple', async () => {
+  const queue = new Queue(1)
+  const d1 = new Deferred()
+  let t1 = false
+  const p1 = queue.exec(async () => {
+    await d1.promise
+  })
+  const p2 = queue.waitSlotIsAvailable()
+  p2.then(() => {
+    t1 = true
+  })
+  expect(t1).toBe(false)
+  d1.resolve()
+  await p1
+  await p2
+  expect(queue.running).toStrictEqual(0)
+})
+
+test('Queue waitSlotIsAvailable limit multiple', async () => {
+  const queue = new Queue(1)
+  const d1 = new Deferred()
+  const pr1 = queue.exec(async () => {
+    await d1.promise
+  })
+  const d2 = new Deferred()
+  const pr2 = queue.exec(async () => {
+    await d2.promise
+  })
+  let t1 = false
+  const p1 = queue.waitSlotIsAvailable()
+  p1.then(() => {
+    t1 = true
+  })
+  expect(t1).toBe(false)
+  d1.resolve()
+  await pr1
+  expect(queue.running).toStrictEqual(1)
+  expect(t1).toStrictEqual(false)
+  d2.resolve()
+  await pr2
+  await p1
+  expect(queue.running).toStrictEqual(0)
+  expect(t1).toStrictEqual(true)
+})

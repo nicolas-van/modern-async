@@ -135,6 +135,29 @@ class Queue {
   cancelAllPending () {
     return this._queue.cancelAllPending()
   }
+
+  /**
+   * Returns a promise that will be resolved when the queue has a least one available slot.
+   *
+   * When tasks are scheduled at multiple places some code may trigger a new task *after* this promise
+   * resolves but *before* the callbacks bound to this promise have time to execute. To prevent this
+   * possibility it is recommended to always wrap this function in a loop that checks there is
+   * effectively available slots in the queue (see example).
+   *
+   * Also be warned that if multiple different pieces of code try to infinitely schedule new tasks as
+   * soon as as slot is available in the same queue it can't be predicted what will happen. One code could
+   * win over the others and infinitely schedule its own tasks.
+   *
+   * @returns {Promise} A promise that will be resolved when the queue has a least one available slot.
+   * @example
+   * // given an instance of Queue
+   * while (queue.running === queue.concurrency) {
+   *   await queue.waitSlotIsAvailable()
+   * }
+   */
+  async waitSlotIsAvailable () {
+    return this._queue.waitSlotIsAvailable()
+  }
 }
 
 export default Queue
@@ -152,6 +175,7 @@ class _InternalQueuePriority {
     this._concurrency = concurrency
     this._iqueue = []
     this._running = 0
+    this._taskFinished = new Deferred()
   }
 
   /**
@@ -251,6 +275,8 @@ class _InternalQueuePriority {
         this._running -= 1
         this._iqueue = this._iqueue.filter((v) => v !== task)
         this._checkQueue()
+        this._taskFinished.resolve()
+        this._taskFinished = new Deferred()
       }).then(task.deferred.resolve, task.deferred.reject)
     }
   }
@@ -266,6 +292,21 @@ class _InternalQueuePriority {
       task.deferred.reject(new CancelledError())
     })
     return toCancel.length
+  }
+
+  /**
+   * @ignore
+   * @returns {*} ignore
+   */
+  async waitSlotIsAvailable () {
+    while (true) {
+      assert(this.running >= 0, 'invalid state')
+      assert(this.running <= this.concurrency, 'invalid state')
+      if (this.running < this.concurrency) {
+        return
+      }
+      await this._taskFinished.promise
+    }
   }
 }
 
@@ -336,4 +377,10 @@ class _InternalInfinityQueue {
   cancelAllPending () {
     return 0
   }
+
+  /**
+   * @ignore
+   * @returns {*} ignore
+   */
+  async waitSlotIsAvailable () {}
 }
