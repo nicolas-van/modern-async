@@ -21,11 +21,14 @@ test('mapLimit concurrency', async () => {
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   const d = new Deferred()
+  const ds = arr.map(() => new Deferred())
   const p = mapLimit(arr, async (x) => {
     called[x] += 1
+    ds[x].resolve()
     await d.promise
     return x * 2
   }, 2)
+  await ds[1].promise
   expect(called[0]).toBe(1)
   expect(called[1]).toBe(1)
   expect(called[2]).toBe(0)
@@ -104,13 +107,17 @@ test('mapLimit all exception c 2', async () => {
   const arr = _.range(3)
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
+  const ds = arr.map(() => new Deferred())
   try {
     const d = new Deferred()
     const p = mapLimit(arr, async (x) => {
       called[x] += 1
+      ds[x].resolve()
       await d.promise
       throw new Error('test')
     }, 2)
+    await ds[0].promise
+    await ds[1].promise
     d.resolve()
     await p
     expect(false).toBe(true)

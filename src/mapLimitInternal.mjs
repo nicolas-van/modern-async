@@ -38,30 +38,23 @@ async function * mapLimitInternal (asyncIterable, iteratee, queue) {
     while (results.length >= 1 && results[0] !== undefined) {
       const result = results.shift()
       lastIndexReturned += 1
-      console.log('yield', result.value)
       yield result.value
-      console.log('postyield')
     }
     if (exhausted && lastIndexFetched === lastIndexReturned) {
-      console.log('returning')
       return
     }
     if (hasValue) {
       if (queue.running < queue.concurrency) {
-        console.log('schedule', lastValue)
         addToWaitList(lastIndexFetched, async () => iteratee(lastValue, lastIndexFetched, asyncIterable))
         hasValue = false
       } else {
-        console.log('taskFinished')
         addToWaitList('taskFinished', async () => taskFinished(queue))
       }
     }
     if (!hasValue && !fetching && !exhausted) {
-      console.log('next')
       addToWaitList('next', async () => it.next())
       fetching = true
     }
-    console.log('racing', waitList)
     const [identifier, state, result] = await Promise.race(waitList.map(([k, v]) => v))
     const i = waitList.findIndex(([k, v]) => k === identifier)
     waitList.splice(i, 1)
@@ -70,7 +63,6 @@ async function * mapLimitInternal (asyncIterable, iteratee, queue) {
     }
     if (identifier === 'next') {
       const { value, done } = result
-      console.log('received next', result)
       assert(!hasValue, 'invalid state')
       lastValue = value
       fetching = false
@@ -87,7 +79,6 @@ async function * mapLimitInternal (asyncIterable, iteratee, queue) {
       const index = identifier
       assert(lastIndexReturned < index, 'invalid state')
       results[index - lastIndexReturned - 1] = { value: result }
-      console.log('result', { index, result, results })
     }
   }
 }

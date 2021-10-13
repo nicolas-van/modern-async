@@ -39,10 +39,13 @@ test('forEachLimit concurrency', async () => {
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   const d = new Deferred()
+  const ds = arr.map(() => new Deferred())
   const p = forEachLimit(arr, async (x) => {
     called[x] += 1
+    ds[x].resolve()
     await d.promise
   }, 2)
+  await ds[1].promise
   expect(called[0]).toBe(1)
   expect(called[1]).toBe(1)
   expect(called[2]).toBe(0)
