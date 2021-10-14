@@ -33,6 +33,7 @@ async function * mapLimitInternal (asyncIterable, iteratee, queue) {
 
   let lastIndexReturned = -1
   const results = []
+  let running = 0
 
   while (true) {
     while (results.length >= 1 && results[0] !== undefined) {
@@ -44,14 +45,13 @@ async function * mapLimitInternal (asyncIterable, iteratee, queue) {
       return
     }
     if (hasValue) {
-      if (queue.running < queue.concurrency) {
-        addToWaitList(lastIndexFetched, async () => iteratee(lastValue, lastIndexFetched, asyncIterable))
-        hasValue = false
-      } else {
-        addToWaitList('taskFinished', async () => taskFinished(queue))
-      }
+      addToWaitList(lastIndexFetched, async () => {
+        return queue.exec(async () => iteratee(lastValue, lastIndexFetched, asyncIterable))
+      })
+      running += 1
+      hasValue = false
     }
-    if (!hasValue && !fetching && !exhausted) {
+    if (!hasValue && !fetching && !exhausted && running < queue.concurrency) {
       addToWaitList('next', async () => it.next())
       fetching = true
     }
@@ -73,25 +73,12 @@ async function * mapLimitInternal (asyncIterable, iteratee, queue) {
         hasValue = false
         exhausted = true
       }
-    } else if (identifier === 'taskFinished') {
-      // nothing to do
     } else { // result
-      const index = identifier
-      assert(lastIndexReturned < index, 'invalid state')
-      results[index - lastIndexReturned - 1] = { value: result }
+      running -= 1
+      assert(lastIndexReturned < identifier, 'invalid state')
+      results[identifier - lastIndexReturned - 1] = { value: result }
     }
   }
-}
-
-/**
- * @ignore
- * @param {*} queue ignore
- * @returns {*} ignore
- */
-async function taskFinished (queue) {
-  return new Promise((resolve) => {
-    queue.once('taskFinished', resolve)
-  })
 }
 
 /**
