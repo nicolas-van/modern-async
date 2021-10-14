@@ -1,5 +1,4 @@
 
-import Queue from './Queue.mjs'
 import asyncGeneratorMap from './asyncGeneratorMap.mjs'
 import assert from 'nanoassert'
 
@@ -12,10 +11,9 @@ import assert from 'nanoassert'
  */
 async function findIndexLimitUnordered (iterable, iteratee, concurrency) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
-  const queue = new Queue(concurrency)
   for await (const [index, pass] of asyncGeneratorMap(iterable, async (value, index, iterable) => {
     return [index, await iteratee(value, index, iterable)]
-  }, queue, false)) {
+  }, concurrency, false)) {
     if (pass) {
       return index
     }

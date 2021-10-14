@@ -1,5 +1,4 @@
 
-import Queue from './Queue.mjs'
 import assert from 'nanoassert'
 import asyncGeneratorMap from './asyncGeneratorMap.mjs'
 
@@ -37,9 +36,8 @@ import asyncGeneratorMap from './asyncGeneratorMap.mjs'
  */
 async function mapLimit (iterable, iteratee, concurrency) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
-  const queue = new Queue(concurrency)
   const results = []
-  for await (const el of asyncGeneratorMap(iterable, iteratee, queue)) {
+  for await (const el of asyncGeneratorMap(iterable, iteratee, concurrency)) {
     results.push(el)
   }
   return results

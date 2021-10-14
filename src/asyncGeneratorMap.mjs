@@ -1,16 +1,18 @@
 
 import assert from 'nanoassert'
+import Queue from './Queue.mjs'
 
 /**
  * @ignore
  * @param {*} asyncIterable ignore
  * @param {*} iteratee ignore
- * @param {*} queue ignore
+ * @param {*} concurrency ignore
  * @param {*} ordered ignore
  * @returns {*} ignore
  */
-async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = true) {
+async function * asyncGeneratorMap (asyncIterable, iteratee, concurrency, ordered = true) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
+  const queue = new Queue(concurrency)
   const it = toAsyncGenerator(asyncIterable)
 
   let lastIndexFetched = -1
@@ -41,7 +43,6 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
 
   let lastIndexReturned = -1
   const results = []
-  let running = 0
 
   addToWaitList('next', async () => it.next())
   while (true) {
@@ -51,7 +52,6 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
       fetching = false
       if (!done) {
         lastIndexFetched += 1
-        running += 1
         addToWaitList(lastIndexFetched, async () => {
           return queue.exec(async () => iteratee(value, lastIndexFetched, asyncIterable))
         })
@@ -59,7 +59,6 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
         exhausted = true
       }
     } else { // result
-      running -= 1
       if (ordered) {
         assert(lastIndexReturned < identifier, 'invalid state')
         results[identifier - lastIndexReturned - 1] = { value: result }
@@ -72,7 +71,7 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
         yield result.value
       }
     }
-    if (!fetching && !exhausted && running < queue.concurrency) {
+    if (!fetching && !exhausted && queue.running < queue.concurrency) {
       addToWaitList('next', async () => it.next())
       fetching = true
     }
