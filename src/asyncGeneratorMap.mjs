@@ -9,7 +9,7 @@ import assert from 'nanoassert'
  * @param {*} ordered ignore
  * @returns {*} ignore
  */
-async function * mapLimitInternal (asyncIterable, iteratee, queue, ordered = true) {
+async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = true) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   const it = toAsyncGenerator(asyncIterable)
 
@@ -93,4 +93,4 @@ async function * toAsyncGenerator (iterator) {
   }
 }
 
-export default mapLimitInternal
+export default asyncGeneratorMap

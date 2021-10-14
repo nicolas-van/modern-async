@@ -1,7 +1,7 @@
 
 import Queue from './Queue.mjs'
 import assert from 'nanoassert'
-import mapLimitInternal from './mapLimitInternal.mjs'
+import asyncGeneratorMap from './asyncGeneratorMap.mjs'
 
 /**
  * Produces a new collection of values by mapping each value in `iterable` through the `iteratee` function.
@@ -39,7 +39,7 @@ async function mapLimit (iterable, iteratee, concurrency) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   const queue = new Queue(concurrency)
   const results = []
-  for await (const el of mapLimitInternal(iterable, iteratee, queue)) {
+  for await (const el of asyncGeneratorMap(iterable, iteratee, queue)) {
     results.push(el)
   }
   return results
