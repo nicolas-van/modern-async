@@ -1,11 +1,11 @@
 
 import { expect, test } from '@jest/globals'
 import forEachLimit from './forEachLimit.mjs'
-import _ from 'lodash'
 import Deferred from './Deferred.mjs'
+import xrange from './xrange.mjs'
 
 test('forEachLimit base', async () => {
-  const arr = _.range(6)
+  const arr = [...xrange(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   await forEachLimit(arr, async (x) => {
@@ -20,7 +20,7 @@ test('forEachLimit base', async () => {
 })
 
 test('forEachLimit no async', async () => {
-  const arr = _.range(6)
+  const arr = [...xrange(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   await forEachLimit(arr, (x) => {
@@ -35,7 +35,7 @@ test('forEachLimit no async', async () => {
 })
 
 test('forEachLimit concurrency', async () => {
-  const arr = _.range(6)
+  const arr = [...xrange(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   const d = new Deferred()

@@ -1,15 +1,15 @@
 
 import { expect, test } from '@jest/globals'
 import some from './some.mjs'
-import _ from 'lodash'
 import Deferred from './Deferred.mjs'
+import xrange from './xrange.mjs'
 
 test('some all no pass', async () => {
   const callCount = {}
-  _.range(3).forEach((i) => { callCount[i] = 0 })
+  ;[...xrange(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
-  const ds = _.range(3).map(() => new Deferred())
-  const p = some(_.range(3), async (v, i) => {
+  const ds = [...xrange(3)].map(() => new Deferred())
+  const p = some([...xrange(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -29,10 +29,10 @@ test('some all no pass', async () => {
 
 test('some some pass', async () => {
   const callCount = {}
-  _.range(3).forEach((i) => { callCount[i] = 0 })
+  ;[...xrange(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
-  const ds = _.range(3).map(() => new Deferred())
-  const p = some(_.range(3), async (v, i) => {
+  const ds = [...xrange(3)].map(() => new Deferred())
+  const p = some([...xrange(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise

@@ -1,25 +1,25 @@
 
 import { expect, test } from '@jest/globals'
 import findIndexLimit from './findIndexLimit.mjs'
-import _ from 'lodash'
 import Deferred from './Deferred.mjs'
+import xrange from './xrange.mjs'
 
 test('findIndexLimit compatibility', async () => {
   let d = new Deferred()
-  let p = findIndexLimit(_.range(3), async (v) => {
+  let p = findIndexLimit([...xrange(3)], async (v) => {
     await d.promise
     return v === 2
   }, 1)
   d.resolve()
-  expect(await p).toBe(_.range(3).findIndex((v) => v === 2))
+  expect(await p).toBe([...xrange(3)].findIndex((v) => v === 2))
 
   d = new Deferred()
-  p = findIndexLimit(_.range(3), async (v) => {
+  p = findIndexLimit([...xrange(3)], async (v) => {
     await d.promise
     return v === 5
   }, 1)
   d.resolve()
-  expect(await p).toBe(_.range(3).findIndex((v) => v === 5))
+  expect(await p).toBe([...xrange(3)].findIndex((v) => v === 5))
 
   d = new Deferred()
   p = findIndexLimit([], async (v) => {
@@ -32,10 +32,10 @@ test('findIndexLimit compatibility', async () => {
 
 test('findIndexLimit cancelSubsequent', async () => {
   const callCount = {}
-  _.range(3).forEach((i) => { callCount[i] = 0 })
+  ;[...xrange(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
-  const ds = _.range(3).map(() => new Deferred())
-  const p = findIndexLimit(_.range(3), async (v, i) => {
+  const ds = [...xrange(3)].map(() => new Deferred())
+  const p = findIndexLimit([...xrange(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -55,10 +55,10 @@ test('findIndexLimit cancelSubsequent', async () => {
 
 test('findIndexLimit cancelSubsequent 2', async () => {
   const callCount = {}
-  _.range(6).forEach((i) => { callCount[i] = 0 })
+  ;[...xrange(6)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
-  const ds = _.range(3).map(() => new Deferred())
-  const p = findIndexLimit(_.range(6), async (v, i) => {
+  const ds = [...xrange(3)].map(() => new Deferred())
+  const p = findIndexLimit([...xrange(6)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise

@@ -1,15 +1,15 @@
 
 import { expect, test } from '@jest/globals'
 import findIndexSeries from './findIndexSeries.mjs'
-import _ from 'lodash'
 import Deferred from './Deferred'
+import xrange from './xrange.mjs'
 
 test('findIndexSeries', async () => {
   const callCount = {}
-  _.range(3).forEach((i) => { callCount[i] = 0 })
+  ;[...xrange(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
-  const ds = _.range(3).map(() => new Deferred())
-  const p = findIndexSeries(_.range(3), async (v, i) => {
+  const ds = [...xrange(3)].map(() => new Deferred())
+  const p = findIndexSeries([...xrange(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -29,10 +29,10 @@ test('findIndexSeries', async () => {
 
 test('findIndexSeries ordered', async () => {
   const callCount = {}
-  _.range(3).forEach((i) => { callCount[i] = 0 })
+  ;[...xrange(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
-  const ds = _.range(3).map(() => new Deferred())
-  const p = findIndexSeries(_.range(3), async (v, i) => {
+  const ds = [...xrange(3)].map(() => new Deferred())
+  const p = findIndexSeries([...xrange(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     if (i === 0) {
@@ -54,9 +54,9 @@ test('findIndexSeries ordered', async () => {
 
 test('findIndexSeries error', async () => {
   const callCount = {}
-  _.range(3).forEach((i) => { callCount[i] = 0 })
+  ;[...xrange(3)].forEach((i) => { callCount[i] = 0 })
   try {
-    await findIndexSeries(_.range(3), async (v, i) => {
+    await findIndexSeries([...xrange(3)], async (v, i) => {
       callCount[i] += 1
       if (i === 0) {
         throw new Error('test')
