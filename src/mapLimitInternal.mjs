@@ -6,9 +6,10 @@ import assert from 'nanoassert'
  * @param {*} asyncIterable ignore
  * @param {*} iteratee ignore
  * @param {*} queue ignore
+ * @param {*} ordered ignore
  * @returns {*} ignore
  */
-async function * mapLimitInternal (asyncIterable, iteratee, queue) {
+async function * mapLimitInternal (asyncIterable, iteratee, queue, ordered = true) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   const it = toAsyncGenerator(asyncIterable)
 
@@ -59,8 +60,12 @@ async function * mapLimitInternal (asyncIterable, iteratee, queue) {
       }
     } else { // result
       running -= 1
-      assert(lastIndexReturned < identifier, 'invalid state')
-      results[identifier - lastIndexReturned - 1] = { value: result }
+      if (ordered) {
+        assert(lastIndexReturned < identifier, 'invalid state')
+        results[identifier - lastIndexReturned - 1] = { value: result }
+      } else {
+        results.push({ value: result })
+      }
       while (results.length >= 1 && results[0] !== undefined) {
         const result = results.shift()
         lastIndexReturned += 1
