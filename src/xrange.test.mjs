@@ -43,4 +43,15 @@ test('xrange step 0', async () => {
 
 test('xrange step wrong direction', async () => {
   expect(() => [...xrange(1, 4, -1)]).toThrow()
+  expect(() => [...xrange(10, -4, 1)]).toThrow()
+})
+
+test('xrange go beyond end', async () => {
+  const res = [...xrange(0, 5, 2)]
+  expect(res).toStrictEqual([0, 2, 4])
+})
+
+test('xrange go below end', async () => {
+  const res = [...xrange(2, -5, -2)]
+  expect(res).toStrictEqual([2, 0, -2, -4])
 })
