@@ -1,5 +1,7 @@
 
-import findLimitInternal from './findLimitInternal.mjs'
+import Queue from './Queue.mjs'
+import asyncGeneratorMap from './asyncGeneratorMap.mjs'
+import assert from 'nanoassert'
 
 /**
  * Returns the first element of an iterable that passes an asynchronous truth test.
@@ -42,8 +44,16 @@ import findLimitInternal from './findLimitInternal.mjs'
  * })
  */
 async function findLimit (iterable, iteratee, concurrency) {
-  const res = await findLimitInternal(iterable, iteratee, concurrency)
-  return res[1]
+  assert(typeof iteratee === 'function', 'iteratee must be a function')
+  const queue = new Queue(concurrency)
+  for await (const [value, pass] of asyncGeneratorMap(iterable, async (value, index, iterable) => {
+    return [value, await iteratee(value, index, iterable)]
+  }, queue, false)) {
+    if (pass) {
+      return value
+    }
+  }
+  return undefined
 }
 
 export default findLimit
