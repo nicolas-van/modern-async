@@ -74,7 +74,6 @@
     "semver-sort": "0.0.4"
   },
   "dependencies": {
-    "events": "^3.3.0",
     "nanoassert": "^2.0.0"
   }
 }
