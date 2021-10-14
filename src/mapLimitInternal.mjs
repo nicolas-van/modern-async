@@ -36,21 +36,6 @@ async function * mapLimitInternal (asyncIterable, iteratee, queue) {
   let running = 0
 
   while (true) {
-    while (results.length >= 1 && results[0] !== undefined) {
-      const result = results.shift()
-      lastIndexReturned += 1
-      yield result.value
-    }
-    if (exhausted && lastIndexFetched === lastIndexReturned) {
-      return
-    }
-    if (hasValue) {
-      addToWaitList(lastIndexFetched, async () => {
-        return queue.exec(async () => iteratee(lastValue, lastIndexFetched, asyncIterable))
-      })
-      running += 1
-      hasValue = false
-    }
     if (!hasValue && !fetching && !exhausted && running < queue.concurrency) {
       addToWaitList('next', async () => it.next())
       fetching = true
@@ -77,6 +62,21 @@ async function * mapLimitInternal (asyncIterable, iteratee, queue) {
       running -= 1
       assert(lastIndexReturned < identifier, 'invalid state')
       results[identifier - lastIndexReturned - 1] = { value: result }
+    }
+    while (results.length >= 1 && results[0] !== undefined) {
+      const result = results.shift()
+      lastIndexReturned += 1
+      yield result.value
+    }
+    if (exhausted && lastIndexFetched === lastIndexReturned) {
+      return
+    }
+    if (hasValue) {
+      addToWaitList(lastIndexFetched, async () => {
+        return queue.exec(async () => iteratee(lastValue, lastIndexFetched, asyncIterable))
+      })
+      running += 1
+      hasValue = false
     }
   }
 }
