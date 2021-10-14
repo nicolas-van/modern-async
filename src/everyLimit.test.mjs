@@ -87,3 +87,14 @@ test('everyLimit parallel', async () => {
   d.resolve()
   expect(await p).toBe([].every((v) => true))
 })
+
+test('everyLimit first in time', async () => {
+  const ds = [...xrange(3)].map(() => new Deferred())
+  const p = everyLimit(xrange(3), async (v, i) => {
+    await ds[i]
+    return false
+  }, 3)
+  ds[2].resolve()
+  const res = await p
+  expect(res).toBe(false)
+})

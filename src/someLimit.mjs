@@ -1,5 +1,5 @@
 
-import findIndexLimit from './findIndexLimit.mjs'
+import findIndexLimitUnordered from './findIndexLimitUnordered.mjs'
 
 /**
  * Returns `true` if at least one element of an iterable pass a truth test and `false` otherwise.
@@ -39,7 +39,7 @@ import findIndexLimit from './findIndexLimit.mjs'
  * })
  */
 async function someLimit (iterable, iteratee, concurrency) {
-  const index = await findIndexLimit(iterable, iteratee, concurrency)
+  const index = await findIndexLimitUnordered(iterable, iteratee, concurrency)
   const result = index !== -1
   return result
 }

@@ -48,7 +48,7 @@ async function findLimit (iterable, iteratee, concurrency) {
   const queue = new Queue(concurrency)
   for await (const [value, pass] of asyncGeneratorMap(iterable, async (value, index, iterable) => {
     return [value, await iteratee(value, index, iterable)]
-  }, queue, false)) {
+  }, queue)) {
     if (pass) {
       return value
     }

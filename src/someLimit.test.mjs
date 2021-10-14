@@ -2,6 +2,7 @@
 import { expect, test } from '@jest/globals'
 import someLimit from './someLimit.mjs'
 import xrange from './xrange.mjs'
+import Deferred from './Deferred.mjs'
 
 test('someLimit compatibility', async () => {
   const p = Promise.resolve()
@@ -67,4 +68,15 @@ test('someLimit parallel', async () => {
     return true
   }, 10)
   expect(res).toBe([].some((v) => true))
+})
+
+test('someLimit first in time', async () => {
+  const ds = [...xrange(3)].map(() => new Deferred())
+  const p = someLimit(xrange(3), async (v, i) => {
+    await ds[i]
+    return true
+  }, 3)
+  ds[2].resolve()
+  const res = await p
+  expect(res).toBe(true)
 })

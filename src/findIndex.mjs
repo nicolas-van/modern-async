@@ -4,10 +4,9 @@ import findIndexLimit from './findIndexLimit.mjs'
 /**
  * Returns the index of the first element of an iterable that passes an asynchronous truth test.
  *
- * The calls to `iteratee` will run in parallel. This implies that the element found by this function may not
- * be the first element of the iterable able to pass the truth test. It will be the first one in time
- * for which one of the parallel calls to `iteratee` was able to return a positive result. If you need
- * a sequential alternative use `findIndexSeries()`.
+ * The calls to `iteratee` will run in parallel. Regardless of which function
+ * call returns first, this function will always return the first in iterable order able to pass the truth
+ * test. Concurrency has no impact on the value that will be returned by this function.
  *
  * In case of exception in one of the `iteratee` calls the promise returned by this function will be
  * rejected with the exception. In the very specific case where a result is found and an
@@ -31,7 +30,7 @@ import findIndexLimit from './findIndexLimit.mjs'
  *     await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
  *     return v % 2 === 1
  *   })
- *   console.log(result) // prints 0 or 2 randomly
+ *   console.log(result) // will always print 0
  * })
  */
 async function findIndex (iterable, iteratee) {

@@ -6,10 +6,9 @@ import assert from 'nanoassert'
 /**
  * Returns the index of the first element of an iterable that passes an asynchronous truth test.
  *
- * The calls to `iteratee` will run in parallel, up to a concurrency limit. This implies that
- * the element found by this function may not be the first element of the iterable able to pass the
- * truth test. It will be the first one in time for which one of the parallel calls to `iteratee` was able to
- * return a positive result. If you need a sequential alternative use `findIndexSeries()`.
+ * The calls to `iteratee` will run in parallel, up to a concurrency limit. Regardless of which function
+ * call returns first, this function will always return the first in iterable order able to pass the truth
+ * test. Concurrency has no impact on the value that will be returned by this function.
  *
  * Whenever a result is found, all the remaining tasks will be cancelled as long
  * as they didn't started already. In case of exception in one of the iteratee calls the promise
@@ -37,10 +36,7 @@ import assert from 'nanoassert'
  *     await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
  *     return v % 2 === 1
  *   }, 3)
- *   console.log(result) // prints 0, 2 or 4 randomly
- *   // 4 is a potential result in this case even with a concurrency of 3 due to how
- *   // randomness works, and all asynchronous operations are inherently random. The only way to ensure an
- *   // order is to use a concurreny of 1 or to use findSeries() which does the same thing.
+ *   console.log(result) // will always print 0
  * })
  */
 async function findIndexLimit (iterable, iteratee, concurrency) {
@@ -48,7 +44,7 @@ async function findIndexLimit (iterable, iteratee, concurrency) {
   const queue = new Queue(concurrency)
   for await (const [index, pass] of asyncGeneratorMap(iterable, async (value, index, iterable) => {
     return [index, await iteratee(value, index, iterable)]
-  }, queue, false)) {
+  }, queue)) {
     if (pass) {
       return index
     }

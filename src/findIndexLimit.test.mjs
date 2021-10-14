@@ -3,6 +3,7 @@ import { expect, test } from '@jest/globals'
 import findIndexLimit from './findIndexLimit.mjs'
 import Deferred from './Deferred.mjs'
 import xrange from './xrange.mjs'
+import delay from './delay.mjs'
 
 test('findIndexLimit compatibility', async () => {
   let d = new Deferred()
@@ -82,7 +83,7 @@ test('findIndexLimit cancelSubsequent 2', async () => {
   expect(callCount[5]).toBe(0)
 })
 
-test('findIndexLimit find first in time', async () => {
+test('findIndexLimit find first in order', async () => {
   const arr = [0, 1, 0]
   let d1 = new Deferred()
   let d2 = new Deferred()
@@ -95,6 +96,8 @@ test('findIndexLimit find first in time', async () => {
     return v === 0
   }, 3)
   d1.resolve()
+  await delay()
+  d2.resolve()
   let res = await p
   expect(res).toBe(0)
   d2.resolve()
@@ -110,8 +113,10 @@ test('findIndexLimit find first in time', async () => {
     return v === 0
   }, 3)
   d2.resolve()
+  await delay()
+  d1.resolve()
   res = await p
-  expect(res).toBe(2)
+  expect(res).toBe(0)
   d1.resolve()
 })
 
