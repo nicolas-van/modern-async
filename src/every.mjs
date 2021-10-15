@@ -10,7 +10,7 @@ import everyLimit from './everyLimit.mjs'
  * with the exception. In the very specific case where a test returns `false` and an already started task throws
  * an exception that exception will be plainly ignored.
  *
- * @param {Iterable} iterable An iterable object.
+ * @param {Iterable | AsyncIterable} iterable An iterable or async iterable object.
  * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
  * three arguments:
  *   * `value`: The current value to process

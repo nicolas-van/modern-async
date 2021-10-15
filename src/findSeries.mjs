@@ -9,7 +9,7 @@ import findLimit from './findLimit.mjs'
  * In case of exception in one of the `iteratee` calls the promise returned by this function will be
  * rejected with the exception.
  *
- * @param {Iterable} iterable An iterable object.
+ * @param {Iterable | AsyncIterable} iterable An iterable or async iterable object.
  * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
  * three arguments:
  *   * `value`: The current value to process

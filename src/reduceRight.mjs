@@ -33,9 +33,12 @@ import reduce from './reduce.mjs'
  * })
  */
 async function reduceRight (iterable, reducer, initial = undefined) {
-  const arr = Array.from(iterable)
+  const arr = []
+  for await (const el of iterable) {
+    arr.push(el)
+  }
   arr.reverse()
-  return reduce(arr, (accumulator, value, index, iterable) => {
+  return reduce(arr, async (accumulator, value, index, iterable) => {
     return reducer(accumulator, value, arr.length - 1 - index, iterable)
   }, initial)
 }

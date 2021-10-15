@@ -26,6 +26,7 @@ module.exports = {
       }}]
   },
   globals: {
-    Iterable: 'readonly'
+    Iterable: 'readonly',
+    AsyncIterable: 'readonly'
   }
 }

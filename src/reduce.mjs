@@ -5,7 +5,7 @@ import assert from 'nanoassert'
  * Performs a reduce operation as defined in the `Array.reduce()` method but using an asynchronous
  * function as reducer. The reducer will be called sequentially.
  *
- * @param {Iterable} iterable An iterable object.
+ * @param {Iterable | AsyncIterable} iterable An iterable or async iterable object.
  * @param {Function} reducer The reducer function. It will be called with four arguments:
  *   * `accumulator`: The last calculated value (or the first value of the iterable if no initial value is provided)
  *   * `value`: The current value
@@ -36,7 +36,7 @@ async function reduce (iterable, reducer, initial = undefined) {
   if (initial !== undefined) {
     let current = initial
     let i = 0
-    for (const el of iterable) {
+    for await (const el of iterable) {
       current = await reducer(current, el, i, iterable)
       i += 1
     }
@@ -44,7 +44,7 @@ async function reduce (iterable, reducer, initial = undefined) {
   } else {
     let i = 0
     let current
-    for (const el of iterable) {
+    for await (const el of iterable) {
       if (i === 0) {
         current = el
       } else {

@@ -18,11 +18,14 @@ test('delayCancellable', async () => {
 
 test('delayCancellable cancel', async () => {
   const [p, cancel] = delayCancellable()
-  cancel()
+  const res = cancel()
+  expect(res).toBe(true)
   try {
     await p
     expect(true).toBe(false)
   } catch (e) {
     expect(e).toBeInstanceOf(CancelledError)
   }
+  const res2 = cancel()
+  expect(res2).toBe(false)
 })

@@ -9,7 +9,7 @@ import forEachLimit from './forEachLimit.mjs'
  * If any of the calls to iteratee throws an exception the returned promise will be rejected and the remaining
  * pending tasks will be cancelled.
  *
- * @param {Iterable} iterable An iterable object.
+ * @param {Iterable | AsyncIterable} iterable An iterable or async iterable object.
  * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
  * three arguments:
  *   * `value`: The current value to process
