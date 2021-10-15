@@ -3,6 +3,7 @@ import { expect, test } from '@jest/globals'
 import Deferred from './Deferred.mjs'
 import reduce from './reduce.mjs'
 import { range } from 'itertools'
+import asyncGeneratorWrap from './asyncGeneratorWrap.mjs'
 
 test('reduce base', async () => {
   const arr = [...range(6)]
@@ -88,4 +89,16 @@ test('reduce index', async () => {
   await reduce(arr, async (p, v, i) => {
     expect(i).toBe(v)
   }, 0)
+})
+
+test('reduce async generator', async () => {
+  const gen = asyncGeneratorWrap(range(6))
+  const d = new Deferred()
+  const p = reduce(gen, async (p, v) => {
+    await d.promise
+    return p + v
+  }, 0)
+  d.resolve()
+  const result = await p
+  expect(result).toEqual([...range(6)].reduce((p, v) => p + v), 0)
 })

@@ -1,6 +1,7 @@
 
 import assert from 'nanoassert'
 import Queue from './Queue.mjs'
+import asyncGeneratorWrap from './asyncGeneratorWrap.mjs'
 
 /**
  * @ignore
@@ -13,7 +14,7 @@ import Queue from './Queue.mjs'
 async function * asyncGeneratorMap (asyncIterable, iteratee, concurrency, ordered = true) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   const queue = new Queue(concurrency)
-  const it = toAsyncGenerator(asyncIterable)
+  const it = asyncGeneratorWrap(asyncIterable)
 
   let lastIndexFetched = -1
   let fetching = false
@@ -78,17 +79,6 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, concurrency, ordere
     if (exhausted && lastIndexFetched === lastIndexReturned) {
       return
     }
-  }
-}
-
-/**
- * @ignore
- * @param {*} iterator ignore
- * @returns {*} ignore
- */
-async function * toAsyncGenerator (iterator) {
-  for await (const el of iterator) {
-    yield el
   }
 }
 
