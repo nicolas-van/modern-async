@@ -4,6 +4,7 @@ import Queue from './Queue.mjs'
 import Deferred from './Deferred.mjs'
 import CancelledError from './CancelledError.mjs'
 import { range } from 'itertools'
+import delay from './delay.mjs'
 
 test('Queue base 1', async () => {
   const queue = new Queue(1)
@@ -549,4 +550,34 @@ test('Queue concurrency 1 priority all cancels', async () => {
   cancel()
   queue.cancelAllPending()
   await p
+})
+
+test('Queue all resolve in micro tasks', async () => {
+  const del = delay()
+  const queue = new Queue(1)
+  const ps = []
+  ps.push(queue.exec(async () => {}))
+  ps.push(queue.exec(async () => {}))
+  ps.push(queue.exec(async () => {}))
+  let finished = false
+  Promise.all(ps).then(() => {
+    finished = true
+  })
+  await del
+  expect(finished).toBe(true)
+})
+
+test('Queue infinity all resolve in micro tasks', async () => {
+  const del = delay()
+  const queue = new Queue(Number.POSITIVE_INFINITY)
+  const ps = []
+  ps.push(queue.exec(async () => {}))
+  ps.push(queue.exec(async () => {}))
+  ps.push(queue.exec(async () => {}))
+  let finished = false
+  Promise.all(ps).then(() => {
+    finished = true
+  })
+  await del
+  expect(finished).toBe(true)
 })
