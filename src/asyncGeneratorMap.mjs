@@ -34,10 +34,50 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
     if (state === 'rejected') {
       throw result
     }
+    removeFromWaitList(identifier)
+    return [identifier, result]
+  }
+  const removeFromWaitList = (identifier) => {
     const i = waitList.findIndex(([k, v]) => k === identifier)
     assert(i !== -1)
     waitList.splice(i, 1)
-    return [identifier, result]
+  }
+  const scheduledList = []
+  const schedule = (value, index) => {
+    console.log('initial schedule', index)
+    scheduledList.push([value, index, null])
+    internalSchedule(value, index)
+  }
+  const internalSchedule = (value, index) => {
+    console.log('effective schedule', index)
+    addToWaitList(index, async () => {
+      const [p, cancel] = queue.execCancellable(async () => {
+        const output = scheduledList.shift()
+        assert(output[1] === index)
+        console.log('remove from schedule list', index)
+        return iteratee(value, index, asyncIterable)
+      })
+      assert(scheduledList.length > 0 && scheduledList[scheduledList.length - 1][1] === index)
+      scheduledList[scheduledList.length - 1][2] = cancel
+      return p
+    })
+  }
+  const cancelAllScheduled = () => {
+    for (const elem of scheduledList) {
+      const index = elem[1]
+      const cancel = elem[2]
+      console.log('cancel', index)
+      assert(cancel)
+      removeFromWaitList(index)
+    }
+  }
+  const rescheduleAll = () => {
+    for (const elem of scheduledList) {
+      const value = elem[0]
+      const index = elem[1]
+      elem[2] = null
+      internalSchedule(value, index)
+    }
   }
 
   let lastIndexReturned = -1
@@ -52,10 +92,7 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
       fetching = false
       if (!done) {
         lastIndexFetched += 1
-        const currentIndex = lastIndexFetched
-        addToWaitList(currentIndex, async () => {
-          return queue.exec(async () => iteratee(value, currentIndex, asyncIterable))
-        })
+        schedule(value, lastIndexFetched)
         running += 1
       } else {
         exhausted = true
@@ -71,7 +108,10 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
       while (results.length >= 1 && results[0] !== undefined) {
         const result = results.shift()
         lastIndexReturned += 1
+        cancelAllScheduled()
+        console.log('yielding', identifier)
         yield result.value
+        rescheduleAll()
       }
     }
     if (!fetching && !exhausted && running < queue.concurrency) {

@@ -4,6 +4,7 @@ import findIndexLimit from './findIndexLimit.mjs'
 import Deferred from './Deferred.mjs'
 import { range } from 'itertools'
 import delay from './delay.mjs'
+import Queue from './Queue.mjs'
 
 test('findIndexLimit compatibility', async () => {
   let d = new Deferred()
@@ -31,7 +32,7 @@ test('findIndexLimit compatibility', async () => {
   expect(await p).toBe([].findIndex((v) => v === 5))
 })
 
-test('findIndexLimit cancelSubsequent', async () => {
+test('findIndexLimit cancel subsequent', async () => {
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
@@ -55,7 +56,7 @@ test('findIndexLimit cancelSubsequent', async () => {
   expect(callCount[2]).toBe(0)
 })
 
-test('findIndexLimit cancelSubsequent 2', async () => {
+test('findIndexLimit cancel subsequent 2', async () => {
   const callCount = {}
   ;[...range(6)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
@@ -179,4 +180,49 @@ test('findIndexLimit concurrency', async () => {
   d.resolve()
   const res = await p
   expect(res).toBe(1)
+})
+
+test('findIndexLimit cancelSubsequent busy queue', async () => {
+  // setup full queue
+  const queue = new Queue(3)
+  const qd = [...range(3)].map(() => new Deferred())
+  for (const i of range(3)) {
+    queue.exec(async () => {
+      await qd[i].promise
+    })
+  }
+
+  const callCount = {}
+  ;[...range(10)].forEach((i) => { callCount[i] = 0 })
+  const d = new Deferred()
+  const ds = [...range(10)].map(() => new Deferred())
+  const p = findIndexLimit([...range(10)], async (v, i) => {
+    console.log('executing', i)
+    callCount[i] += 1
+    ds[i].resolve()
+    await d.promise
+    return v === 1
+  }, queue)
+  await delay()
+  expect(callCount[0]).toBe(0)
+  expect(callCount[1]).toBe(0)
+  expect(callCount[2]).toBe(0)
+  qd[1].resolve()
+  await ds[0].promise
+  expect(callCount[0]).toBe(1)
+  expect(callCount[1]).toBe(0)
+  expect(callCount[2]).toBe(0)
+  d.resolve()
+  const res = await p
+  expect(res).toBe(1)
+  expect(callCount[0]).toBe(1)
+  expect(callCount[1]).toBe(1)
+  expect(callCount[2]).toBe(0)
+  await delay()
+  expect(callCount[0]).toBe(1)
+  expect(callCount[1]).toBe(1)
+  expect(callCount[2]).toBe(0)
+  expect(queue.running).toStrictEqual(2)
+  expect(queue.pending).toStrictEqual(0)
+  queue.cancelAllPending()
 })
