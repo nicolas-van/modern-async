@@ -73,6 +73,7 @@
     "semver-sort": "0.0.4"
   },
   "dependencies": {
+    "core-js-pure": "^3.18.3",
     "nanoassert": "^2.0.0"
   }
 }

@@ -1,5 +1,8 @@
 
-import sleepCancellable from './sleepCancellable.mjs'
+import Deferred from './Deferred.mjs'
+import CancelledError from './CancelledError.mjs'
+import setImmediate from 'core-js-pure/features/set-immediate'
+import clearImmediate from 'core-js-pure/features/clear-immediate'
 
 /**
  * A function returning a promise that will be resolved in a later tick of the event loop.
@@ -7,7 +10,7 @@ import sleepCancellable from './sleepCancellable.mjs'
  * This function returns both a promise and cancel function in order to cancel the wait time if
  * necessary. If cancelled, the promise will be rejected with a CancelledError.
  *
- * This function simply uses `setTimeout()` internally as it's the most portable solution.
+ * This function uses core-js' shim for `setImmediate()` internally.
  *
  * @returns {Array} A tuple of two objects:
  *   * The promise
@@ -27,7 +30,21 @@ import sleepCancellable from './sleepCancellable.mjs'
  * })
  */
 function delayCancellable () {
-  return sleepCancellable(0)
+  const deferred = new Deferred()
+  const id = setImmediate(deferred.resolve)
+  let terminated = false
+  return [deferred.promise.finally(() => {
+    terminated = true
+  }), () => {
+    if (terminated) {
+      return false
+    } else {
+      terminated = true
+      deferred.reject(new CancelledError())
+      clearImmediate(id)
+      return true
+    }
+  }]
 }
 
 export default delayCancellable

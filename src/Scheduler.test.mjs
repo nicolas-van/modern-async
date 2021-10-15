@@ -110,7 +110,7 @@ test('Scheduler pending', async () => {
   scheduler.start()
   expect(scheduler.started).toBe(true)
   await sleepPrecise(150)
-  expect(scheduler._queue.pending).toBeGreaterThan(10)
+  expect(scheduler._queue.pending).toBeGreaterThan(3)
   scheduler.stop()
   expect(scheduler._queue.pending).toBe(0)
   expect(scheduler.started).toBe(false)

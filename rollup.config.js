@@ -5,7 +5,7 @@ import babel from '@rollup/plugin-babel'
 
 export default [{
   input: 'src/modern-async.mjs',
-  external: ['nanoassert'],
+  external: ['nanoassert', 'core-js-pure/features/set-immediate', 'core-js-pure/features/clear-immediate'],
   output: {
     file: 'dist/modern-async.cjs',
     format: 'cjs'

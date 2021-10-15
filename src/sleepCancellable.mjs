@@ -33,9 +33,8 @@ import CancelledError from './CancelledError.mjs'
  */
 function sleepCancellable (amount) {
   assert(typeof amount === 'number', 'amount must be a number')
-  let id
   const deferred = new Deferred()
-  setTimeout(deferred.resolve, amount)
+  const id = setTimeout(deferred.resolve, amount)
   let terminated = false
   return [deferred.promise.finally(() => {
     terminated = true
