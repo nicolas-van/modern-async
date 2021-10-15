@@ -2,12 +2,12 @@
 import { expect, test } from '@jest/globals'
 import find from './find.mjs'
 import Deferred from './Deferred.mjs'
-import xrange from './xrange.mjs'
+import { range } from 'itertools'
 
 test('find', async () => {
   const arr = ['a', 'b', 'c']
   const callCount = {}
-  ;[...xrange(3)].forEach((i) => { callCount[i] = 0 })
+  ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const ds = arr.map(() => new Deferred())
   const p = find(arr, async (v, i) => {

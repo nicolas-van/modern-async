@@ -2,14 +2,14 @@
 import { expect, test } from '@jest/globals'
 import findLimit from './findLimit.mjs'
 import Deferred from './Deferred.mjs'
-import xrange from './xrange.mjs'
+import { range } from 'itertools'
 
 test('findLimit', async () => {
   const arr = ['a', 'b', 'c']
   const callCount = {}
-  ;[...xrange(3)].forEach((i) => { callCount[i] = 0 })
+  ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
-  const ds = [...xrange(3)].map(() => new Deferred())
+  const ds = [...range(3)].map(() => new Deferred())
   const p = findLimit(arr, async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
@@ -31,7 +31,7 @@ test('findLimit', async () => {
 test('findLimit not found', async () => {
   const arr = ['a', 'b', 'c']
   const callCount = {}
-  ;[...xrange(3)].forEach((i) => { callCount[i] = 0 })
+  ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const p = findLimit(arr, async (v, i) => {
     callCount[i] += 1

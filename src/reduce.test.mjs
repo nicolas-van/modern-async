@@ -2,10 +2,10 @@
 import { expect, test } from '@jest/globals'
 import Deferred from './Deferred.mjs'
 import reduce from './reduce.mjs'
-import xrange from './xrange.mjs'
+import { range } from 'itertools'
 
 test('reduce base', async () => {
-  const arr = [...xrange(6)]
+  const arr = [...range(6)]
   const d = new Deferred()
   const p = reduce(arr, async (p, v) => {
     await d.promise
@@ -17,7 +17,7 @@ test('reduce base', async () => {
 })
 
 test('reduce no accumulator', async () => {
-  const arr = [...xrange(6)]
+  const arr = [...range(6)]
   const d = new Deferred()
   const p = reduce(arr, async (p, v) => {
     await d.promise
@@ -29,7 +29,7 @@ test('reduce no accumulator', async () => {
 })
 
 test('reduce no async', async () => {
-  const arr = [...xrange(6)]
+  const arr = [...range(6)]
   const result = await reduce(arr, (p, v) => {
     return p + v
   }, 0)
@@ -37,7 +37,7 @@ test('reduce no async', async () => {
 })
 
 test('reduce no async exception', async () => {
-  const arr = [...xrange(6)]
+  const arr = [...range(6)]
   const p = reduce(arr, (p, v) => {
     throw new Error('test')
   }, 0)
@@ -66,7 +66,7 @@ test('reduce no args', async () => {
 })
 
 test('reduce iterable', async () => {
-  const arr = [...xrange(6)]
+  const arr = [...range(6)]
   const result = await reduce(arr, async (p, v, index, iterable) => {
     expect(iterable).toBe(arr)
     return p + v
@@ -75,7 +75,7 @@ test('reduce iterable', async () => {
 })
 
 test('reduce index', async () => {
-  const arr = [...xrange(6)]
+  const arr = [...range(6)]
   arr.reduce((p, v, i) => {
     expect(i).toBe(v)
   })

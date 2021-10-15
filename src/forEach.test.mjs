@@ -2,10 +2,10 @@
 import { expect, test } from '@jest/globals'
 import forEach from './forEach.mjs'
 import Deferred from './Deferred.mjs'
-import xrange from './xrange.mjs'
+import { range } from 'itertools'
 
 test('forEach base', async () => {
-  const arr = [...xrange(6)]
+  const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   await forEach(arr, async (x) => {
@@ -20,7 +20,7 @@ test('forEach base', async () => {
 })
 
 test('forEach no async', async () => {
-  const arr = [...xrange(6)]
+  const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   await forEach(arr, (x) => {
@@ -35,7 +35,7 @@ test('forEach no async', async () => {
 })
 
 test('forEach concurrency', async () => {
-  const arr = [...xrange(6)]
+  const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   const d = new Deferred()

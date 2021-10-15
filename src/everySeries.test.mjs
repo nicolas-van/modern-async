@@ -2,14 +2,14 @@
 import { expect, test } from '@jest/globals'
 import everySeries from './everySeries.mjs'
 import Deferred from './Deferred.mjs'
-import xrange from './xrange.mjs'
+import { range } from 'itertools'
 
 test('everySeries all pass', async () => {
   const callCount = {}
-  ;[...xrange(3)].forEach((i) => { callCount[i] = 0 })
+  ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
-  const ds = [...xrange(3)].map(() => new Deferred())
-  const p = everySeries([...xrange(3)], async (v, i) => {
+  const ds = [...range(3)].map(() => new Deferred())
+  const p = everySeries([...range(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -29,10 +29,10 @@ test('everySeries all pass', async () => {
 
 test('everySeries no all pass', async () => {
   const callCount = {}
-  ;[...xrange(3)].forEach((i) => { callCount[i] = 0 })
+  ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
-  const ds = [...xrange(3)].map(() => new Deferred())
-  const p = everySeries([...xrange(3)], async (v, i) => {
+  const ds = [...range(3)].map(() => new Deferred())
+  const p = everySeries([...range(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise

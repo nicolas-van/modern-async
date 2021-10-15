@@ -2,22 +2,22 @@
 import { expect, test } from '@jest/globals'
 import mapLimit from './mapLimit.mjs'
 import Deferred from './Deferred.mjs'
-import xrange from './xrange.mjs'
+import { range } from 'itertools'
 
 test('mapLimit base', async () => {
-  const arr = [...xrange(6)]
+  const arr = [...range(6)]
   const res = await mapLimit(arr, async (x) => x * 2, 2)
   expect(res).toEqual([0, 2, 4, 6, 8, 10])
 })
 
 test('mapLimit no async', async () => {
-  const arr = [...xrange(6)]
+  const arr = [...range(6)]
   const res = await mapLimit(arr, (x) => x * 2, 2)
   expect(res).toEqual([0, 2, 4, 6, 8, 10])
 })
 
 test('mapLimit concurrency', async () => {
-  const arr = [...xrange(6)]
+  const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   const d = new Deferred()
@@ -47,7 +47,7 @@ test('mapLimit concurrency', async () => {
 })
 
 test('mapLimit index & iterable', async () => {
-  const arr = [...xrange(6)]
+  const arr = [...range(6)]
   const res = await mapLimit(arr, async (x, index, iterable) => {
     expect(index).toBe(x)
     expect(iterable).toBe(arr)
@@ -57,7 +57,7 @@ test('mapLimit index & iterable', async () => {
 })
 
 test('mapLimit one exception', async () => {
-  const arr = [...xrange(3)]
+  const arr = [...range(3)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   try {
@@ -82,7 +82,7 @@ test('mapLimit one exception', async () => {
 })
 
 test('mapLimit all exception c 1', async () => {
-  const arr = [...xrange(3)]
+  const arr = [...range(3)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   try {
@@ -104,7 +104,7 @@ test('mapLimit all exception c 1', async () => {
 })
 
 test('mapLimit all exception c 2', async () => {
-  const arr = [...xrange(3)]
+  const arr = [...range(3)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   const ds = arr.map(() => new Deferred())

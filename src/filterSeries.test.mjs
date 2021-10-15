@@ -2,22 +2,22 @@
 import { expect, test } from '@jest/globals'
 import filterSeries from './filterSeries.mjs'
 import Deferred from './Deferred.mjs'
-import xrange from './xrange.mjs'
+import { range } from 'itertools'
 
 test('filterSeries base', async () => {
-  const arr = [...xrange(6)]
+  const arr = [...range(6)]
   const res = await filterSeries(arr, async (x) => x % 2 === 0)
   expect(res).toEqual([0, 2, 4])
 })
 
 test('filterSeries no async', async () => {
-  const arr = [...xrange(6)]
+  const arr = [...range(6)]
   const res = await filterSeries(arr, (x) => x % 2 === 0)
   expect(res).toEqual([0, 2, 4])
 })
 
 test('filterSeries concurrency', async () => {
-  const arr = [...xrange(6)]
+  const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   const d = new Deferred()

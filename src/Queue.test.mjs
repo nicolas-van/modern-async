@@ -3,7 +3,7 @@ import { expect, test } from '@jest/globals'
 import Queue from './Queue.mjs'
 import Deferred from './Deferred.mjs'
 import CancelledError from './CancelledError.mjs'
-import xrange from './xrange.mjs'
+import { range } from 'itertools'
 
 test('Queue base 1', async () => {
   const queue = new Queue(1)
@@ -11,8 +11,8 @@ test('Queue base 1', async () => {
   expect(queue.pending).toBe(0)
   const promises = []
   const callCount = {}
-  const ds = [...xrange(3)].map(() => new Deferred())
-  for (const x of [...xrange(3)]) {
+  const ds = [...range(3)].map(() => new Deferred())
+  for (const x of [...range(3)]) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
@@ -53,8 +53,8 @@ test('Queue base 2', async () => {
   expect(queue.pending).toBe(0)
   const promises = []
   const callCount = {}
-  const ds = [...xrange(6)].map(() => new Deferred())
-  for (const x of [...xrange(6)]) {
+  const ds = [...range(6)].map(() => new Deferred())
+  for (const x of [...range(6)]) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
@@ -117,8 +117,8 @@ test('Queue infinity', async () => {
   expect(queue.pending).toBe(0)
   const promises = []
   const callCount = {}
-  const ds = [...xrange(6)].map(() => new Deferred())
-  for (const x of [...xrange(6)]) {
+  const ds = [...range(6)].map(() => new Deferred())
+  for (const x of [...range(6)]) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
@@ -156,8 +156,8 @@ test('Queue infinity race', async () => {
   const promises = []
   const callCount = {}
   const completeCount = {}
-  const ds = [...xrange(6)].map(() => new Deferred())
-  for (const x of [...xrange(6)]) {
+  const ds = [...range(6)].map(() => new Deferred())
+  for (const x of [...range(6)]) {
     callCount[x] = 0
     completeCount[x] = 0
     const p = queue.exec(async () => {
@@ -203,8 +203,8 @@ test('Queue throws', async () => {
   expect(queue.pending).toBe(0)
   const promises = []
   const callCount = {}
-  const ds = [...xrange(6)].map(() => new Deferred())
-  for (const x of [...xrange(6)]) {
+  const ds = [...range(6)].map(() => new Deferred())
+  for (const x of [...range(6)]) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
@@ -328,8 +328,8 @@ test('Queue cancel', async () => {
   const promises = []
   const cancels = []
   const callCount = {}
-  const ds = [...xrange(3)].map(() => new Deferred())
-  for (const x in [...xrange(3)]) {
+  const ds = [...range(3)].map(() => new Deferred())
+  for (const x in [...range(3)]) {
     callCount[x] = 0
     const [p, cancel] = queue.execCancellable(async () => {
       callCount[x] += 1
@@ -398,8 +398,8 @@ test('Queue cancelAllPending', async () => {
   const queue = new Queue(1)
   const promises = []
   const callCount = {}
-  const ds = [...xrange(3)].map(() => new Deferred())
-  for (const x in [...xrange(3)]) {
+  const ds = [...range(3)].map(() => new Deferred())
+  for (const x in [...range(3)]) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
@@ -453,8 +453,8 @@ test('Queue concurrency 1', async () => {
   expect(mutex.pending).toBe(0)
   const promises = []
   const callCount = {}
-  const ds = [...xrange(3)].map(() => new Deferred())
-  for (const x of [...xrange(3)]) {
+  const ds = [...range(3)].map(() => new Deferred())
+  for (const x of [...range(3)]) {
     callCount[x] = 0
     const p = mutex.exec(async () => {
       callCount[x] += 1
@@ -505,8 +505,8 @@ test('Queue concurrency 1 priority', async () => {
   expect(mutex.pending).toBe(0)
   const promises = []
   const callCount = {}
-  const ds = [...xrange(3)].map(() => new Deferred())
-  for (const x of [...xrange(3)]) {
+  const ds = [...range(3)].map(() => new Deferred())
+  for (const x of [...range(3)]) {
     callCount[x] = 0
     const p = mutex.exec(async () => {
       callCount[x] += 1

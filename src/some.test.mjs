@@ -2,14 +2,14 @@
 import { expect, test } from '@jest/globals'
 import some from './some.mjs'
 import Deferred from './Deferred.mjs'
-import xrange from './xrange.mjs'
+import { range } from 'itertools'
 
 test('some all no pass', async () => {
   const callCount = {}
-  ;[...xrange(3)].forEach((i) => { callCount[i] = 0 })
+  ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
-  const ds = [...xrange(3)].map(() => new Deferred())
-  const p = some([...xrange(3)], async (v, i) => {
+  const ds = [...range(3)].map(() => new Deferred())
+  const p = some([...range(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -29,10 +29,10 @@ test('some all no pass', async () => {
 
 test('some some pass', async () => {
   const callCount = {}
-  ;[...xrange(3)].forEach((i) => { callCount[i] = 0 })
+  ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
-  const ds = [...xrange(3)].map(() => new Deferred())
-  const p = some([...xrange(3)], async (v, i) => {
+  const ds = [...range(3)].map(() => new Deferred())
+  const p = some([...range(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise

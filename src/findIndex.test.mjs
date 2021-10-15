@@ -2,14 +2,14 @@
 import { expect, test } from '@jest/globals'
 import findIndex from './findIndex.mjs'
 import Deferred from './Deferred.mjs'
-import xrange from './xrange.mjs'
+import { range } from 'itertools'
 
 test('findIndex', async () => {
   const callCount = {}
-  ;[...xrange(3)].forEach((i) => { callCount[i] = 0 })
+  ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
-  const ds = [...xrange(3)].map(() => new Deferred())
-  const p = findIndex([...xrange(3)], async (v, i) => {
+  const ds = [...range(3)].map(() => new Deferred())
+  const p = findIndex([...range(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
