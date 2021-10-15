@@ -4,7 +4,6 @@ import findIndexLimit from './findIndexLimit.mjs'
 import Deferred from './Deferred.mjs'
 import { range } from 'itertools'
 import delay from './delay.mjs'
-import Queue from './Queue.mjs'
 
 test('findIndexLimit compatibility', async () => {
   let d = new Deferred()

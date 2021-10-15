@@ -23,6 +23,7 @@ test('Queue base 1', async () => {
     promises.push(p)
   }
   expect(promises.length).toBe(3)
+  await Promise.resolve()
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(2)
   expect(callCount[0]).toBe(1)
@@ -65,6 +66,7 @@ test('Queue base 2', async () => {
     promises.push(p)
   }
   expect(promises.length).toBe(6)
+  await Promise.resolve()
   expect(queue.running).toBe(2)
   expect(queue.pending).toBe(4)
   expect(callCount[0]).toBe(1)
@@ -129,6 +131,9 @@ test('Queue infinity', async () => {
     promises.push(p)
   }
   expect(promises.length).toBe(6)
+  expect(queue.running).toBe(0)
+  expect(queue.pending).toBe(6)
+  await Promise.resolve()
   expect(queue.running).toBe(6)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -170,6 +175,9 @@ test('Queue infinity race', async () => {
     promises.push(p)
   }
   expect(promises.length).toBe(6)
+  expect(queue.running).toBe(0)
+  expect(queue.pending).toBe(6)
+  await Promise.resolve()
   expect(queue.running).toBe(6)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -222,6 +230,7 @@ test('Queue throws', async () => {
     }))
   }
   expect(promises.length).toBe(6)
+  await Promise.resolve()
   expect(queue.running).toBe(2)
   expect(queue.pending).toBe(4)
   expect(callCount[0]).toBe(1)
@@ -248,16 +257,6 @@ test('Queue throws', async () => {
   expect(callCount[5]).toBe(1)
 })
 
-test('Queue all cancels', async () => {
-  const queue = new Queue(1)
-  const [p, cancel] = queue.execCancellable(() => {
-    return 'test'
-  })
-  cancel()
-  queue.cancelAllPending()
-  await p
-})
-
 test('Queue priority', async () => {
   const queue = new Queue(1)
   expect(queue.concurrency).toBe(1)
@@ -272,6 +271,7 @@ test('Queue priority', async () => {
     callCount[0] += 1
     await d0.promise
   }, 0))
+  await Promise.resolve()
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -346,6 +346,7 @@ test('Queue cancel', async () => {
   }
   expect(promises.length).toBe(3)
   expect(cancels.length).toBe(3)
+  await Promise.resolve()
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(2)
   expect(callCount[0]).toBe(1)
@@ -414,6 +415,7 @@ test('Queue cancelAllPending', async () => {
     promises.push(p)
   }
   expect(promises.length).toBe(3)
+  await Promise.resolve()
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(2)
   expect(callCount[0]).toBe(1)
@@ -440,14 +442,6 @@ test('Queue cancelAllPending', async () => {
   expect(callCount[2]).toBe(0)
 })
 
-test('Queue infinity cancel', async () => {
-  const queue = new Queue(Number.POSITIVE_INFINITY)
-  const [p, cancel] = queue.execCancellable(() => 'test', 0)
-  expect(cancel()).toBe(false)
-  expect(queue.cancelAllPending()).toBe(0)
-  await p
-})
-
 test('Queue concurrency 1', async () => {
   const mutex = new Queue(1)
   expect(mutex.running).toBe(0)
@@ -465,6 +459,7 @@ test('Queue concurrency 1', async () => {
     promises.push(p)
   }
   expect(promises.length).toBe(3)
+  await Promise.resolve()
   expect(mutex.running).toBe(1)
   expect(mutex.pending).toBe(2)
   expect(callCount[0]).toBe(1)
@@ -488,16 +483,6 @@ test('Queue concurrency 1', async () => {
   await promises[2]
   expect(mutex.running).toBe(0)
   expect(mutex.pending).toBe(0)
-})
-
-test('Queue concurrency 1 all cancels', async () => {
-  const queue = new Queue(1)
-  const [p, cancel] = queue.execCancellable(() => {
-    return 'test'
-  })
-  cancel()
-  queue.cancelAllPending()
-  await p
 })
 
 test('Queue concurrency 1 priority', async () => {
@@ -517,6 +502,7 @@ test('Queue concurrency 1 priority', async () => {
     promises.push(p)
   }
   expect(promises.length).toBe(3)
+  await Promise.resolve()
   expect(mutex.running).toBe(1)
   expect(mutex.pending).toBe(2)
   expect(callCount[0]).toBe(1)
@@ -540,16 +526,6 @@ test('Queue concurrency 1 priority', async () => {
   await promises[2]
   expect(mutex.running).toBe(0)
   expect(mutex.pending).toBe(0)
-})
-
-test('Queue concurrency 1 priority all cancels', async () => {
-  const queue = new Queue(1)
-  const [p, cancel] = queue.execCancellable(() => {
-    return 'test'
-  }, 0)
-  cancel()
-  queue.cancelAllPending()
-  await p
 })
 
 test('Queue all resolve in micro tasks', async () => {
@@ -580,4 +556,48 @@ test('Queue infinity all resolve in micro tasks', async () => {
   })
   await del
   expect(finished).toBe(true)
+})
+
+test('Queue always call in micro task sync', async () => {
+  const calls = []
+  const queue = new Queue(1)
+  const p = queue.exec(() => {
+    calls.push('exec')
+  })
+  calls.push('after exec')
+  await p
+  expect(calls).toStrictEqual(['after exec', 'exec'])
+})
+
+test('Queue infinity always call in micro task sync', async () => {
+  const calls = []
+  const queue = new Queue(Number.POSITIVE_INFINITY)
+  const p = queue.exec(() => {
+    calls.push('exec')
+  })
+  calls.push('after exec')
+  await p
+  expect(calls).toStrictEqual(['after exec', 'exec'])
+})
+
+test('Queue always call in micro task async', async () => {
+  const calls = []
+  const queue = new Queue(1)
+  const p = queue.exec(async () => {
+    calls.push('exec')
+  })
+  calls.push('after exec')
+  await p
+  expect(calls).toStrictEqual(['after exec', 'exec'])
+})
+
+test('Queue infinity always call in micro task async', async () => {
+  const calls = []
+  const queue = new Queue(Number.POSITIVE_INFINITY)
+  const p = queue.exec(async () => {
+    calls.push('exec')
+  })
+  calls.push('after exec')
+  await p
+  expect(calls).toStrictEqual(['after exec', 'exec'])
 })

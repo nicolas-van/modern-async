@@ -47,11 +47,7 @@ class Queue {
     assert(Number.isInteger(concurrency) || concurrency === Number.POSITIVE_INFINITY,
       'concurrency must be an integer or positive infinity')
     assert(concurrency > 0, 'concurrency must be greater than 0')
-    if (concurrency !== Number.POSITIVE_INFINITY) {
-      this._queue = new _InternalQueuePriority(concurrency)
-    } else {
-      this._queue = new _InternalInfinityQueue()
-    }
+    this._queue = new _InternalQueuePriority(concurrency)
   }
 
   /**
@@ -214,7 +210,7 @@ class _InternalQueuePriority {
       priority
     }
     this._iqueue.splice(i, 0, task)
-    this._checkQueue()
+    Promise.resolve().then(() => this._checkQueue())
     return [deferred.promise, () => {
       if (task.running) {
         return false
@@ -250,8 +246,9 @@ class _InternalQueuePriority {
       task.asyncFct().finally(() => {
         this._running -= 1
         this._iqueue = this._iqueue.filter((v) => v !== task)
+      }).then(task.deferred.resolve, task.deferred.reject).finally(() => {
         this._checkQueue()
-      }).then(task.deferred.resolve, task.deferred.reject)
+      })
     }
   }
 
@@ -266,74 +263,5 @@ class _InternalQueuePriority {
       task.deferred.reject(new CancelledError())
     })
     return toCancel.length
-  }
-}
-
-/**
- * @ignore
- */
-class _InternalInfinityQueue {
-  /**
-   * @ignore
-   */
-  constructor () {
-    this._running = 0
-  }
-
-  /**
-   * @ignore
-   * @returns {number} ignore
-   */
-  get concurrency () {
-    return Number.POSITIVE_INFINITY
-  }
-
-  /**
-   * @ignore
-   * @returns {number} ignore
-   */
-  get running () {
-    return this._running
-  }
-
-  /**
-   * @ignore
-   * @returns {number} ignore
-   */
-  get pending () {
-    return 0
-  }
-
-  /**
-   * @ignore
-   *
-   * @param {Function} fct ignore
-   * @returns {Promise} ignore
-   */
-  async exec (fct) {
-    return this.execCancellable(fct)[0]
-  }
-
-  /**
-   * @ignore
-   *
-   * @param {*} fct ignore
-   * @returns {*} ignore
-   */
-  execCancellable (fct) {
-    this._running += 1
-    const asyncFct = asyncWrap(fct)
-    const p = asyncFct()
-    return [p.finally(() => {
-      this._running -= 1
-    }), () => false]
-  }
-
-  /**
-   * @ignore
-   * @returns {*} ignore
-   */
-  cancelAllPending () {
-    return 0
   }
 }
