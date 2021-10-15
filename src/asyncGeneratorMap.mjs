@@ -52,8 +52,9 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
       fetching = false
       if (!done) {
         lastIndexFetched += 1
-        addToWaitList(lastIndexFetched, async () => {
-          return queue.exec(async () => iteratee(value, lastIndexFetched, asyncIterable))
+        const currentIndex = lastIndexFetched
+        addToWaitList(currentIndex, async () => {
+          return queue.exec(async () => iteratee(value, currentIndex, asyncIterable))
         })
         running += 1
       } else {
