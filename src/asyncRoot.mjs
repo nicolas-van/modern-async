@@ -6,7 +6,8 @@ import asyncWrap from './asyncWrap.mjs'
  * The error handler is optional, the default one just outputs the error in the console.
  *
  * This function is trivial but useful in the context of node.js when you would like to use await in the root
- * scope. It is also used in most examples provided for this library.
+ * scope and can't use top-level await in an ESM module for some reason. It is also used in most examples
+ * provided for this library.
  *
  * @param {Function} fct An asynchronous function to call.
  * @param {Function} errorHandler (Optional) A facultative error handler. This function will receive a single argument:
