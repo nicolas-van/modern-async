@@ -15,7 +15,7 @@ This library is a modernized alternative to a lot of libraries like [Async.js](h
 * Has low bundle size.
 * Has 100% code coverage.
 * Bundled for ESM modules, CommonJS and UMD.
-* Works in node >= 8.0 and in the vast majority of browsers (very old browser compatibility can be achieved using Babel and shims).
+* Works in node >= 10 and in the vast majority of browsers (very old browser compatibility can be achieved using Babel and shims).
 
 [![Stargazers repo roster for @nicolas-van/modern-async](https://reporoster.com/stars/nicolas-van/modern-async)](https://github.com/nicolas-van/modern-async/stargazers)
 
