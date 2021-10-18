@@ -45,7 +45,7 @@ import Queue from './Queue.mjs'
  */
 async function findLimit (iterable, iteratee, concurrency) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
-  const queue = typeof concurrency === 'number' ? new Queue(concurrency) : concurrency
+  const queue = new Queue(concurrency)
   for await (const [value, pass] of asyncGeneratorMap(iterable, async (value, index, iterable) => {
     return [value, await iteratee(value, index, iterable)]
   }, queue)) {

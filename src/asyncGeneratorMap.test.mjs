@@ -4,6 +4,7 @@ import asyncGeneratorMap from './asyncGeneratorMap.mjs'
 import { range } from 'itertools'
 import delay from './delay.mjs'
 import Queue from './Queue.mjs'
+import Deferred from './Deferred.mjs'
 
 test('asyncGeneratorMap base', async () => {
   const res = []
@@ -136,4 +137,59 @@ test('asyncGeneratorMap same queue three levels concurrency infinity', async () 
   })()
   const res = await p
   expect(res).toStrictEqual([0, 8, 16])
+})
+
+test('findIndexLimit cancelSubsequent busy queue', async () => {
+  const findIndexLimit = async (iterable, iteratee, queue) => {
+    for await (const [index, pass] of asyncGeneratorMap(iterable, async (value, index, iterable) => {
+      return [index, await iteratee(value, index, iterable)]
+    }, queue)) {
+      if (pass) {
+        return index
+      }
+    }
+    return -1
+  }
+
+  // setup full queue
+  const queue = new Queue(3)
+  const qd = [...range(3)].map(() => new Deferred())
+  for (const i of range(3)) {
+    queue.exec(async () => {
+      await qd[i].promise
+    })
+  }
+
+  const callCount = {}
+  ;[...range(10)].forEach((i) => { callCount[i] = 0 })
+  const d = new Deferred()
+  const ds = [...range(10)].map(() => new Deferred())
+  const p = findIndexLimit([...range(10)], async (v, i) => {
+    callCount[i] += 1
+    ds[i].resolve()
+    await d.promise
+    return v === 1
+  }, queue)
+  await delay()
+  expect(callCount[0]).toBe(0)
+  expect(callCount[1]).toBe(0)
+  expect(callCount[2]).toBe(0)
+  qd[0].resolve()
+  await ds[0].promise
+  expect(callCount[0]).toBe(1)
+  expect(callCount[1]).toBe(0)
+  expect(callCount[2]).toBe(0)
+  d.resolve()
+  const res = await p
+  expect(res).toBe(1)
+  expect(callCount[0]).toBe(1)
+  expect(callCount[1]).toBe(1)
+  expect(callCount[2]).toBe(0)
+  await delay()
+  expect(callCount[0]).toBe(1)
+  expect(callCount[1]).toBe(1)
+  expect(callCount[2]).toBe(0)
+  expect(queue.running).toStrictEqual(2)
+  expect(queue.pending).toStrictEqual(0)
+  queue.cancelAllPending()
 })
