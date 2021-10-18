@@ -47,7 +47,9 @@ class Queue {
     assert(Number.isInteger(concurrency) || concurrency === Number.POSITIVE_INFINITY,
       'concurrency must be an integer or positive infinity')
     assert(concurrency > 0, 'concurrency must be greater than 0')
-    this._queue = new _InternalQueuePriority(concurrency)
+    this._concurrency = concurrency
+    this._iqueue = []
+    this._running = 0
   }
 
   /**
@@ -58,7 +60,7 @@ class Queue {
    * @returns {number} ignore
    */
   get concurrency () {
-    return this._queue.concurrency
+    return this._concurrency
   }
 
   /**
@@ -69,7 +71,7 @@ class Queue {
    * @returns {number} ignore
    */
   get running () {
-    return this._queue.running
+    return this._running
   }
 
   /**
@@ -80,7 +82,7 @@ class Queue {
    * @returns {number} ignore
    */
   get pending () {
-    return this._queue.pending
+    return this._iqueue.length - this.running
   }
 
   /**
@@ -95,7 +97,7 @@ class Queue {
    * than the promise returned by the call to `fct`.
    */
   async exec (fct, priority = 0) {
-    return this._queue.exec(fct, priority)
+    return this.execCancellable(fct, priority)[0]
   }
 
   /**
@@ -119,79 +121,6 @@ class Queue {
    *     `false` in any other case.
    */
   execCancellable (fct, priority = 0) {
-    return this._queue.execCancellable(fct, priority)
-  }
-
-  /**
-   * Cancels all pending tasks. Their corresponding promises will be rejected with a `CancelledError`. This method will
-   * not alter tasks that are already running.
-   *
-   * @returns {number} The number of pending tasks that were effectively cancelled.
-   */
-  cancelAllPending () {
-    return this._queue.cancelAllPending()
-  }
-}
-
-export default Queue
-
-/**
- * @ignore
- */
-class _InternalQueuePriority {
-  /**
-   * @ignore
-   *
-   * @param {number} concurrency ignore
-   */
-  constructor (concurrency) {
-    this._concurrency = concurrency
-    this._iqueue = []
-    this._running = 0
-  }
-
-  /**
-   * @ignore
-   * @returns {number} ignore
-   */
-  get concurrency () {
-    return this._concurrency
-  }
-
-  /**
-   * @ignore
-   * @returns {number} ignore
-   */
-  get running () {
-    return this._running
-  }
-
-  /**
-   * @ignore
-   * @returns {number} ignore
-   */
-  get pending () {
-    return this._iqueue.length - this.running
-  }
-
-  /**
-   * @ignore
-   *
-   * @param {*} fct ignored
-   * @param {*} priority ignored
-   * @returns {*} ignored
-   */
-  async exec (fct, priority) {
-    return this.execCancellable(fct, priority)[0]
-  }
-
-  /**
-   * @ignore
-   * @param {*} fct ignore
-   * @param {*} priority ignore
-   * @returns {*} ignore
-   */
-  execCancellable (fct, priority) {
     assert(typeof fct === 'function', 'fct must be a function')
     assert(typeof priority === 'number', 'priority must be a number')
     const deferred = new Deferred()
@@ -260,8 +189,10 @@ class _InternalQueuePriority {
   }
 
   /**
-   * @ignore
-   * @returns {*} ignore
+   * Cancels all pending tasks. Their corresponding promises will be rejected with a `CancelledError`. This method will
+   * not alter tasks that are already running.
+   *
+   * @returns {number} The number of pending tasks that were effectively cancelled.
    */
   cancelAllPending () {
     const toCancel = this._iqueue.filter((task) => task.state === 'pending' || task.state === 'scheduled')
@@ -272,3 +203,5 @@ class _InternalQueuePriority {
     return toCancel.length
   }
 }
+
+export default Queue

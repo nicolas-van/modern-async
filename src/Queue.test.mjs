@@ -33,6 +33,7 @@ test('Queue base 1', async () => {
   expect(callCount[2]).toBe(0)
   ds[0].resolve()
   await promises[0]
+  await dsi[1].promise
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(1)
   expect(callCount[0]).toBe(1)
@@ -40,6 +41,7 @@ test('Queue base 1', async () => {
   expect(callCount[2]).toBe(0)
   ds[1].resolve()
   await promises[1]
+  await dsi[2].promise
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -292,8 +294,10 @@ test('Queue priority', async () => {
 
   callCount[1] = 0
   const d1 = new Deferred()
+  const dsi1 = new Deferred()
   promises.push(queue.exec(async () => {
     callCount[1] += 1
+    dsi1.resolve()
     await d1.promise
   }, 1))
   expect(queue.running).toBe(1)
@@ -303,8 +307,10 @@ test('Queue priority', async () => {
 
   callCount[2] = 0
   const d2 = new Deferred()
+  const dsi2 = new Deferred()
   promises.push(queue.exec(async () => {
     callCount[2] += 1
+    dsi2.resolve()
     await d2.promise
   }, 2))
   expect(queue.running).toBe(1)
@@ -315,6 +321,7 @@ test('Queue priority', async () => {
 
   d0.resolve()
   await promises[0]
+  await dsi2.promise
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(1)
   expect(callCount[0]).toBe(1)
@@ -323,6 +330,7 @@ test('Queue priority', async () => {
 
   d2.resolve()
   await promises[2]
+  await dsi1.promise
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -487,6 +495,7 @@ test('Queue concurrency 1', async () => {
   expect(callCount[2]).toBe(0)
   ds[0].resolve()
   await promises[0]
+  await dsi[1].promise
   expect(mutex.running).toBe(1)
   expect(mutex.pending).toBe(1)
   expect(callCount[0]).toBe(1)
@@ -494,6 +503,7 @@ test('Queue concurrency 1', async () => {
   expect(callCount[2]).toBe(0)
   ds[1].resolve()
   await promises[1]
+  await dsi[2].promise
   expect(mutex.running).toBe(1)
   expect(mutex.pending).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -532,6 +542,7 @@ test('Queue concurrency 1 priority', async () => {
   expect(callCount[2]).toBe(0)
   ds[0].resolve()
   await promises[0]
+  await dsi[1].promise
   expect(mutex.running).toBe(1)
   expect(mutex.pending).toBe(1)
   expect(callCount[0]).toBe(1)
@@ -539,6 +550,7 @@ test('Queue concurrency 1 priority', async () => {
   expect(callCount[2]).toBe(0)
   ds[1].resolve()
   await promises[1]
+  await dsi[2].promise
   expect(mutex.running).toBe(1)
   expect(mutex.pending).toBe(0)
   expect(callCount[0]).toBe(1)
