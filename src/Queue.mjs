@@ -2,6 +2,7 @@ import assert from 'nanoassert'
 import Deferred from './Deferred.mjs'
 import asyncWrap from './asyncWrap.mjs'
 import CancelledError from './CancelledError.mjs'
+import queueMicrotask from './queueMicrotask.mjs'
 
 /**
  * A class representing a queue.

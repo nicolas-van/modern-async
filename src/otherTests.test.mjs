@@ -1,6 +1,7 @@
 
 import { expect, test } from '@jest/globals'
 import Deferred from './Deferred.mjs'
+import queueMicrotask from './queueMicrotask.mjs'
 
 test('then is not immediate', async () => {
   const d = new Deferred()
