@@ -207,7 +207,8 @@ class _InternalQueuePriority {
       asyncFct: asyncWrap(fct),
       deferred,
       running: false,
-      priority
+      priority,
+      cancelled: false
     }
     this._iqueue.splice(i, 0, task)
     Promise.resolve().then(() => this._checkQueue())
@@ -215,6 +216,7 @@ class _InternalQueuePriority {
       if (task.running) {
         return false
       } else {
+        task.cancelled = true
         const filtered = this._iqueue.filter((v) => v !== task)
         if (filtered.length < this._iqueue.length) {
           this._iqueue = filtered
@@ -243,11 +245,14 @@ class _InternalQueuePriority {
       }
       task.running = true
       this._running += 1
-      task.asyncFct().finally(() => {
-        this._running -= 1
-        this._iqueue = this._iqueue.filter((v) => v !== task)
-      }).then(task.deferred.resolve, task.deferred.reject).finally(() => {
-        this._checkQueue()
+      queueMicrotask(() => {
+        const p = !task.cancelled ? task.asyncFct() : Promise.resolve()
+        p.finally(() => {
+          this._running -= 1
+          this._iqueue = this._iqueue.filter((v) => v !== task)
+        }).then(task.deferred.resolve, task.deferred.reject).finally(() => {
+          this._checkQueue()
+        })
       })
     }
   }

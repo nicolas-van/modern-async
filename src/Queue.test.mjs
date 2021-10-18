@@ -13,17 +13,19 @@ test('Queue base 1', async () => {
   const promises = []
   const callCount = {}
   const ds = [...range(3)].map(() => new Deferred())
+  const dsi = [...range(3)].map(() => new Deferred())
   for (const x of [...range(3)]) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
+      dsi[x].resolve()
       await ds[x].promise
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
   }
   expect(promises.length).toBe(3)
-  await Promise.resolve()
+  await dsi[0].promise
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(2)
   expect(callCount[0]).toBe(1)
@@ -56,17 +58,20 @@ test('Queue base 2', async () => {
   const promises = []
   const callCount = {}
   const ds = [...range(6)].map(() => new Deferred())
+  const dsi = [...range(6)].map(() => new Deferred())
   for (const x of [...range(6)]) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
+      dsi[x].resolve()
       await ds[x].promise
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
   }
   expect(promises.length).toBe(6)
-  await Promise.resolve()
+  await dsi[0].promise
+  await dsi[1].promise
   expect(queue.running).toBe(2)
   expect(queue.pending).toBe(4)
   expect(callCount[0]).toBe(1)
@@ -121,10 +126,12 @@ test('Queue infinity', async () => {
   const promises = []
   const callCount = {}
   const ds = [...range(6)].map(() => new Deferred())
+  const dsi = [...range(6)].map(() => new Deferred())
   for (const x of [...range(6)]) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
+      dsi[x].resolve()
       await ds[x].promise
     })
     expect(p).toBeInstanceOf(Promise)
@@ -133,7 +140,9 @@ test('Queue infinity', async () => {
   expect(promises.length).toBe(6)
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(6)
-  await Promise.resolve()
+  for (const x of range(6)) {
+    await dsi[x].promise
+  }
   expect(queue.running).toBe(6)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -163,11 +172,13 @@ test('Queue infinity race', async () => {
   const callCount = {}
   const completeCount = {}
   const ds = [...range(6)].map(() => new Deferred())
+  const dsi = [...range(6)].map(() => new Deferred())
   for (const x of [...range(6)]) {
     callCount[x] = 0
     completeCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
+      dsi[x].resolve()
       await ds[x].promise
       completeCount[x] += 1
     })
@@ -177,7 +188,9 @@ test('Queue infinity race', async () => {
   expect(promises.length).toBe(6)
   expect(queue.running).toBe(0)
   expect(queue.pending).toBe(6)
-  await Promise.resolve()
+  for (const x of range(6)) {
+    await dsi[x].promise
+  }
   expect(queue.running).toBe(6)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -213,10 +226,12 @@ test('Queue throws', async () => {
   const promises = []
   const callCount = {}
   const ds = [...range(6)].map(() => new Deferred())
+  const dsi = [...range(6)].map(() => new Deferred())
   for (const x of [...range(6)]) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
+      dsi[x].resolve()
       await ds[x].promise
       if (x % 2 === 1) {
         throw new Error()
@@ -230,7 +245,8 @@ test('Queue throws', async () => {
     }))
   }
   expect(promises.length).toBe(6)
-  await Promise.resolve()
+  await dsi[0].promise
+  await dsi[1].promise
   expect(queue.running).toBe(2)
   expect(queue.pending).toBe(4)
   expect(callCount[0]).toBe(1)
@@ -267,11 +283,13 @@ test('Queue priority', async () => {
 
   callCount[0] = 0
   const d0 = new Deferred()
+  const dsi0 = new Deferred()
   promises.push(queue.exec(async () => {
     callCount[0] += 1
+    dsi0.resolve()
     await d0.promise
   }, 0))
-  await Promise.resolve()
+  await dsi0.promise
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -330,10 +348,12 @@ test('Queue cancel', async () => {
   const cancels = []
   const callCount = {}
   const ds = [...range(3)].map(() => new Deferred())
+  const dsi = [...range(3)].map(() => new Deferred())
   for (const x in [...range(3)]) {
     callCount[x] = 0
     const [p, cancel] = queue.execCancellable(async () => {
       callCount[x] += 1
+      dsi[x].resolve()
       await ds[x].promise
       return 'test'
     }, 0)
@@ -346,7 +366,7 @@ test('Queue cancel', async () => {
   }
   expect(promises.length).toBe(3)
   expect(cancels.length).toBe(3)
-  await Promise.resolve()
+  await dsi[0].promise
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(2)
   expect(callCount[0]).toBe(1)
@@ -401,10 +421,12 @@ test('Queue cancelAllPending', async () => {
   const promises = []
   const callCount = {}
   const ds = [...range(3)].map(() => new Deferred())
+  const dsi = [...range(6)].map(() => new Deferred())
   for (const x in [...range(3)]) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
+      dsi[x].resolve()
       await ds[x].promise
       return 'test'
     }, 0).catch((e) => {
@@ -415,7 +437,7 @@ test('Queue cancelAllPending', async () => {
     promises.push(p)
   }
   expect(promises.length).toBe(3)
-  await Promise.resolve()
+  await dsi[0].promise
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(2)
   expect(callCount[0]).toBe(1)
@@ -449,17 +471,19 @@ test('Queue concurrency 1', async () => {
   const promises = []
   const callCount = {}
   const ds = [...range(3)].map(() => new Deferred())
+  const dsi = [...range(6)].map(() => new Deferred())
   for (const x of [...range(3)]) {
     callCount[x] = 0
     const p = mutex.exec(async () => {
       callCount[x] += 1
+      dsi[x].resolve()
       await ds[x].promise
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
   }
   expect(promises.length).toBe(3)
-  await Promise.resolve()
+  await dsi[0].promise
   expect(mutex.running).toBe(1)
   expect(mutex.pending).toBe(2)
   expect(callCount[0]).toBe(1)
@@ -492,17 +516,19 @@ test('Queue concurrency 1 priority', async () => {
   const promises = []
   const callCount = {}
   const ds = [...range(3)].map(() => new Deferred())
+  const dsi = [...range(6)].map(() => new Deferred())
   for (const x of [...range(3)]) {
     callCount[x] = 0
     const p = mutex.exec(async () => {
       callCount[x] += 1
+      dsi[x].resolve()
       await ds[x].promise
     }, 10)
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
   }
   expect(promises.length).toBe(3)
-  await Promise.resolve()
+  await dsi[0].promise
   expect(mutex.running).toBe(1)
   expect(mutex.pending).toBe(2)
   expect(callCount[0]).toBe(1)
