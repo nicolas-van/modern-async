@@ -663,3 +663,19 @@ test('Queue custom error class', async () => {
   }
   expect(passed).toBe(false)
 })
+
+test('Queue cancel just scheduled', async () => {
+  let passed = false
+  const queue = new Queue(1)
+  const [p, cancel] = queue.execCancellable(() => {
+    passed = true
+  })
+  expect(cancel()).toBe(true)
+  try {
+    await p
+    expect(true).toBe(false)
+  } catch (e) {
+    expect(e instanceof CancelledError).toBe(true)
+  }
+  expect(passed).toBe(false)
+})

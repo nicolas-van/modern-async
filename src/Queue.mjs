@@ -132,7 +132,7 @@ class Queue {
    * @param {*} CancelledErrorClass ignore
    * @returns {*} ignore
    */
-  _execCancellableInternal (fct, priority = 0, CancelledErrorClass = CancelledError) {
+  _execCancellableInternal (fct, priority, CancelledErrorClass = CancelledError) {
     assert(typeof fct === 'function', 'fct must be a function')
     assert(typeof priority === 'number', 'priority must be a number')
     const deferred = new Deferred()
@@ -159,13 +159,10 @@ class Queue {
       } else {
         task.state = 'cancelled'
         const filtered = this._iqueue.filter((v) => v !== task)
-        if (filtered.length < this._iqueue.length) {
-          this._iqueue = filtered
-          deferred.reject(new task.CancelledErrorClass())
-          return true
-        } else {
-          return false
-        }
+        assert(filtered.length < this._iqueue.length)
+        this._iqueue = filtered
+        deferred.reject(new task.CancelledErrorClass())
+        return true
       }
     }]
   }
