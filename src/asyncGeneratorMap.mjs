@@ -1,6 +1,7 @@
 
 import assert from 'nanoassert'
 import asyncGeneratorWrap from './asyncGeneratorWrap.mjs'
+import CancelledError from './CancelledError.mjs'
 
 /**
  * @ignore
@@ -30,53 +31,61 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
     waitList.push([identifier, p])
   }
   const raceWaitList = async () => {
-    const [identifier, state, result] = await Promise.race(waitList.map(([k, v]) => v))
-    if (state === 'rejected') {
-      throw result
+    while (true) {
+      const [identifier, state, result] = await Promise.race(waitList.map(([k, v]) => v))
+      if (state === 'rejected') {
+        if (result instanceof CancelledError) {
+          continue
+        }
+        throw result
+      }
+      removeFromWaitList(identifier)
+      return [identifier, result]
     }
-    removeFromWaitList(identifier)
-    return [identifier, result]
   }
   const removeFromWaitList = (identifier) => {
     const i = waitList.findIndex(([k, v]) => k === identifier)
     assert(i !== -1)
     waitList.splice(i, 1)
   }
+
   const scheduledList = []
   const schedule = (value, index) => {
-    console.log('initial schedule', index)
-    scheduledList.push([value, index, null])
+    scheduledList.push({ value, index, cancel: null, cancelled: null })
     internalSchedule(value, index)
   }
   const internalSchedule = (value, index) => {
-    console.log('effective schedule', index)
     addToWaitList(index, async () => {
       const [p, cancel] = queue.execCancellable(async () => {
         const output = scheduledList.shift()
-        assert(output[1] === index)
-        console.log('remove from schedule list', index)
-        return iteratee(value, index, asyncIterable)
+        assert(output.index === index)
+        try {
+          return iteratee(value, index, asyncIterable)
+        } finally {
+          cancelAllScheduled()
+        }
       })
-      assert(scheduledList.length > 0 && scheduledList[scheduledList.length - 1][1] === index)
-      scheduledList[scheduledList.length - 1][2] = cancel
+      const i = scheduledList.findIndex((el) => el.index === index)
+      assert(i !== -1)
+      const scheduleObj = scheduledList[i]
+      assert(scheduleObj.cancel === null)
+      scheduleObj.cancelled = false
+      scheduleObj.cancel = cancel
       return p
     })
   }
   const cancelAllScheduled = () => {
-    for (const elem of scheduledList) {
-      const index = elem[1]
-      const cancel = elem[2]
-      console.log('cancel', index)
-      assert(cancel)
-      removeFromWaitList(index)
+    for (const scheduleObj of scheduledList.filter((el) => !el.cancelled)) {
+      assert(scheduleObj.cancel)
+      assert(scheduleObj.cancel())
+      scheduleObj.cancelled = true
+      removeFromWaitList(scheduleObj.index)
     }
   }
-  const rescheduleAll = () => {
-    for (const elem of scheduledList) {
-      const value = elem[0]
-      const index = elem[1]
-      elem[2] = null
-      internalSchedule(value, index)
+  const rescheduleAllCancelled = () => {
+    for (const scheduleObj of scheduledList.filter((el) => el.cancelled)) {
+      scheduleObj.cancel = null
+      internalSchedule(scheduleObj.value, scheduleObj.index)
     }
   }
 
@@ -108,10 +117,8 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
       while (results.length >= 1 && results[0] !== undefined) {
         const result = results.shift()
         lastIndexReturned += 1
-        cancelAllScheduled()
-        console.log('yielding', identifier)
         yield result.value
-        rescheduleAll()
+        rescheduleAllCancelled()
       }
     }
     if (!fetching && !exhausted && running < queue.concurrency) {

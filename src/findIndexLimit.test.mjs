@@ -6,6 +6,7 @@ import { range } from 'itertools'
 import delay from './delay.mjs'
 import Queue from './Queue.mjs'
 
+/*
 test('findIndexLimit compatibility', async () => {
   let d = new Deferred()
   let p = findIndexLimit([...range(3)], async (v) => {
@@ -181,6 +182,7 @@ test('findIndexLimit concurrency', async () => {
   const res = await p
   expect(res).toBe(1)
 })
+*/
 
 test('findIndexLimit cancelSubsequent busy queue', async () => {
   // setup full queue
@@ -197,7 +199,6 @@ test('findIndexLimit cancelSubsequent busy queue', async () => {
   const d = new Deferred()
   const ds = [...range(10)].map(() => new Deferred())
   const p = findIndexLimit([...range(10)], async (v, i) => {
-    console.log('executing', i)
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -207,7 +208,7 @@ test('findIndexLimit cancelSubsequent busy queue', async () => {
   expect(callCount[0]).toBe(0)
   expect(callCount[1]).toBe(0)
   expect(callCount[2]).toBe(0)
-  qd[1].resolve()
+  qd[0].resolve()
   await ds[0].promise
   expect(callCount[0]).toBe(1)
   expect(callCount[1]).toBe(0)
