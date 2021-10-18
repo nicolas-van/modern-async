@@ -138,8 +138,6 @@ test('Queue infinity', async () => {
     promises.push(p)
   }
   expect(promises.length).toBe(6)
-  expect(queue.running).toBe(0)
-  expect(queue.pending).toBe(6)
   for (const x of range(6)) {
     await dsi[x].promise
   }
@@ -186,8 +184,6 @@ test('Queue infinity race', async () => {
     promises.push(p)
   }
   expect(promises.length).toBe(6)
-  expect(queue.running).toBe(0)
-  expect(queue.pending).toBe(6)
   for (const x of range(6)) {
     await dsi[x].promise
   }
