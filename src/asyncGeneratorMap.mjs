@@ -15,6 +15,11 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   const it = asyncGeneratorWrap(asyncIterable)
 
+  /**
+   * @ignore
+   */
+  class CustomCancelledError extends CancelledError {}
+
   let lastIndexFetched = -1
   let fetching = false
   let exhausted = false
@@ -33,13 +38,13 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
   const raceWaitList = async () => {
     while (true) {
       const [identifier, state, result] = await Promise.race(waitList.map(([k, v]) => v))
+      removeFromWaitList(identifier)
       if (state === 'rejected') {
-        if (result instanceof CancelledError) {
+        if (result instanceof CustomCancelledError) {
           continue
         }
         throw result
       }
-      removeFromWaitList(identifier)
       return [identifier, result]
     }
   }
@@ -56,7 +61,7 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
   }
   const internalSchedule = (value, index) => {
     addToWaitList(index, async () => {
-      const [p, cancel] = queue.execCancellable(async () => {
+      const [p, cancel] = queue._execCancellableInternal(async () => {
         const output = scheduledList.shift()
         assert(output.index === index)
         try {
@@ -64,7 +69,7 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
         } finally {
           cancelAllScheduled()
         }
-      })
+      }, 0, CustomCancelledError)
       const i = scheduledList.findIndex((el) => el.index === index)
       assert(i !== -1)
       const scheduleObj = scheduledList[i]
@@ -79,7 +84,6 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
       assert(scheduleObj.cancel)
       assert(scheduleObj.cancel())
       scheduleObj.cancelled = true
-      removeFromWaitList(scheduleObj.index)
     }
   }
   const rescheduleAllCancelled = () => {
@@ -118,8 +122,8 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
         const result = results.shift()
         lastIndexReturned += 1
         yield result.value
-        rescheduleAllCancelled()
       }
+      rescheduleAllCancelled()
     }
     if (!fetching && !exhausted && running < queue.concurrency) {
       addToWaitList('next', async () => it.next())
