@@ -132,6 +132,7 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
         const result = results.shift()
         lastIndexReturned += 1
         if (result.state === 'rejected') {
+          cancelAllScheduled()
           throw result.result
         } else {
           yield result.result

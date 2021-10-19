@@ -107,3 +107,36 @@ test('async catch is not immediate', async () => {
   }
   expect(calls).toStrictEqual(['call', 'after call', 'catch'])
 })
+
+/**
+ * @ignore
+ */
+class TestError extends Error {}
+
+test('async generators ends generator', async () => {
+  const lst = []
+  const gen = (async function * () {
+    for (let i = 0; i < 10; i += 1) {
+      lst.push(i)
+      if (i === 1) {
+        throw new TestError()
+      } else {
+        yield i
+      }
+    }
+  })()
+
+  const res = await gen.next()
+  expect(res.done).toStrictEqual(false)
+  expect(res.value).toStrictEqual(0)
+
+  try {
+    await gen.next()
+    expect(false).toBe(true)
+  } catch (e) {
+    expect(e instanceof TestError).toBe(true)
+  }
+
+  const res2 = await gen.next()
+  expect(res2.done).toStrictEqual(true)
+})
