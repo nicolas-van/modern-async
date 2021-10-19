@@ -35,7 +35,7 @@ import mapLimit from './mapLimit.mjs'
  */
 async function forEachLimit (iterable, iteratee, concurrency) {
   await mapLimit(iterable, async (v, i, t) => {
-    iteratee(v, i, t)
+    await iteratee(v, i, t)
   }, concurrency)
 }
 
