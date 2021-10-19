@@ -430,3 +430,39 @@ test('asyncGeneratorMap fail process second unordered', async () => {
     expect(e instanceof TestError).toBe(true)
   }
 })
+
+test('asyncGeneratorMap fail in fetch cancels sheduled tasks', async () => {
+  const originGen = asyncGeneratorMap(range(2), async (x, i) => {
+    if (i === 1) {
+      throw new TestError()
+    } else {
+      return x
+    }
+  }, new Queue(2))
+
+  const queue = new Queue(2)
+  queue.exec(async () => {
+    await new Promise(() => {})
+  })
+  const d = new Deferred()
+  queue.exec(async () => {
+    await d.promise
+  })
+  const callList = []
+  const gen = asyncGeneratorMap(originGen, async (x, i) => {
+    callList.push(i)
+    return (x + 1) * 2
+  }, queue, false)
+
+  const p1 = gen.next()
+
+  try {
+    await p1
+    expect(false).toBe(true)
+  } catch (e) {
+    expect(e instanceof TestError).toBe(true)
+  }
+  d.resolve()
+  await delay()
+  expect(callList).toStrictEqual([])
+})
