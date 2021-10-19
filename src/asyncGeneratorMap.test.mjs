@@ -51,6 +51,60 @@ test('asyncGeneratorMap infinity all resolve in micro tasks', async () => {
   expect(finished).toBe(true)
 })
 
+test('asyncGeneratorMap same queue one level concurrency 1 random delays', async () => {
+  const queue = new Queue(10)
+  const gen1 = asyncGeneratorMap(range(1000), async (x, i) => {
+    await sleep(Math.floor(Math.random() * 10))
+    return x * 2
+  }, queue)
+  const p = (async () => {
+    const res = []
+    for await (const el of gen1) {
+      res.push(el)
+    }
+    return res
+  })()
+  const res = await p
+  expect(res).toStrictEqual([...range(1000)].map((x) => x * 2))
+})
+
+test('asyncGeneratorMap same queue one level concurrency 10 random delays', async () => {
+  const queue = new Queue(10)
+  const gen1 = asyncGeneratorMap(range(1000), async (x, i) => {
+    await sleep(Math.floor(Math.random() * 10))
+    return x * 2
+  }, queue)
+  const p = (async () => {
+    const res = []
+    for await (const el of gen1) {
+      res.push(el)
+    }
+    return res
+  })()
+  const res = await p
+  expect(res).toStrictEqual([...range(1000)].map((x) => x * 2))
+})
+
+test('asyncGeneratorMap same queue one level concurrency 3 busy queue random delays', async () => {
+  const queue = new Queue(10)
+  ;[...range(7)].forEach(element => {
+    queue.exec(async () => new Promise(() => {}))
+  })
+  const gen1 = asyncGeneratorMap(range(1000), async (x, i) => {
+    await sleep(Math.floor(Math.random() * 10))
+    return x * 2
+  }, queue)
+  const p = (async () => {
+    const res = []
+    for await (const el of gen1) {
+      res.push(el)
+    }
+    return res
+  })()
+  const res = await p
+  expect(res).toStrictEqual([...range(1000)].map((x) => x * 2))
+})
+
 test('asyncGeneratorMap same queue three levels concurrency 1', async () => {
   const callList = []
   const queue = new Queue(1)
@@ -142,7 +196,7 @@ test('asyncGeneratorMap same queue three levels concurrency infinity', async () 
 
 test('asyncGeneratorMap same queue three levels concurrency 1 random delays', async () => {
   const queue = new Queue(1)
-  const gen1 = asyncGeneratorMap(range(10), async (x, i) => {
+  const gen1 = asyncGeneratorMap(range(100), async (x, i) => {
     await sleep(Math.floor(Math.random() * 10))
     return x * 2
   }, queue)
@@ -162,15 +216,12 @@ test('asyncGeneratorMap same queue three levels concurrency 1 random delays', as
     return res
   })()
   const res = await p
-  expect(res).toStrictEqual([0, 8, 16, 24, 32, 40, 48, 56, 64, 72])
+  expect(res).toStrictEqual([...range(100)].map((x) => x * 8))
 })
 
-test('asyncGeneratorMap same queue three levels concurrency 1 random delays busy queue', async () => {
-  const queue = new Queue(10)
-  ;[...range(8)].forEach(element => {
-    queue.exec(async () => new Promise(() => {}))
-  })
-  const gen1 = asyncGeneratorMap(range(10), async (x, i) => {
+test('asyncGeneratorMap same queue three levels concurrency 5 random delays', async () => {
+  const queue = new Queue(5)
+  const gen1 = asyncGeneratorMap(range(100), async (x, i) => {
     await sleep(Math.floor(Math.random() * 10))
     return x * 2
   }, queue)
@@ -190,8 +241,61 @@ test('asyncGeneratorMap same queue three levels concurrency 1 random delays busy
     return res
   })()
   const res = await p
-  expect(res).toStrictEqual([0, 8, 16, 24, 32, 40, 48, 56, 64, 72])
+  expect(res).toStrictEqual([...range(100)].map((x) => x * 8))
+}, 10000)
+
+test('asyncGeneratorMap same queue three levels infinity random delays', async () => {
+  const queue = new Queue(Number.POSITIVE_INFINITY)
+  const gen1 = asyncGeneratorMap(range(100), async (x, i) => {
+    await sleep(Math.floor(Math.random() * 10))
+    return x * 2
+  }, queue)
+  const gen2 = asyncGeneratorMap(gen1, async (x, i) => {
+    await sleep(Math.floor(Math.random() * 10))
+    return x * 2
+  }, queue)
+  const gen3 = asyncGeneratorMap(gen2, async (x, i) => {
+    await sleep(Math.floor(Math.random() * 10))
+    return x * 2
+  }, queue)
+  const p = (async () => {
+    const res = []
+    for await (const el of gen3) {
+      res.push(el)
+    }
+    return res
+  })()
+  const res = await p
+  expect(res).toStrictEqual([...range(100)].map((x) => x * 8))
 })
+
+test('asyncGeneratorMap same queue three levels busy queue random delays ', async () => {
+  const queue = new Queue(10)
+  ;[...range(7)].forEach(element => {
+    queue.exec(async () => new Promise(() => {}))
+  })
+  const gen1 = asyncGeneratorMap(range(100), async (x, i) => {
+    await sleep(Math.floor(Math.random() * 10))
+    return x * 2
+  }, queue)
+  const gen2 = asyncGeneratorMap(gen1, async (x, i) => {
+    await sleep(Math.floor(Math.random() * 10))
+    return x * 2
+  }, queue)
+  const gen3 = asyncGeneratorMap(gen2, async (x, i) => {
+    await sleep(Math.floor(Math.random() * 10))
+    return x * 2
+  }, queue)
+  const p = (async () => {
+    const res = []
+    for await (const el of gen3) {
+      res.push(el)
+    }
+    return res
+  })()
+  const res = await p
+  expect(res).toStrictEqual([...range(100)].map((x) => x * 8))
+}, 10000)
 
 test('findIndexLimit cancelSubsequent busy queue', async () => {
   const findIndexLimit = async (iterable, iteratee, queue) => {
