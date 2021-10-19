@@ -224,15 +224,15 @@ test('asyncGeneratorMap same queue three levels concurrency 5 random delays', as
   const gen1 = asyncGeneratorMap(range(100), async (x, i) => {
     await sleep(Math.floor(Math.random() * 10))
     return x * 2
-  }, queue)
+  }, queue, true, 1)
   const gen2 = asyncGeneratorMap(gen1, async (x, i) => {
     await sleep(Math.floor(Math.random() * 10))
     return x * 2
-  }, queue)
+  }, queue, true, 2)
   const gen3 = asyncGeneratorMap(gen2, async (x, i) => {
     await sleep(Math.floor(Math.random() * 10))
     return x * 2
-  }, queue)
+  }, queue, true, 3)
   const p = (async () => {
     const res = []
     for await (const el of gen3) {
@@ -242,7 +242,7 @@ test('asyncGeneratorMap same queue three levels concurrency 5 random delays', as
   })()
   const res = await p
   expect(res).toStrictEqual([...range(100)].map((x) => x * 8))
-}, 10000)
+})
 
 test('asyncGeneratorMap same queue three levels infinity random delays', async () => {
   const queue = new Queue(Number.POSITIVE_INFINITY)
@@ -295,7 +295,7 @@ test('asyncGeneratorMap same queue three levels busy queue random delays ', asyn
   })()
   const res = await p
   expect(res).toStrictEqual([...range(100)].map((x) => x * 8))
-}, 10000)
+})
 
 test('findIndexLimit cancelSubsequent busy queue', async () => {
   const findIndexLimit = async (iterable, iteratee, queue) => {
@@ -352,9 +352,7 @@ test('findIndexLimit cancelSubsequent busy queue', async () => {
   queue.cancelAllPending()
 })
 
-/**
- * @ignore
- */
+// eslint-disable-next-line require-jsdoc
 class TestError extends Error {}
 
 test('asyncGeneratorMap fail fetch first', async () => {

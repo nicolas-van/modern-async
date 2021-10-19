@@ -1,14 +1,7 @@
 
-import assert_ from 'nanoassert'
+import assert from 'nanoassert'
 import asyncGeneratorWrap from './asyncGeneratorWrap.mjs'
 import CancelledError from './CancelledError.mjs'
-
-const assert = (test, str) => {
-  if (!test) {
-    console.log(str)
-  }
-  assert_(test, str)
-}
 
 /**
  * @ignore
@@ -31,31 +24,33 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
   let fetching = false
   let exhausted = false
 
-  const waitList = []
+  const waitList = new Map()
+  let currentWaitListInternalIdentifier = 0
   const addToWaitList = (identifier, fct) => {
+    const waitListIdentifier = currentWaitListInternalIdentifier
     const p = (async () => {
       try {
-        return [identifier, 'resolved', await fct()]
+        return [waitListIdentifier, identifier, 'resolved', await fct()]
       } catch (e) {
-        return [identifier, 'rejected', e]
+        return [waitListIdentifier, identifier, 'rejected', e]
       }
     })()
-    waitList.push([identifier, p])
+    waitList.set(waitListIdentifier, p)
+    currentWaitListInternalIdentifier += 1
   }
   const raceWaitList = async () => {
     while (true) {
-      const [identifier, state, result] = await Promise.race(waitList.map(([k, v]) => v))
-      removeFromWaitList(identifier)
+      assert(waitList.size >= 1, 'Can not race on empty list')
+      const [waitListIdentifier, identifier, state, result] = await Promise.race(waitList.values())
+      removeFromWaitList(waitListIdentifier)
       if (state === 'rejected' && result instanceof CustomCancelledError) {
         continue
       }
       return [identifier, state, result]
     }
   }
-  const removeFromWaitList = (identifier) => {
-    const i = waitList.findIndex(([k, v]) => k === identifier)
-    assert(i !== -1, 'Couldn\'t find index in waitList for removal')
-    waitList.splice(i, 1)
+  const removeFromWaitList = (waitListIdentifier) => {
+    waitList.delete(waitListIdentifier)
   }
 
   const scheduledList = []
@@ -66,14 +61,9 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
   const internalSchedule = (value, index) => {
     addToWaitList(index, async () => {
       const [p, cancel] = queue._execCancellableInternal(async () => {
-        assert(scheduledList.length >= 1, 'scheduledList can\'t be empty')
-        const output = scheduledList.shift()
-        assert(output.index === index, 'Removed invalid index from sheduled list')
-        /*
         const i = scheduledList.findIndex((el) => el.index === index)
         assert(i !== -1, 'Couldn\'t find index in scheduledList for removal')
         scheduledList.splice(i, 1)
-        */
         try {
           return iteratee(value, index, asyncIterable)
         } finally {
@@ -115,12 +105,9 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
       if (state === 'rejected') {
         lastIndexFetched += 1
         exhausted = true
-        if (ordered) {
-          assert(lastIndexReturned < lastIndexFetched, 'invalid index to insert after fetch throw')
-          results[lastIndexFetched - lastIndexReturned - 1] = { state, result }
-        } else {
-          results.push({ state, result })
-        }
+        const index = ordered ? lastIndexFetched : lastIndexReturned + 1
+        assert(index > lastIndexReturned, 'invalid index to insert after result')
+        results[index - lastIndexReturned - 1] = { state, index, result }
       } else {
         const { value, done } = result
         if (!done) {
@@ -133,25 +120,20 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
       }
     } else { // result
       running -= 1
-      if (ordered) {
-        assert(lastIndexReturned < identifier, 'invalid index to insert after result')
-        results[identifier - lastIndexReturned - 1] = { state, result }
-      } else {
-        results.push({ state, result })
-      }
+      const index = ordered ? identifier : lastIndexReturned + 1
+      assert(index > lastIndexReturned, 'invalid index to insert after result')
+      results[index - lastIndexReturned - 1] = { state, index, result }
     }
-    if (results.length >= 1 && results[0] !== undefined) {
-      while (results.length >= 1 && results[0] !== undefined) {
-        const result = results.shift()
-        lastIndexReturned += 1
-        if (result.state === 'rejected') {
-          cancelAllScheduled()
-          throw result.result
-        } else {
-          yield result.result
-        }
+    while (results.length >= 1 && results[0] !== undefined) {
+      const result = results.shift()
+      assert(result.index === lastIndexReturned + 1, 'Invalid returned index')
+      if (result.state === 'rejected') {
+        cancelAllScheduled()
+        throw result.result
+      } else {
+        yield result.result
       }
-      rescheduleAllCancelled()
+      lastIndexReturned += 1
     }
     if (!fetching && !exhausted && running < queue.concurrency) {
       addToWaitList('next', async () => it.next())
@@ -160,6 +142,7 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
     if (exhausted && lastIndexFetched === lastIndexReturned) {
       return
     }
+    rescheduleAllCancelled()
   }
 }
 
