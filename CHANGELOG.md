@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.4
+
+* Fixed bug in `forEachLimit`
+
 ## 1.0.3
 
 * Performance improvements. Notably the `Queue` class will now avoid calling the `delay()` function and will immediately trigger any
