@@ -3,6 +3,7 @@ import { expect, test } from '@jest/globals'
 import forEachLimit from './forEachLimit.mjs'
 import Deferred from './Deferred.mjs'
 import { range } from 'itertools'
+import delay from './delay.mjs'
 
 test('forEachLimit base', async () => {
   const arr = [...range(6)]
@@ -46,6 +47,13 @@ test('forEachLimit concurrency', async () => {
     await d.promise
   }, 2)
   await ds[1].promise
+  expect(called[0]).toBe(1)
+  expect(called[1]).toBe(1)
+  expect(called[2]).toBe(0)
+  expect(called[3]).toBe(0)
+  expect(called[4]).toBe(0)
+  expect(called[5]).toBe(0)
+  await delay()
   expect(called[0]).toBe(1)
   expect(called[1]).toBe(1)
   expect(called[2]).toBe(0)
