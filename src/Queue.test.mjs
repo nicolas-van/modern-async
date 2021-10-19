@@ -13,16 +13,19 @@ test('Queue base 1', async () => {
   const promises = []
   const callCount = {}
   const ds = [...range(3)].map(() => new Deferred())
+  const dsi = [...range(3)].map(() => new Deferred())
   for (const x of [...range(3)]) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
+      dsi[x].resolve()
       await ds[x].promise
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
   }
   expect(promises.length).toBe(3)
+  await dsi[0].promise
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(2)
   expect(callCount[0]).toBe(1)
@@ -30,6 +33,7 @@ test('Queue base 1', async () => {
   expect(callCount[2]).toBe(0)
   ds[0].resolve()
   await promises[0]
+  await dsi[1].promise
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(1)
   expect(callCount[0]).toBe(1)
@@ -37,6 +41,7 @@ test('Queue base 1', async () => {
   expect(callCount[2]).toBe(0)
   ds[1].resolve()
   await promises[1]
+  await dsi[2].promise
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -55,16 +60,20 @@ test('Queue base 2', async () => {
   const promises = []
   const callCount = {}
   const ds = [...range(6)].map(() => new Deferred())
+  const dsi = [...range(6)].map(() => new Deferred())
   for (const x of [...range(6)]) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
+      dsi[x].resolve()
       await ds[x].promise
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
   }
   expect(promises.length).toBe(6)
+  await dsi[0].promise
+  await dsi[1].promise
   expect(queue.running).toBe(2)
   expect(queue.pending).toBe(4)
   expect(callCount[0]).toBe(1)
@@ -119,16 +128,21 @@ test('Queue infinity', async () => {
   const promises = []
   const callCount = {}
   const ds = [...range(6)].map(() => new Deferred())
+  const dsi = [...range(6)].map(() => new Deferred())
   for (const x of [...range(6)]) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
+      dsi[x].resolve()
       await ds[x].promise
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
   }
   expect(promises.length).toBe(6)
+  for (const x of range(6)) {
+    await dsi[x].promise
+  }
   expect(queue.running).toBe(6)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -158,11 +172,13 @@ test('Queue infinity race', async () => {
   const callCount = {}
   const completeCount = {}
   const ds = [...range(6)].map(() => new Deferred())
+  const dsi = [...range(6)].map(() => new Deferred())
   for (const x of [...range(6)]) {
     callCount[x] = 0
     completeCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
+      dsi[x].resolve()
       await ds[x].promise
       completeCount[x] += 1
     })
@@ -170,6 +186,9 @@ test('Queue infinity race', async () => {
     promises.push(p)
   }
   expect(promises.length).toBe(6)
+  for (const x of range(6)) {
+    await dsi[x].promise
+  }
   expect(queue.running).toBe(6)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -205,10 +224,12 @@ test('Queue throws', async () => {
   const promises = []
   const callCount = {}
   const ds = [...range(6)].map(() => new Deferred())
+  const dsi = [...range(6)].map(() => new Deferred())
   for (const x of [...range(6)]) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
+      dsi[x].resolve()
       await ds[x].promise
       if (x % 2 === 1) {
         throw new Error()
@@ -222,6 +243,8 @@ test('Queue throws', async () => {
     }))
   }
   expect(promises.length).toBe(6)
+  await dsi[0].promise
+  await dsi[1].promise
   expect(queue.running).toBe(2)
   expect(queue.pending).toBe(4)
   expect(callCount[0]).toBe(1)
@@ -248,16 +271,6 @@ test('Queue throws', async () => {
   expect(callCount[5]).toBe(1)
 })
 
-test('Queue all cancels', async () => {
-  const queue = new Queue(1)
-  const [p, cancel] = queue.execCancellable(() => {
-    return 'test'
-  })
-  cancel()
-  queue.cancelAllPending()
-  await p
-})
-
 test('Queue priority', async () => {
   const queue = new Queue(1)
   expect(queue.concurrency).toBe(1)
@@ -268,18 +281,23 @@ test('Queue priority', async () => {
 
   callCount[0] = 0
   const d0 = new Deferred()
+  const dsi0 = new Deferred()
   promises.push(queue.exec(async () => {
     callCount[0] += 1
+    dsi0.resolve()
     await d0.promise
   }, 0))
+  await dsi0.promise
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)
 
   callCount[1] = 0
   const d1 = new Deferred()
+  const dsi1 = new Deferred()
   promises.push(queue.exec(async () => {
     callCount[1] += 1
+    dsi1.resolve()
     await d1.promise
   }, 1))
   expect(queue.running).toBe(1)
@@ -289,8 +307,10 @@ test('Queue priority', async () => {
 
   callCount[2] = 0
   const d2 = new Deferred()
+  const dsi2 = new Deferred()
   promises.push(queue.exec(async () => {
     callCount[2] += 1
+    dsi2.resolve()
     await d2.promise
   }, 2))
   expect(queue.running).toBe(1)
@@ -301,6 +321,7 @@ test('Queue priority', async () => {
 
   d0.resolve()
   await promises[0]
+  await dsi2.promise
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(1)
   expect(callCount[0]).toBe(1)
@@ -309,6 +330,7 @@ test('Queue priority', async () => {
 
   d2.resolve()
   await promises[2]
+  await dsi1.promise
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -330,10 +352,12 @@ test('Queue cancel', async () => {
   const cancels = []
   const callCount = {}
   const ds = [...range(3)].map(() => new Deferred())
+  const dsi = [...range(3)].map(() => new Deferred())
   for (const x in [...range(3)]) {
     callCount[x] = 0
     const [p, cancel] = queue.execCancellable(async () => {
       callCount[x] += 1
+      dsi[x].resolve()
       await ds[x].promise
       return 'test'
     }, 0)
@@ -346,6 +370,7 @@ test('Queue cancel', async () => {
   }
   expect(promises.length).toBe(3)
   expect(cancels.length).toBe(3)
+  await dsi[0].promise
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(2)
   expect(callCount[0]).toBe(1)
@@ -400,10 +425,12 @@ test('Queue cancelAllPending', async () => {
   const promises = []
   const callCount = {}
   const ds = [...range(3)].map(() => new Deferred())
+  const dsi = [...range(6)].map(() => new Deferred())
   for (const x in [...range(3)]) {
     callCount[x] = 0
     const p = queue.exec(async () => {
       callCount[x] += 1
+      dsi[x].resolve()
       await ds[x].promise
       return 'test'
     }, 0).catch((e) => {
@@ -414,6 +441,7 @@ test('Queue cancelAllPending', async () => {
     promises.push(p)
   }
   expect(promises.length).toBe(3)
+  await dsi[0].promise
   expect(queue.running).toBe(1)
   expect(queue.pending).toBe(2)
   expect(callCount[0]).toBe(1)
@@ -440,14 +468,6 @@ test('Queue cancelAllPending', async () => {
   expect(callCount[2]).toBe(0)
 })
 
-test('Queue infinity cancel', async () => {
-  const queue = new Queue(Number.POSITIVE_INFINITY)
-  const [p, cancel] = queue.execCancellable(() => 'test', 0)
-  expect(cancel()).toBe(false)
-  expect(queue.cancelAllPending()).toBe(0)
-  await p
-})
-
 test('Queue concurrency 1', async () => {
   const mutex = new Queue(1)
   expect(mutex.running).toBe(0)
@@ -455,16 +475,19 @@ test('Queue concurrency 1', async () => {
   const promises = []
   const callCount = {}
   const ds = [...range(3)].map(() => new Deferred())
+  const dsi = [...range(6)].map(() => new Deferred())
   for (const x of [...range(3)]) {
     callCount[x] = 0
     const p = mutex.exec(async () => {
       callCount[x] += 1
+      dsi[x].resolve()
       await ds[x].promise
     })
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
   }
   expect(promises.length).toBe(3)
+  await dsi[0].promise
   expect(mutex.running).toBe(1)
   expect(mutex.pending).toBe(2)
   expect(callCount[0]).toBe(1)
@@ -472,6 +495,7 @@ test('Queue concurrency 1', async () => {
   expect(callCount[2]).toBe(0)
   ds[0].resolve()
   await promises[0]
+  await dsi[1].promise
   expect(mutex.running).toBe(1)
   expect(mutex.pending).toBe(1)
   expect(callCount[0]).toBe(1)
@@ -479,6 +503,7 @@ test('Queue concurrency 1', async () => {
   expect(callCount[2]).toBe(0)
   ds[1].resolve()
   await promises[1]
+  await dsi[2].promise
   expect(mutex.running).toBe(1)
   expect(mutex.pending).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -488,16 +513,6 @@ test('Queue concurrency 1', async () => {
   await promises[2]
   expect(mutex.running).toBe(0)
   expect(mutex.pending).toBe(0)
-})
-
-test('Queue concurrency 1 all cancels', async () => {
-  const queue = new Queue(1)
-  const [p, cancel] = queue.execCancellable(() => {
-    return 'test'
-  })
-  cancel()
-  queue.cancelAllPending()
-  await p
 })
 
 test('Queue concurrency 1 priority', async () => {
@@ -507,16 +522,19 @@ test('Queue concurrency 1 priority', async () => {
   const promises = []
   const callCount = {}
   const ds = [...range(3)].map(() => new Deferred())
+  const dsi = [...range(6)].map(() => new Deferred())
   for (const x of [...range(3)]) {
     callCount[x] = 0
     const p = mutex.exec(async () => {
       callCount[x] += 1
+      dsi[x].resolve()
       await ds[x].promise
     }, 10)
     expect(p).toBeInstanceOf(Promise)
     promises.push(p)
   }
   expect(promises.length).toBe(3)
+  await dsi[0].promise
   expect(mutex.running).toBe(1)
   expect(mutex.pending).toBe(2)
   expect(callCount[0]).toBe(1)
@@ -524,6 +542,7 @@ test('Queue concurrency 1 priority', async () => {
   expect(callCount[2]).toBe(0)
   ds[0].resolve()
   await promises[0]
+  await dsi[1].promise
   expect(mutex.running).toBe(1)
   expect(mutex.pending).toBe(1)
   expect(callCount[0]).toBe(1)
@@ -531,6 +550,7 @@ test('Queue concurrency 1 priority', async () => {
   expect(callCount[2]).toBe(0)
   ds[1].resolve()
   await promises[1]
+  await dsi[2].promise
   expect(mutex.running).toBe(1)
   expect(mutex.pending).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -540,16 +560,6 @@ test('Queue concurrency 1 priority', async () => {
   await promises[2]
   expect(mutex.running).toBe(0)
   expect(mutex.pending).toBe(0)
-})
-
-test('Queue concurrency 1 priority all cancels', async () => {
-  const queue = new Queue(1)
-  const [p, cancel] = queue.execCancellable(() => {
-    return 'test'
-  }, 0)
-  cancel()
-  queue.cancelAllPending()
-  await p
 })
 
 test('Queue all resolve in micro tasks', async () => {
@@ -580,4 +590,92 @@ test('Queue infinity all resolve in micro tasks', async () => {
   })
   await del
   expect(finished).toBe(true)
+})
+
+test('Queue always call in micro task sync', async () => {
+  const calls = []
+  const queue = new Queue(1)
+  const p = queue.exec(() => {
+    calls.push('exec')
+  })
+  calls.push('after exec')
+  await p
+  expect(calls).toStrictEqual(['after exec', 'exec'])
+})
+
+test('Queue infinity always call in micro task sync', async () => {
+  const calls = []
+  const queue = new Queue(Number.POSITIVE_INFINITY)
+  const p = queue.exec(() => {
+    calls.push('exec')
+  })
+  calls.push('after exec')
+  await p
+  expect(calls).toStrictEqual(['after exec', 'exec'])
+})
+
+test('Queue always call in micro task async', async () => {
+  const calls = []
+  const queue = new Queue(1)
+  const p = queue.exec(async () => {
+    calls.push('exec')
+  })
+  calls.push('after exec')
+  await p
+  expect(calls).toStrictEqual(['after exec', 'exec'])
+})
+
+test('Queue infinity always call in micro task async', async () => {
+  const calls = []
+  const queue = new Queue(Number.POSITIVE_INFINITY)
+  const p = queue.exec(async () => {
+    calls.push('exec')
+  })
+  calls.push('after exec')
+  await p
+  expect(calls).toStrictEqual(['after exec', 'exec'])
+})
+
+test('Queue custom error class', async () => {
+  /**
+   * @ignore
+   */
+  class CustomCancelledError extends CancelledError {}
+
+  const queue = new Queue(1)
+  const d = new Deferred()
+
+  queue.exec(async () => {
+    await d.promise
+  })
+
+  let passed = false
+  const [p, cancel] = queue._execCancellableInternal(() => {
+    passed = true
+  }, 0, CustomCancelledError)
+
+  expect(cancel()).toBe(true)
+  try {
+    await p
+    expect(true).toBe(false)
+  } catch (e) {
+    expect(e instanceof CustomCancelledError).toBe(true)
+  }
+  expect(passed).toBe(false)
+})
+
+test('Queue cancel just scheduled', async () => {
+  let passed = false
+  const queue = new Queue(1)
+  const [p, cancel] = queue.execCancellable(() => {
+    passed = true
+  })
+  expect(cancel()).toBe(true)
+  try {
+    await p
+    expect(true).toBe(false)
+  } catch (e) {
+    expect(e instanceof CancelledError).toBe(true)
+  }
+  expect(passed).toBe(false)
 })

@@ -1,5 +1,7 @@
 
-import mapLimit from './mapLimit.mjs'
+import assert from 'nanoassert'
+import asyncGeneratorMap from './asyncGeneratorMap.mjs'
+import Queue from './Queue.mjs'
 
 /**
  * Calls a function on each element of iterable.
@@ -34,9 +36,12 @@ import mapLimit from './mapLimit.mjs'
  * })
  */
 async function forEachLimit (iterable, iteratee, concurrency) {
-  await mapLimit(iterable, async (v, i, t) => {
-    iteratee(v, i, t)
-  }, concurrency)
+  assert(typeof iteratee === 'function', 'iteratee must be a function')
+  const queue = new Queue(concurrency)
+  // eslint-disable-next-line no-unused-vars
+  for await (const _el of asyncGeneratorMap(iterable, iteratee, queue)) {
+    // do nothing
+  }
 }
 
 export default forEachLimit

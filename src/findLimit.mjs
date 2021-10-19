@@ -1,6 +1,7 @@
 
 import asyncGeneratorMap from './asyncGeneratorMap.mjs'
 import assert from 'nanoassert'
+import Queue from './Queue.mjs'
 
 /**
  * Returns the first element of an iterable that passes an asynchronous truth test.
@@ -44,9 +45,10 @@ import assert from 'nanoassert'
  */
 async function findLimit (iterable, iteratee, concurrency) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
+  const queue = new Queue(concurrency)
   for await (const [value, pass] of asyncGeneratorMap(iterable, async (value, index, iterable) => {
     return [value, await iteratee(value, index, iterable)]
-  }, concurrency)) {
+  }, queue)) {
     if (pass) {
       return value
     }

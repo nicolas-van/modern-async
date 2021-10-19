@@ -1,20 +1,24 @@
 
 import assert from 'nanoassert'
-import Queue from './Queue.mjs'
 import asyncGeneratorWrap from './asyncGeneratorWrap.mjs'
+import CancelledError from './CancelledError.mjs'
 
 /**
  * @ignore
  * @param {*} asyncIterable ignore
  * @param {*} iteratee ignore
- * @param {*} concurrency ignore
+ * @param {*} queue ignore
  * @param {*} ordered ignore
  * @returns {*} ignore
  */
-async function * asyncGeneratorMap (asyncIterable, iteratee, concurrency, ordered = true) {
+async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = true) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
-  const queue = new Queue(concurrency)
   const it = asyncGeneratorWrap(asyncIterable)
+
+  /**
+   * @ignore
+   */
+  class CustomCancelledError extends CancelledError {}
 
   let lastIndexFetched = -1
   let fetching = false
@@ -32,18 +36,66 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, concurrency, ordere
     waitList.push([identifier, p])
   }
   const raceWaitList = async () => {
-    const [identifier, state, result] = await Promise.race(waitList.map(([k, v]) => v))
-    if (state === 'rejected') {
-      throw result
+    while (true) {
+      const [identifier, state, result] = await Promise.race(waitList.map(([k, v]) => v))
+      removeFromWaitList(identifier)
+      if (state === 'rejected') {
+        if (result instanceof CustomCancelledError) {
+          continue
+        }
+        throw result
+      }
+      return [identifier, result]
     }
+  }
+  const removeFromWaitList = (identifier) => {
     const i = waitList.findIndex(([k, v]) => k === identifier)
     assert(i !== -1)
     waitList.splice(i, 1)
-    return [identifier, result]
+  }
+
+  const scheduledList = []
+  const schedule = (value, index) => {
+    scheduledList.push({ value, index, cancel: null, cancelled: null })
+    internalSchedule(value, index)
+  }
+  const internalSchedule = (value, index) => {
+    addToWaitList(index, async () => {
+      const [p, cancel] = queue._execCancellableInternal(async () => {
+        const output = scheduledList.shift()
+        assert(output.index === index)
+        try {
+          return iteratee(value, index, asyncIterable)
+        } finally {
+          cancelAllScheduled()
+        }
+      }, 0, CustomCancelledError)
+      const i = scheduledList.findIndex((el) => el.index === index)
+      assert(i !== -1)
+      const scheduleObj = scheduledList[i]
+      assert(scheduleObj.cancel === null)
+      scheduleObj.cancelled = false
+      scheduleObj.cancel = cancel
+      return p
+    })
+  }
+  const cancelAllScheduled = () => {
+    for (const scheduleObj of scheduledList.filter((el) => !el.cancelled)) {
+      assert(scheduleObj.cancel)
+      assert(scheduleObj.cancel())
+      scheduleObj.cancelled = true
+    }
+  }
+  const rescheduleAllCancelled = () => {
+    for (const scheduleObj of scheduledList.filter((el) => el.cancelled)) {
+      scheduleObj.cancel = null
+      internalSchedule(scheduleObj.value, scheduleObj.index)
+    }
   }
 
   let lastIndexReturned = -1
   const results = []
+  let running = 0
 
   addToWaitList('next', async () => it.next())
   while (true) {
@@ -53,14 +105,13 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, concurrency, ordere
       fetching = false
       if (!done) {
         lastIndexFetched += 1
-        const currentIndex = lastIndexFetched
-        addToWaitList(currentIndex, async () => {
-          return queue.exec(async () => iteratee(value, currentIndex, asyncIterable))
-        })
+        schedule(value, lastIndexFetched)
+        running += 1
       } else {
         exhausted = true
       }
     } else { // result
+      running -= 1
       if (ordered) {
         assert(lastIndexReturned < identifier, 'invalid state')
         results[identifier - lastIndexReturned - 1] = { value: result }
@@ -72,8 +123,9 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, concurrency, ordere
         lastIndexReturned += 1
         yield result.value
       }
+      rescheduleAllCancelled()
     }
-    if (!fetching && !exhausted && queue.running < queue.concurrency) {
+    if (!fetching && !exhausted && running < queue.concurrency) {
       addToWaitList('next', async () => it.next())
       fetching = true
     }

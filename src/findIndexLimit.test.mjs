@@ -31,7 +31,7 @@ test('findIndexLimit compatibility', async () => {
   expect(await p).toBe([].findIndex((v) => v === 5))
 })
 
-test('findIndexLimit cancelSubsequent', async () => {
+test('findIndexLimit cancel subsequent', async () => {
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
@@ -47,6 +47,7 @@ test('findIndexLimit cancelSubsequent', async () => {
   expect(callCount[1]).toBe(0)
   expect(callCount[2]).toBe(0)
   d.resolve()
+  await delay()
   const res = await p
   expect(res).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -54,7 +55,7 @@ test('findIndexLimit cancelSubsequent', async () => {
   expect(callCount[2]).toBe(0)
 })
 
-test('findIndexLimit cancelSubsequent 2', async () => {
+test('findIndexLimit cancel subsequent 2', async () => {
   const callCount = {}
   ;[...range(6)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
@@ -73,6 +74,7 @@ test('findIndexLimit cancelSubsequent 2', async () => {
   expect(callCount[4]).toBe(0)
   expect(callCount[5]).toBe(0)
   d.resolve()
+  await delay()
   const res = await p
   expect(res === 0 || res === 1).toBe(true)
   expect(callCount[0]).toBe(1)
@@ -157,4 +159,24 @@ test('findIndexLimit error after completion', async () => {
   d2.resolve()
   const res = await p
   expect(res).toBe(0)
+})
+
+test('findIndexLimit concurrency', async () => {
+  const callCount = {}
+  ;[...range(3)].forEach((i) => { callCount[i] = 0 })
+  const d = new Deferred()
+  const ds = [...range(3)].map(() => new Deferred())
+  const p = findIndexLimit([...range(10)], async (v, i) => {
+    callCount[i] += 1
+    ds[i].resolve()
+    await d.promise
+    return v === 1
+  }, 3)
+  await delay()
+  expect(callCount[0]).toBe(1)
+  expect(callCount[1]).toBe(1)
+  expect(callCount[2]).toBe(1)
+  d.resolve()
+  const res = await p
+  expect(res).toBe(1)
 })
