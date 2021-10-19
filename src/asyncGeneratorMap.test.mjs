@@ -5,6 +5,7 @@ import { range } from 'itertools'
 import delay from './delay.mjs'
 import Queue from './Queue.mjs'
 import Deferred from './Deferred.mjs'
+import sleep from './sleep'
 
 test('asyncGeneratorMap base', async () => {
   const res = []
@@ -137,6 +138,59 @@ test('asyncGeneratorMap same queue three levels concurrency infinity', async () 
   })()
   const res = await p
   expect(res).toStrictEqual([0, 8, 16])
+})
+
+test('asyncGeneratorMap same queue three levels concurrency 1 random delays', async () => {
+  const queue = new Queue(1)
+  const gen1 = asyncGeneratorMap(range(10), async (x, i) => {
+    await sleep(Math.floor(Math.random() * 10))
+    return x * 2
+  }, queue)
+  const gen2 = asyncGeneratorMap(gen1, async (x, i) => {
+    await sleep(Math.floor(Math.random() * 10))
+    return x * 2
+  }, queue)
+  const gen3 = asyncGeneratorMap(gen2, async (x, i) => {
+    await sleep(Math.floor(Math.random() * 10))
+    return x * 2
+  }, queue)
+  const p = (async () => {
+    const res = []
+    for await (const el of gen3) {
+      res.push(el)
+    }
+    return res
+  })()
+  const res = await p
+  expect(res).toStrictEqual([0, 8, 16, 24, 32, 40, 48, 56, 64, 72])
+})
+
+test('asyncGeneratorMap same queue three levels concurrency 1 random delays busy queue', async () => {
+  const queue = new Queue(10)
+  ;[...range(8)].forEach(element => {
+    queue.exec(async () => new Promise(() => {}))
+  })
+  const gen1 = asyncGeneratorMap(range(10), async (x, i) => {
+    await sleep(Math.floor(Math.random() * 10))
+    return x * 2
+  }, queue)
+  const gen2 = asyncGeneratorMap(gen1, async (x, i) => {
+    await sleep(Math.floor(Math.random() * 10))
+    return x * 2
+  }, queue)
+  const gen3 = asyncGeneratorMap(gen2, async (x, i) => {
+    await sleep(Math.floor(Math.random() * 10))
+    return x * 2
+  }, queue)
+  const p = (async () => {
+    const res = []
+    for await (const el of gen3) {
+      res.push(el)
+    }
+    return res
+  })()
+  const res = await p
+  expect(res).toStrictEqual([0, 8, 16, 24, 32, 40, 48, 56, 64, 72])
 })
 
 test('findIndexLimit cancelSubsequent busy queue', async () => {
