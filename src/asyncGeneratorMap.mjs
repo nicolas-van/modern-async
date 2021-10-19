@@ -66,6 +66,7 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
   const internalSchedule = (value, index) => {
     addToWaitList(index, async () => {
       const [p, cancel] = queue._execCancellableInternal(async () => {
+        assert(scheduledList.length >= 1, 'scheduledList can\'t be empty')
         const output = scheduledList.shift()
         assert(output.index === index, 'Removed invalid index from sheduled list')
         /*
