@@ -39,13 +39,10 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
     while (true) {
       const [identifier, state, result] = await Promise.race(waitList.map(([k, v]) => v))
       removeFromWaitList(identifier)
-      if (state === 'rejected') {
-        if (result instanceof CustomCancelledError) {
-          continue
-        }
-        throw result
+      if (state === 'rejected' && result instanceof CustomCancelledError) {
+        continue
       }
-      return [identifier, result]
+      return [identifier, state, result]
     }
   }
   const removeFromWaitList = (identifier) => {
@@ -99,8 +96,12 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
 
   addToWaitList('next', async () => it.next())
   while (true) {
-    const [identifier, result] = await raceWaitList()
+    const [identifier, state, result] = await raceWaitList()
     if (identifier === 'next') {
+      if (state === 'rejected') {
+        // TODO: streamline
+        throw result
+      }
       const { value, done } = result
       fetching = false
       if (!done) {
@@ -114,14 +115,18 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
       running -= 1
       if (ordered) {
         assert(lastIndexReturned < identifier, 'invalid state')
-        results[identifier - lastIndexReturned - 1] = { value: result }
+        results[identifier - lastIndexReturned - 1] = { state, result }
       } else {
-        results.push({ value: result })
+        results.push({ state, result })
       }
       while (results.length >= 1 && results[0] !== undefined) {
         const result = results.shift()
         lastIndexReturned += 1
-        yield result.value
+        if (result.state === 'rejected') {
+          throw result.result
+        } else {
+          yield result.result
+        }
       }
       rescheduleAllCancelled()
     }
