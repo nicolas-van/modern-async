@@ -98,27 +98,36 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
   while (true) {
     const [identifier, state, result] = await raceWaitList()
     if (identifier === 'next') {
-      if (state === 'rejected') {
-        // TODO: streamline
-        throw result
-      }
-      const { value, done } = result
       fetching = false
-      if (!done) {
+      if (state === 'rejected') {
         lastIndexFetched += 1
-        schedule(value, lastIndexFetched)
-        running += 1
-      } else {
         exhausted = true
+        if (ordered) {
+          assert(lastIndexReturned < lastIndexFetched, 'invalid state process')
+          results[lastIndexFetched - lastIndexReturned - 1] = { state, result }
+        } else {
+          results.push({ state, result })
+        }
+      } else {
+        const { value, done } = result
+        if (!done) {
+          lastIndexFetched += 1
+          schedule(value, lastIndexFetched)
+          running += 1
+        } else {
+          exhausted = true
+        }
       }
     } else { // result
       running -= 1
       if (ordered) {
-        assert(lastIndexReturned < identifier, 'invalid state')
+        assert(lastIndexReturned < identifier, 'invalid state process')
         results[identifier - lastIndexReturned - 1] = { state, result }
       } else {
         results.push({ state, result })
       }
+    }
+    if (results.length >= 1 && results[0] !== undefined) {
       while (results.length >= 1 && results[0] !== undefined) {
         const result = results.shift()
         lastIndexReturned += 1

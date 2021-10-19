@@ -193,3 +193,240 @@ test('findIndexLimit cancelSubsequent busy queue', async () => {
   expect(queue.pending).toStrictEqual(0)
   queue.cancelAllPending()
 })
+
+/**
+ * @ignore
+ */
+class TestError extends Error {}
+
+test('asyncGeneratorMap fail fetch first', async () => {
+  const bd = [...range(2)].map(() => new Deferred())
+  const originGen = asyncGeneratorMap(range(2), async (x, i) => {
+    await bd[i].promise
+    if (i === 0) {
+      throw new TestError()
+    } else {
+      return x
+    }
+  }, new Queue(2))
+
+  const gen = asyncGeneratorMap(originGen, async (x) => {
+    return (x + 1) * 2
+  }, new Queue(2))
+
+  const p1 = gen.next()
+
+  bd[1].resolve()
+  await delay()
+  bd[0].resolve()
+
+  try {
+    await p1
+    expect(false).toBe(true)
+  } catch (e) {
+    expect(e instanceof TestError).toBe(true)
+  }
+})
+
+test('asyncGeneratorMap fail fetch second', async () => {
+  const bd = [...range(2)].map(() => new Deferred())
+  const originGen = asyncGeneratorMap(range(2), async (x, i) => {
+    await bd[i].promise
+    if (i === 1) {
+      throw new TestError()
+    } else {
+      return x
+    }
+  }, new Queue(2))
+
+  const gen = asyncGeneratorMap(originGen, async (x) => {
+    return (x + 1) * 2
+  }, new Queue(2))
+
+  const p1 = gen.next()
+
+  bd[1].resolve()
+  await delay()
+  bd[0].resolve()
+
+  const res = await p1
+
+  expect(res.done).toStrictEqual(false)
+  expect(res.value).toStrictEqual(2)
+
+  const p2 = gen.next()
+
+  try {
+    await p2
+    expect(false).toBe(true)
+  } catch (e) {
+    expect(e instanceof TestError).toBe(true)
+  }
+})
+
+test('asyncGeneratorMap fail process first', async () => {
+  const bd = [...range(2)].map(() => new Deferred())
+  const gen = asyncGeneratorMap(range(2), async (x, i) => {
+    await bd[i].promise
+    if (i === 0) {
+      throw new TestError()
+    } else {
+      return (x + 1) * 2
+    }
+  }, new Queue(2))
+
+  const p1 = gen.next()
+
+  bd[1].resolve()
+  await delay()
+  bd[0].resolve()
+
+  try {
+    await p1
+    expect(false).toBe(true)
+  } catch (e) {
+    expect(e instanceof TestError).toBe(true)
+  }
+})
+
+test('asyncGeneratorMap fail process second', async () => {
+  const bd = [...range(2)].map(() => new Deferred())
+  const gen = asyncGeneratorMap(range(2), async (x, i) => {
+    await bd[i].promise
+    if (i === 1) {
+      throw new TestError()
+    } else {
+      return (x + 1) * 2
+    }
+  }, new Queue(2))
+
+  const p1 = gen.next()
+
+  bd[1].resolve()
+  await delay()
+  bd[0].resolve()
+
+  const res = await p1
+
+  expect(res.done).toStrictEqual(false)
+  expect(res.value).toStrictEqual(2)
+
+  const p2 = gen.next()
+
+  try {
+    await p2
+    expect(false).toBe(true)
+  } catch (e) {
+    expect(e instanceof TestError).toBe(true)
+  }
+})
+
+test('asyncGeneratorMap fail fetch first unordered', async () => {
+  const bd = [...range(2)].map(() => new Deferred())
+  const originGen = asyncGeneratorMap(range(2), async (x, i) => {
+    await bd[i].promise
+    if (i === 0) {
+      throw new TestError()
+    } else {
+      return x
+    }
+  }, new Queue(2))
+
+  const gen = asyncGeneratorMap(originGen, async (x) => {
+    return (x + 1) * 2
+  }, new Queue(2), false)
+
+  const p1 = gen.next()
+
+  bd[1].resolve()
+  await delay()
+  bd[0].resolve()
+
+  try {
+    await p1
+    expect(false).toBe(true)
+  } catch (e) {
+    expect(e instanceof TestError).toBe(true)
+  }
+})
+
+test('asyncGeneratorMap fail fetch second unordered', async () => {
+  const bd = [...range(2)].map(() => new Deferred())
+  const originGen = asyncGeneratorMap(range(2), async (x, i) => {
+    await bd[i].promise
+    if (i === 1) {
+      throw new TestError()
+    } else {
+      return x
+    }
+  }, new Queue(2))
+
+  const gen = asyncGeneratorMap(originGen, async (x) => {
+    return (x + 1) * 2
+  }, new Queue(2), false)
+
+  const p1 = gen.next()
+
+  bd[1].resolve()
+  bd[0].resolve()
+
+  try {
+    await p1
+    expect(false).toBe(true)
+  } catch (e) {
+    expect(e instanceof TestError).toBe(true)
+  }
+})
+
+test('asyncGeneratorMap fail process first unordered', async () => {
+  const bd = [...range(2)].map(() => new Deferred())
+  const gen = asyncGeneratorMap(range(2), async (x, i) => {
+    await bd[i].promise
+    if (i === 0) {
+      throw new TestError()
+    } else {
+      return (x + 1) * 2
+    }
+  }, new Queue(2), false)
+
+  const p1 = gen.next()
+
+  bd[1].resolve()
+  const res = await p1
+  expect(res.done).toStrictEqual(false)
+  expect(res.value).toStrictEqual(4)
+
+  const p2 = gen.next()
+
+  bd[0].resolve()
+
+  try {
+    await p2
+    expect(false).toBe(true)
+  } catch (e) {
+    expect(e instanceof TestError).toBe(true)
+  }
+})
+
+test('asyncGeneratorMap fail process second unordered', async () => {
+  const bd = [...range(2)].map(() => new Deferred())
+  const gen = asyncGeneratorMap(range(2), async (x, i) => {
+    await bd[i].promise
+    if (i === 1) {
+      throw new TestError()
+    } else {
+      return (x + 1) * 2
+    }
+  }, new Queue(2), false)
+
+  const p1 = gen.next()
+
+  bd[1].resolve()
+
+  try {
+    await p1
+    expect(false).toBe(true)
+  } catch (e) {
+    expect(e instanceof TestError).toBe(true)
+  }
+})
