@@ -35,13 +35,13 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
         return [waitListIdentifier, identifier, 'rejected', e]
       }
     })()
-    waitList.set(waitListIdentifier, p)
+    waitList.set(waitListIdentifier, [identifier, p])
     currentWaitListInternalIdentifier += 1
   }
   const raceWaitList = async () => {
     while (true) {
       assert(waitList.size >= 1, 'Can not race on empty list')
-      const [waitListIdentifier, identifier, state, result] = await Promise.race(waitList.values())
+      const [waitListIdentifier, identifier, state, result] = await Promise.race([...waitList.values()].map(([k, v]) => v))
       removeFromWaitList(waitListIdentifier)
       if (state === 'rejected' && result instanceof CustomCancelledError) {
         continue
@@ -73,7 +73,8 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
           assert(i !== -1, 'Couldn\'t find index in scheduledList for removal')
           scheduledList.splice(i, 1)
           try {
-            return iteratee(task.value, task.index, asyncIterable)
+            const result = await iteratee(task.value, task.index, asyncIterable)
+            return result
           } finally {
             finalizedTask()
           }
