@@ -59,40 +59,50 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
       value,
       index,
       cancel: null,
-      cancelled: null
+      state: null
     }
     scheduledList.push(task)
     internalSchedule(task)
   }
   const internalSchedule = (task) => {
     addToWaitList(task.index, async () => {
-      const [p, cancel] = queue._execCancellableInternal(async () => {
-        const i = scheduledList.findIndex((el) => el === task)
-        assert(i !== -1, 'Couldn\'t find index in scheduledList for removal')
-        scheduledList.splice(i, 1)
-        try {
-          return iteratee(task.value, task.index, asyncIterable)
-        } finally {
-          cancelAllScheduled()
+      const p = queue.exec(async () => {
+        assert(task.state === 'scheduled' || task.state === 'cancelled', 'invalid task state')
+        if (task.state === 'scheduled') {
+          const i = scheduledList.findIndex((el) => el === task)
+          assert(i !== -1, 'Couldn\'t find index in scheduledList for removal')
+          scheduledList.splice(i, 1)
+          try {
+            return iteratee(task.value, task.index, asyncIterable)
+          } finally {
+            cancelAllScheduled()
+          }
+        } else { // cancelled
+          throw new CustomCancelledError()
         }
-      }, 0, CustomCancelledError)
+      })
       assert(task.cancel === null, 'task already has cancel')
-      task.cancelled = false
-      task.cancel = cancel
+      task.cancel = () => {
+        assert(task.state === 'scheduled', 'task should be scheduled')
+        task.state = 'cancelled'
+      }
+      assert(task.state === null, 'task should have no state')
+      task.state = 'scheduled'
       return p
     })
   }
   const cancelAllScheduled = () => {
-    for (const task of scheduledList.filter((el) => !el.cancelled)) {
+    for (const task of scheduledList.filter((el) => el.state === 'scheduled')) {
       assert(task.cancel, 'task does not have cancel')
-      assert(task.cancel(), 'task was already cancelled')
-      task.cancelled = true
+      task.cancel()
     }
   }
   const rescheduleAllCancelled = () => {
-    for (const task of scheduledList.filter((el) => el.cancelled)) {
-      task.cancel = null
-      internalSchedule(task)
+    for (const task of scheduledList.filter((el) => el.state === 'cancelled')) {
+      const i = scheduledList.findIndex((el) => el === task)
+      assert(i !== -1, 'Couldn\'t find index in scheduledList for removal')
+      scheduledList.splice(i, 1)
+      schedule(task.value, task.index)
     }
   }
 
@@ -103,6 +113,7 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
   addToWaitList('next', async () => it.next())
   while (true) {
     const [identifier, state, result] = await raceWaitList()
+    let reschedule = false
     if (identifier === 'next') {
       fetching = false
       if (state === 'rejected') {
@@ -126,12 +137,13 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
       const index = ordered ? identifier : lastIndexReturned + 1
       assert(index > lastIndexReturned, 'invalid index to insert after result')
       results[index - lastIndexReturned - 1] = { state, index, result }
+      reschedule = true
     }
     while (results.length >= 1 && results[0] !== undefined) {
       const result = results.shift()
       assert(result.index === lastIndexReturned + 1, 'Invalid returned index')
       if (result.state === 'rejected') {
-        cancelAllScheduled()
+        cancelAllScheduled() // in case of fetch reject
         throw result.result
       } else {
         yield result.result
@@ -145,7 +157,9 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
     if (exhausted && lastIndexFetched === lastIndexReturned) {
       return
     }
-    rescheduleAllCancelled()
+    if (reschedule) {
+      rescheduleAllCancelled()
+    }
   }
 }
 

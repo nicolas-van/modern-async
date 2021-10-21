@@ -122,17 +122,6 @@ class Queue {
    *     `false` in any other case.
    */
   execCancellable (fct, priority = 0) {
-    return this._execCancellableInternal(fct, priority)
-  }
-
-  /**
-   * @ignore
-   * @param {*} fct ignore
-   * @param {*} priority ignore
-   * @param {*} CancelledErrorClass ignore
-   * @returns {*} ignore
-   */
-  _execCancellableInternal (fct, priority, CancelledErrorClass = CancelledError) {
     assert(typeof fct === 'function', 'fct must be a function')
     assert(typeof priority === 'number', 'priority must be a number')
     const deferred = new Deferred()
@@ -148,8 +137,7 @@ class Queue {
       asyncFct: asyncWrap(fct),
       deferred,
       priority,
-      state: 'pending',
-      CancelledErrorClass
+      state: 'pending'
     }
     this._iqueue.splice(i, 0, task)
     this._checkQueue()
@@ -161,7 +149,7 @@ class Queue {
         const filtered = this._iqueue.filter((v) => v !== task)
         assert(filtered.length < this._iqueue.length)
         this._iqueue = filtered
-        deferred.reject(new task.CancelledErrorClass())
+        deferred.reject(new CancelledError())
         return true
       }
     }]
@@ -208,7 +196,7 @@ class Queue {
     const toCancel = this._iqueue.filter((task) => task.state === 'pending' || task.state === 'scheduled')
     this._iqueue = this._iqueue.filter((task) => task.state !== 'pending' && task.state !== 'scheduled')
     toCancel.forEach((task) => {
-      task.deferred.reject(new task.CancelledErrorClass())
+      task.deferred.reject(new CancelledError())
     })
     return toCancel.length
   }

@@ -103,7 +103,7 @@ test('asyncGeneratorMap same queue one level concurrency 3 busy queue random del
   })()
   const res = await p
   expect(res).toStrictEqual([...range(1000)].map((x) => x * 2))
-})
+}, 10000)
 
 test('asyncGeneratorMap same queue three levels concurrency 1', async () => {
   const callList = []
@@ -297,7 +297,7 @@ test('asyncGeneratorMap same queue three levels busy queue random delays ', asyn
   expect(res).toStrictEqual([...range(100)].map((x) => x * 8))
 })
 
-test('findIndexLimit cancelSubsequent busy queue', async () => {
+test('asyncGeneratorMap cancel subsequents busy queue', async () => {
   const findIndexLimit = async (iterable, iteratee, queue) => {
     for await (const [index, pass] of asyncGeneratorMap(iterable, async (value, index, iterable) => {
       return [index, await iteratee(value, index, iterable)]

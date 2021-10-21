@@ -636,34 +636,6 @@ test('Queue infinity always call in micro task async', async () => {
   expect(calls).toStrictEqual(['after exec', 'exec'])
 })
 
-test('Queue custom error class', async () => {
-  /**
-   * @ignore
-   */
-  class CustomCancelledError extends CancelledError {}
-
-  const queue = new Queue(1)
-  const d = new Deferred()
-
-  queue.exec(async () => {
-    await d.promise
-  })
-
-  let passed = false
-  const [p, cancel] = queue._execCancellableInternal(() => {
-    passed = true
-  }, 0, CustomCancelledError)
-
-  expect(cancel()).toBe(true)
-  try {
-    await p
-    expect(true).toBe(false)
-  } catch (e) {
-    expect(e instanceof CustomCancelledError).toBe(true)
-  }
-  expect(passed).toBe(false)
-})
-
 test('Queue cancel just scheduled', async () => {
   let passed = false
   const queue = new Queue(1)
