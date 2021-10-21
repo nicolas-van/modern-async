@@ -75,7 +75,7 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
           try {
             return iteratee(task.value, task.index, asyncIterable)
           } finally {
-            cancelAllScheduled()
+            finalizedTask()
           }
         } else { // cancelled
           throw new CustomCancelledError()
@@ -105,15 +105,20 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
       schedule(task.value, task.index)
     }
   }
+  let finalizedCount = 0
+  const finalizedTask = (task) => {
+    assert(finalizedCount >= 0, 'invalid finalized count in finalizedTask')
+    finalizedCount += 1
+    cancelAllScheduled()
+  }
 
   let lastIndexReturned = -1
   const results = []
-  let running = 0
+  const fetchedList = []
 
   addToWaitList('next', async () => it.next())
   while (true) {
     const [identifier, state, result] = await raceWaitList()
-    let reschedule = false
     if (identifier === 'next') {
       fetching = false
       if (state === 'rejected') {
@@ -126,39 +131,43 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
         const { value, done } = result
         if (!done) {
           lastIndexFetched += 1
-          schedule(value, lastIndexFetched)
-          running += 1
+          const index = lastIndexFetched
+          fetchedList.push({ index, value })
         } else {
           exhausted = true
         }
       }
     } else { // result
-      running -= 1
       const index = ordered ? identifier : lastIndexReturned + 1
       assert(index > lastIndexReturned, 'invalid index to insert after result')
       results[index - lastIndexReturned - 1] = { state, index, result }
-      reschedule = true
+      assert(finalizedCount >= 1, 'invalid finalized count')
+      finalizedCount -= 1
     }
     while (results.length >= 1 && results[0] !== undefined) {
       const result = results.shift()
       assert(result.index === lastIndexReturned + 1, 'Invalid returned index')
       if (result.state === 'rejected') {
-        cancelAllScheduled() // in case of fetch reject
+        cancelAllScheduled()
         throw result.result
       } else {
         yield result.result
       }
       lastIndexReturned += 1
     }
-    if (!fetching && !exhausted && running < queue.concurrency) {
-      addToWaitList('next', async () => it.next())
-      fetching = true
-    }
     if (exhausted && lastIndexFetched === lastIndexReturned) {
       return
     }
-    if (reschedule) {
+    if (finalizedCount === 0) {
+      while (fetchedList.length >= 1) {
+        const { index, value } = fetchedList.shift()
+        schedule(value, index)
+      }
       rescheduleAllCancelled()
+      if (!fetching && !exhausted) {
+        addToWaitList('next', async () => it.next())
+        fetching = true
+      }
     }
   }
 }
