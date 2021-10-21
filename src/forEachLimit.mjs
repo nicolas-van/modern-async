@@ -1,6 +1,6 @@
 
 import assert from 'nanoassert'
-import asyncGeneratorMap from './asyncGeneratorMap.mjs'
+import mapGenerator from './mapGenerator.mjs'
 import Queue from './Queue.mjs'
 
 /**
@@ -39,7 +39,7 @@ async function forEachLimit (iterable, iteratee, concurrency) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   const queue = new Queue(concurrency)
   // eslint-disable-next-line no-unused-vars
-  for await (const _el of asyncGeneratorMap(iterable, iteratee, queue)) {
+  for await (const _el of mapGenerator(iterable, iteratee, queue)) {
     // do nothing
   }
 }

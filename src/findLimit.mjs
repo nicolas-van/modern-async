@@ -1,5 +1,5 @@
 
-import asyncGeneratorMap from './asyncGeneratorMap.mjs'
+import mapGenerator from './mapGenerator.mjs'
 import assert from 'nanoassert'
 import Queue from './Queue.mjs'
 
@@ -46,7 +46,7 @@ import Queue from './Queue.mjs'
 async function findLimit (iterable, iteratee, concurrency) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   const queue = new Queue(concurrency)
-  for await (const [value, pass] of asyncGeneratorMap(iterable, async (value, index, iterable) => {
+  for await (const [value, pass] of mapGenerator(iterable, async (value, index, iterable) => {
     return [value, await iteratee(value, index, iterable)]
   }, queue)) {
     if (pass) {
