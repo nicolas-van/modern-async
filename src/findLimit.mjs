@@ -1,5 +1,5 @@
 
-import mapGenerator from './mapGenerator.mjs'
+import findInternal from './findInternal.mjs'
 import assert from 'nanoassert'
 import Queue from './Queue.mjs'
 
@@ -46,14 +46,8 @@ import Queue from './Queue.mjs'
 async function findLimit (iterable, iteratee, concurrency) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   const queue = new Queue(concurrency)
-  for await (const [value, pass] of mapGenerator(iterable, async (value, index, iterable) => {
-    return [value, await iteratee(value, index, iterable)]
-  }, queue)) {
-    if (pass) {
-      return value
-    }
-  }
-  return undefined
+  const result = (await findInternal(iterable, iteratee, queue))[1]
+  return result
 }
 
 export default findLimit
