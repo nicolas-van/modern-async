@@ -86,6 +86,7 @@ test('Queue base 2', async () => {
   ds[1].resolve()
   await promises[0]
   await promises[1]
+  await dsi[3].promise
   expect(queue.running).toBe(2)
   expect(queue.pending).toBe(2)
   expect(callCount[0]).toBe(1)
@@ -98,6 +99,7 @@ test('Queue base 2', async () => {
   ds[3].resolve()
   await promises[2]
   await promises[3]
+  await dsi[5].promise
   expect(queue.running).toBe(2)
   expect(queue.pending).toBe(0)
   expect(callCount[0]).toBe(1)

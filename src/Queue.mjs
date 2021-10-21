@@ -186,11 +186,13 @@ class Queue {
       }
       this._running += 1
       task.state = 'running'
-      task.asyncFct().finally(() => {
-        this._running -= 1
-        this._iqueue = this._iqueue.filter((v) => v !== task)
-      }).then(task.deferred.resolve, task.deferred.reject).then(() => {
-        this._scheduleCheckQueue()
+      queueMicrotask(() => {
+        task.asyncFct().finally(() => {
+          this._running -= 1
+          this._iqueue = this._iqueue.filter((v) => v !== task)
+        }).then(task.deferred.resolve, task.deferred.reject).then(() => {
+          this._scheduleCheckQueue()
+        })
       })
     }
   }
