@@ -55,41 +55,44 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
 
   const scheduledList = []
   const schedule = (value, index) => {
-    scheduledList.push({ value, index, cancel: null, cancelled: null })
-    internalSchedule(value, index)
+    const task = {
+      value,
+      index,
+      cancel: null,
+      cancelled: null
+    }
+    scheduledList.push(task)
+    internalSchedule(task)
   }
-  const internalSchedule = (value, index) => {
-    addToWaitList(index, async () => {
+  const internalSchedule = (task) => {
+    addToWaitList(task.index, async () => {
       const [p, cancel] = queue._execCancellableInternal(async () => {
-        const i = scheduledList.findIndex((el) => el.index === index)
+        const i = scheduledList.findIndex((el) => el === task)
         assert(i !== -1, 'Couldn\'t find index in scheduledList for removal')
         scheduledList.splice(i, 1)
         try {
-          return iteratee(value, index, asyncIterable)
+          return iteratee(task.value, task.index, asyncIterable)
         } finally {
           cancelAllScheduled()
         }
       }, 0, CustomCancelledError)
-      const i = scheduledList.findIndex((el) => el.index === index)
-      assert(i !== -1, 'Couldn\'t find index in scheduledList for cancel update')
-      const scheduleObj = scheduledList[i]
-      assert(scheduleObj.cancel === null, 'scheduleObj already has cancel')
-      scheduleObj.cancelled = false
-      scheduleObj.cancel = cancel
+      assert(task.cancel === null, 'task already has cancel')
+      task.cancelled = false
+      task.cancel = cancel
       return p
     })
   }
   const cancelAllScheduled = () => {
-    for (const scheduleObj of scheduledList.filter((el) => !el.cancelled)) {
-      assert(scheduleObj.cancel, 'scheduleObj does not have cancel')
-      assert(scheduleObj.cancel(), 'task was already cancelled')
-      scheduleObj.cancelled = true
+    for (const task of scheduledList.filter((el) => !el.cancelled)) {
+      assert(task.cancel, 'task does not have cancel')
+      assert(task.cancel(), 'task was already cancelled')
+      task.cancelled = true
     }
   }
   const rescheduleAllCancelled = () => {
-    for (const scheduleObj of scheduledList.filter((el) => el.cancelled)) {
-      scheduleObj.cancel = null
-      internalSchedule(scheduleObj.value, scheduleObj.index)
+    for (const task of scheduledList.filter((el) => el.cancelled)) {
+      task.cancel = null
+      internalSchedule(task)
     }
   }
 
