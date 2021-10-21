@@ -651,3 +651,21 @@ test('Queue cancel just scheduled', async () => {
   }
   expect(passed).toBe(false)
 })
+
+test('Queue multiple priorities sync', async () => {
+  const calls = []
+  const queue = new Queue(1)
+  const p0 = queue.exec(() => {
+    calls.push(0)
+  }, 0)
+  const p1 = queue.exec(() => {
+    calls.push(1)
+  }, 1)
+  const p2 = queue.exec(() => {
+    calls.push(2)
+  }, 2)
+  await p0
+  await p1
+  await p2
+  expect(calls).toStrictEqual([2, 1, 0])
+})

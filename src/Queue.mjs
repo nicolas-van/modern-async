@@ -51,6 +51,7 @@ class Queue {
     this._concurrency = concurrency
     this._iqueue = []
     this._running = 0
+    this._checkQueueScheduled = false
   }
 
   /**
@@ -140,19 +141,33 @@ class Queue {
       state: 'pending'
     }
     this._iqueue.splice(i, 0, task)
-    this._checkQueue()
+    this._scheduleCheckQueue()
     return [deferred.promise, () => {
-      if (task.state !== 'pending' && task.state !== 'scheduled') {
+      if (task.state !== 'pending') {
         return false
       } else {
-        task.state = 'cancelled'
         const filtered = this._iqueue.filter((v) => v !== task)
         assert(filtered.length < this._iqueue.length)
         this._iqueue = filtered
+        task.state = 'cancelled'
         deferred.reject(new CancelledError())
         return true
       }
     }]
+  }
+
+  /**
+   * @ignore
+   */
+  _scheduleCheckQueue () {
+    if (this._checkQueueScheduled) {
+      return
+    }
+    this._checkQueueScheduled = true
+    queueMicrotask(() => {
+      this._checkQueueScheduled = false
+      this._checkQueue()
+    })
   }
 
   /**
@@ -169,19 +184,13 @@ class Queue {
       if (task === undefined) {
         return
       }
-      task.state = 'scheduled'
       this._running += 1
-      queueMicrotask(() => {
-        if (task.state === 'cancelled') {
-          return
-        }
-        task.state = 'running'
-        task.asyncFct().finally(() => {
-          this._running -= 1
-          this._iqueue = this._iqueue.filter((v) => v !== task)
-        }).then(task.deferred.resolve, task.deferred.reject).then(() => {
-          this._checkQueue()
-        })
+      task.state = 'running'
+      task.asyncFct().finally(() => {
+        this._running -= 1
+        this._iqueue = this._iqueue.filter((v) => v !== task)
+      }).then(task.deferred.resolve, task.deferred.reject).then(() => {
+        this._scheduleCheckQueue()
       })
     }
   }
@@ -193,8 +202,8 @@ class Queue {
    * @returns {number} The number of pending tasks that were effectively cancelled.
    */
   cancelAllPending () {
-    const toCancel = this._iqueue.filter((task) => task.state === 'pending' || task.state === 'scheduled')
-    this._iqueue = this._iqueue.filter((task) => task.state !== 'pending' && task.state !== 'scheduled')
+    const toCancel = this._iqueue.filter((task) => task.state === 'pending')
+    this._iqueue = this._iqueue.filter((task) => task.state !== 'pending')
     toCancel.forEach((task) => {
       task.deferred.reject(new CancelledError())
     })
