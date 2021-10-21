@@ -73,7 +73,8 @@ async function * asyncGeneratorMap (asyncIterable, iteratee, queue, ordered = tr
           assert(i !== -1, 'Couldn\'t find index in scheduledList for removal')
           scheduledList.splice(i, 1)
           try {
-            return iteratee(task.value, task.index, asyncIterable)
+            const result = await iteratee(task.value, task.index, asyncIterable)
+            return result
           } finally {
             cancelAllScheduled()
           }
