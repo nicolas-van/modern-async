@@ -1,5 +1,5 @@
 
-import findInternal from './findInternal.mjs'
+import findIndexLimit from './findIndexLimit.mjs'
 import Queue from './Queue.mjs'
 import asyncWrap from './asyncWrap.mjs'
 import assert from 'nanoassert'
@@ -46,7 +46,7 @@ import assert from 'nanoassert'
 async function everyLimit (iterable, iteratee, concurrencyOrQueue) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   iteratee = asyncWrap(iteratee)
-  const [index] = await findInternal(iterable, async (value, index, iterable) => {
+  const index = await findIndexLimit(iterable, async (value, index, iterable) => {
     return !(await iteratee(value, index, iterable))
   }, concurrencyOrQueue, false)
   const result = index === -1

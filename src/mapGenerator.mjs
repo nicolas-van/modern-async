@@ -6,16 +6,16 @@ import getQueue from './getQueue.mjs'
 
 /**
  * @ignore
- * @param {*} asyncIterable ignore
+ * @param {*} iterable ignore
  * @param {*} iteratee ignore
  * @param {*} concurrencyOrQueue ignore
  * @param {*} ordered ignore
  * @returns {*} ignore
  */
-async function * mapGenerator (asyncIterable, iteratee, concurrencyOrQueue = Number.POSITIVE_INFINITY, ordered = true) {
+async function * mapGenerator (iterable, iteratee, concurrencyOrQueue = Number.POSITIVE_INFINITY, ordered = true) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   iteratee = asyncWrap(iteratee)
-  const it = asyncGeneratorWrap(asyncIterable)
+  const it = asyncGeneratorWrap(iterable)
   const queue = getQueue(concurrencyOrQueue)
 
   /**
@@ -76,7 +76,7 @@ async function * mapGenerator (asyncIterable, iteratee, concurrencyOrQueue = Num
         const removed = scheduledList.delete(index)
         assert(removed, 'Couldn\'t find index in scheduledList for removal')
 
-        const [state, result] = await iteratee(value, index, asyncIterable)
+        const [state, result] = await iteratee(value, index, iterable)
           .then((r) => ['resolved', r], (e) => ['rejected', e])
 
         insertInResults(index, value, state, result)

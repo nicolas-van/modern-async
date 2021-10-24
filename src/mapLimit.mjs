@@ -1,6 +1,7 @@
 
 import mapGenerator from './mapGenerator.mjs'
 import Queue from './Queue.mjs'
+import toArray from './toArray.mjs'
 
 /**
  * Produces a new collection of values by mapping each value in `iterable` through the `iteratee` function.
@@ -36,11 +37,7 @@ import Queue from './Queue.mjs'
  * })
  */
 async function mapLimit (iterable, iteratee, concurrencyOrQueue) {
-  const results = []
-  for await (const el of mapGenerator(iterable, iteratee, concurrencyOrQueue)) {
-    results.push(el)
-  }
-  return results
+  return await toArray(mapGenerator(iterable, iteratee, concurrencyOrQueue))
 }
 
 export default mapLimit
