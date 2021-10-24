@@ -46,16 +46,10 @@ async function findInternal (iterable, iteratee, concurrencyOrQueue, ordered = t
     waitList.set(identifier, p)
   }
   const raceWaitList = async () => {
-    while (true) {
-      assert(waitList.size >= 1, 'Can not race on empty list')
-      const [identifier, state, result] = await Promise.race([...waitList.values()])
-      const removed = waitList.delete(identifier)
-      assert(removed, 'waitList does not contain identifier')
-      if (state === 'rejected' && result instanceof CustomCancelledError) {
-        continue
-      }
-      return
-    }
+    assert(waitList.size >= 1, 'Can not race on empty list')
+    const [identifier] = await Promise.race([...waitList.values()])
+    const removed = waitList.delete(identifier)
+    assert(removed, 'waitList does not contain identifier')
   }
 
   const scheduledList = new Map()
@@ -131,10 +125,13 @@ async function findInternal (iterable, iteratee, concurrencyOrQueue, ordered = t
   }
 
   const insertInResults = (index, value, state, result) => {
-    const indexForInsert = ordered ? index : (lastIndexHandled + 1 + results.length)
-    assert(indexForInsert - lastIndexHandled - 1 >= 0, 'invalid index to insert')
-    assert(results[indexForInsert - lastIndexHandled - 1] === undefined, 'already inserted result')
-    results[indexForInsert - lastIndexHandled - 1] = { index, value, state, result }
+    if (ordered) {
+      assert(index - lastIndexHandled - 1 >= 0, 'invalid index to insert')
+      assert(results[index - lastIndexHandled - 1] === undefined, 'already inserted result')
+      results[index - lastIndexHandled - 1] = { index, value, state, result }
+    } else {
+      results.push({ index, value, state, result })
+    }
   }
 
   fetch()
