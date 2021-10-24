@@ -30,7 +30,7 @@ async function * mapGenerator (asyncIterable, iteratee, concurrencyOrQueue = Num
   let exhausted = false
   let shouldStop = false
 
-  let lastIndexReturned = -1
+  let lastIndexHandled = -1
   const results = []
 
   const waitList = new Map()
@@ -79,7 +79,7 @@ async function * mapGenerator (asyncIterable, iteratee, concurrencyOrQueue = Num
         const [state, result] = await iteratee(value, index, asyncIterable)
           .then((r) => ['resolved', r], (e) => ['rejected', e])
 
-        insertInResults(index, state, result)
+        insertInResults(index, value, state, result)
         if (state === 'rejected') {
           shouldStop = true
           cancelAllScheduled(ordered ? index : 0)
@@ -124,17 +124,17 @@ async function * mapGenerator (asyncIterable, iteratee, concurrencyOrQueue = Num
         exhausted = true
         lastIndexFetched += 1
         const index = lastIndexFetched
-        insertInResults(index, state, result)
+        insertInResults(index, undefined, state, result)
         cancelAllScheduled(ordered ? index : 0)
       }
     })
   }
 
-  const insertInResults = (index, state, result) => {
-    const indexForInsert = ordered ? index : (lastIndexReturned + 1 + results.length)
-    assert(indexForInsert - lastIndexReturned - 1 >= 0, 'invalid index to insert')
-    assert(results[indexForInsert - lastIndexReturned - 1] === undefined, 'already inserted result')
-    results[indexForInsert - lastIndexReturned - 1] = { index, state, result }
+  const insertInResults = (index, value, state, result) => {
+    const indexForInsert = ordered ? index : (lastIndexHandled + 1 + results.length)
+    assert(indexForInsert - lastIndexHandled - 1 >= 0, 'invalid index to insert')
+    assert(results[indexForInsert - lastIndexHandled - 1] === undefined, 'already inserted result')
+    results[indexForInsert - lastIndexHandled - 1] = { index, value, state, result }
   }
 
   fetch()
@@ -142,14 +142,14 @@ async function * mapGenerator (asyncIterable, iteratee, concurrencyOrQueue = Num
     await raceWaitList()
     while (results.length >= 1 && results[0] !== undefined) {
       const result = results.shift()
-      lastIndexReturned += 1
+      lastIndexHandled += 1
       if (result.state === 'rejected') {
         throw result.result
       } else {
         yield result.result
       }
     }
-    if (exhausted && lastIndexFetched === lastIndexReturned) {
+    if (exhausted && lastIndexFetched === lastIndexHandled) {
       return
     }
     if (hasFetchedValue && !shouldStop) {

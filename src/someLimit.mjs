@@ -1,5 +1,5 @@
 
-import findIndexLimitUnordered from './findIndexLimitUnordered.mjs'
+import findInternal from './findInternal.mjs'
 import Queue from './Queue.mjs'
 
 /**
@@ -41,7 +41,7 @@ import Queue from './Queue.mjs'
  * })
  */
 async function someLimit (iterable, iteratee, concurrencyOrQueue) {
-  const index = await findIndexLimitUnordered(iterable, iteratee, concurrencyOrQueue)
+  const [index] = await findInternal(iterable, iteratee, concurrencyOrQueue, false)
   const result = index !== -1
   return result
 }

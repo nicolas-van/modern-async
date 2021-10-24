@@ -1,5 +1,5 @@
 
-import findIndexLimitUnordered from './findIndexLimitUnordered.mjs'
+import findInternal from './findInternal.mjs'
 import Queue from './Queue.mjs'
 
 /**
@@ -42,9 +42,9 @@ import Queue from './Queue.mjs'
  * })
  */
 async function everyLimit (iterable, iteratee, concurrencyOrQueue) {
-  const index = await findIndexLimitUnordered(iterable, async (value, index, iterable) => {
+  const [index] = await findInternal(iterable, async (value, index, iterable) => {
     return !(await iteratee(value, index, iterable))
-  }, concurrencyOrQueue)
+  }, concurrencyOrQueue, false)
   const result = index === -1
   return result
 }
