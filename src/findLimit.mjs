@@ -5,10 +5,7 @@ import Queue from './Queue.mjs'
 /**
  * Returns the first element of an iterable that passes an asynchronous truth test.
  *
- * The calls to `iteratee` will run in parallel, up to a concurrency limit. This implies that
- * the element found by this function may not be the first element of the iterable able to pass the
- * truth test. It will be the first one for which one of the parallel calls to `iteratee` was able to
- * return a positive result. If you need a sequential alternative use `findSeries()`.
+ * The calls to `iteratee` will run in parallel, up to a concurrency limit.
  *
  * Whenever a result is found, all the remaining tasks will be cancelled as long
  * as they didn't started already. In case of exception in one of the `iteratee` calls the promise
@@ -22,8 +19,10 @@ import Queue from './Queue.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {number | Queue} concurrencyOrQueue The maximun number of times iteratee can be called concurrently or
+ * @param {number | Queue} concurrencyOrQueue The maximum number of times iteratee can be called concurrently or
  * a queue.
+ * @param {boolean} ordered Defaults to true. If true this function will return on the first element in the iterable
+ * order for which `iteratee` returned true. If false it will be the first in time.
  * @returns {Promise} A promise that will be resolved with the first found value or rejected if one of the
  * `iteratee` calls throws an exception before finding a value. If no value is found it will return `undefined`.
  * @example
@@ -37,14 +36,11 @@ import Queue from './Queue.mjs'
  *     await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
  *     return v % 2 === 1
  *   }, 3)
- *   console.log(result) // prints 1, 3 or 5 randomly
- *   // 5 is a potential result in this case even with a concurrency of 3 due to how
- *   // randomness works, and all asynchronous operations are inherently random. The only way to ensure an
- *   // order is to use a concurreny of 1 or to use findSeries() which does the same thing.
+ *   console.log(result) // prints 1
  * })
  */
-async function findLimit (iterable, iteratee, concurrencyOrQueue) {
-  const result = (await findInternal(iterable, iteratee, concurrencyOrQueue))[1]
+async function findLimit (iterable, iteratee, concurrencyOrQueue, ordered = true) {
+  const result = (await findInternal(iterable, iteratee, concurrencyOrQueue, ordered))[1]
   return result
 }
 

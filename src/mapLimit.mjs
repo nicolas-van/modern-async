@@ -16,7 +16,7 @@ import Queue from './Queue.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {number | Queue} concurrencyOrQueue The maximun number of times iteratee can be called concurrently or
+ * @param {number | Queue} concurrencyOrQueue The maximum number of times iteratee can be called concurrently or
  * a queue.
  * @returns {Promise} A promise that will be resolved with an array containing all the mapped value,
  * or will be rejected if any of the calls to `iteratee` throws an exception.

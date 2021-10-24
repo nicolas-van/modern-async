@@ -4,9 +4,7 @@ import findLimit from './findLimit.mjs'
 /**
  * Returns the first element of an iterable that passes an asynchronous truth test.
  *
- * The calls to `iteratee` will run in parallel. Regardless of which function
- * call returns first, this function will always return the first in iterable order able to pass the truth
- * test. Concurrency has no impact on the value that will be returned by this function.
+ * The calls to `iteratee` will run in parallel.
  *
  * In case of exception in one of the `iteratee` calls the promise returned by this function will be
  * rejected with the exception. In the very specific case where a result is found and an
@@ -18,6 +16,8 @@ import findLimit from './findLimit.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
+ * @param {boolean} ordered Defaults to true. If true this function will return on the first element in the iterable
+ * order for which `iteratee` returned true. If false it will be the first in time.
  * @returns {Promise} A promise that will be resolved with the first found value or rejected if one of the
  * `iteratee` calls throws an exception before finding a value. If no value is found it will return `undefined`.
  * @example
@@ -30,11 +30,11 @@ import findLimit from './findLimit.mjs'
  *     await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
  *     return v % 2 === 1
  *   })
- *   console.log(result) // will always print 1
+ *   console.log(result) // prints 1
  * })
  */
-async function find (iterable, iteratee) {
-  return findLimit(iterable, iteratee, Number.POSITIVE_INFINITY)
+async function find (iterable, iteratee, ordered = true) {
+  return findLimit(iterable, iteratee, Number.POSITIVE_INFINITY, ordered)
 }
 
 export default find

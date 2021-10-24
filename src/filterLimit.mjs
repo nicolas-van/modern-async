@@ -19,10 +19,8 @@ import asyncWrap from './asyncWrap.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {number | Queue} concurrencyOrQueue The maximun number of times iteratee can be called concurrently or
+ * @param {number | Queue} concurrencyOrQueue The maximum number of times iteratee can be called concurrently or
  * a queue.
- * @param {boolean} ordered If true the results will be in the same order than the source iterable. If false
- * it will be in the order in time, depending which call to iteratee returns first.
  * @returns {Promise} A promise that will be resolved with an array containing all the values that passed
  * the truth test. This promise will be rejected if any of the `iteratee` calls throws an exception.
  * @example
@@ -40,13 +38,13 @@ import asyncWrap from './asyncWrap.mjs'
  *   // total processing time should be ~ 20ms
  * })
  */
-async function filterLimit (iterable, iteratee, concurrencyOrQueue, ordered = true) {
+async function filterLimit (iterable, iteratee, concurrencyOrQueue) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   iteratee = asyncWrap(iteratee)
   const results = []
   for await (const [value, pass] of mapGenerator(iterable, async (v, i, t) => {
     return [v, await iteratee(v, i, t)]
-  }, concurrencyOrQueue, ordered)) {
+  }, concurrencyOrQueue)) {
     if (pass) {
       results.push(value)
     }

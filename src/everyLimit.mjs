@@ -22,7 +22,7 @@ import assert from 'nanoassert'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {number | Queue} concurrencyOrQueue The maximun number of times iteratee can be called concurrently or
+ * @param {number | Queue} concurrencyOrQueue The maximum number of times iteratee can be called concurrently or
  * a queue.
  * @returns {Promise} A promise that will be resolved to `true` if all values pass the truth test and `false`
  * if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
