@@ -3,6 +3,10 @@ import { expect, test } from '@jest/globals'
 import everySeries from './everySeries.mjs'
 import Deferred from './Deferred.mjs'
 import { range } from 'itertools'
+import delay from './delay.mjs'
+
+// eslint-disable-next-line require-jsdoc
+class TestError extends Error {}
 
 test('everySeries all pass', async () => {
   const callCount = {}
@@ -52,4 +56,25 @@ test('everySeries no all pass', async () => {
   expect(callCount[0]).toBe(1)
   expect(callCount[1]).toBe(1)
   expect(callCount[2]).toBe(0)
+})
+
+test('everySeries error', async () => {
+  const callList = [...range(3)].map(() => 0)
+  const p = everySeries([...range(3)], async (v, i) => {
+    callList[i] += 1
+    if (i === 1) {
+      throw new TestError()
+    }
+    return true
+  })
+  try {
+    await p
+    expect(true).toStrictEqual(false)
+  } catch (e) {
+    expect(e).toBeInstanceOf(TestError)
+  }
+  await delay()
+  expect(callList[0]).toStrictEqual(1)
+  expect(callList[1]).toStrictEqual(1)
+  expect(callList[2]).toStrictEqual(0)
 })
