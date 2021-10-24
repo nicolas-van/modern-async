@@ -2,6 +2,7 @@
 import mapGenerator from './mapGenerator.mjs'
 import assert from 'nanoassert'
 import Queue from './Queue.mjs'
+import asyncWrap from './asyncWrap.mjs'
 
 /**
  * Returns a new array of all the values in iterable which pass an asynchronous truth test.
@@ -41,6 +42,7 @@ import Queue from './Queue.mjs'
  */
 async function filterLimit (iterable, iteratee, concurrencyOrQueue, ordered = true) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
+  iteratee = asyncWrap(iteratee)
   const results = []
   for await (const [value, pass] of mapGenerator(iterable, async (v, i, t) => {
     return [v, await iteratee(v, i, t)]

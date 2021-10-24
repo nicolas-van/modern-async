@@ -1,5 +1,7 @@
 
 import reduce from './reduce.mjs'
+import assert from 'nanoassert'
+import asyncWrap from './asyncWrap.mjs'
 
 /**
  * Performs a reduce operation as defined in the `Array.reduceRight()` method but using an asynchronous
@@ -33,6 +35,8 @@ import reduce from './reduce.mjs'
  * })
  */
 async function reduceRight (iterable, reducer, initial = undefined) {
+  assert(typeof reducer === 'function', 'iteratee must be a function')
+  reducer = asyncWrap(reducer)
   const arr = []
   for await (const el of iterable) {
     arr.push(el)

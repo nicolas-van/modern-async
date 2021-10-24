@@ -1,6 +1,5 @@
 
 import findInternal from './findInternal.mjs'
-import assert from 'nanoassert'
 import Queue from './Queue.mjs'
 
 /**
@@ -45,7 +44,6 @@ import Queue from './Queue.mjs'
  * })
  */
 async function findLimit (iterable, iteratee, concurrencyOrQueue) {
-  assert(typeof iteratee === 'function', 'iteratee must be a function')
   const result = (await findInternal(iterable, iteratee, concurrencyOrQueue))[1]
   return result
 }
