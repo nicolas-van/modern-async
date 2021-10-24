@@ -7,6 +7,9 @@ import Queue from './Queue.mjs'
 import Deferred from './Deferred.mjs'
 import sleep from './sleep'
 
+// eslint-disable-next-line require-jsdoc
+class TestError extends Error {}
+
 test('mapGenerator base', async () => {
   const res = []
   for await (const el of mapGenerator(range(6), async (x) => x * 2, new Queue(1))) {
@@ -129,17 +132,6 @@ test('mapGenerator same queue three levels concurrency 1', async () => {
   })()
   const res = await p
   expect(res).toStrictEqual([0, 8, 16])
-  expect(callList).toStrictEqual([
-    [0, 0],
-    [1, 0],
-    [2, 0],
-    [0, 1],
-    [1, 1],
-    [2, 1],
-    [0, 2],
-    [1, 2],
-    [2, 2]
-  ])
 })
 
 test('mapGenerator same queue three levels concurrency 2', async () => {
@@ -297,64 +289,6 @@ test('mapGenerator same queue three levels busy queue random delays ', async () 
   expect(res).toStrictEqual([...range(100)].map((x) => x * 8))
 })
 
-test('mapGenerator cancel subsequents busy queue', async () => {
-  const findIndexLimit = async (iterable, iteratee, queue) => {
-    for await (const [index, pass] of mapGenerator(iterable, async (value, index, iterable) => {
-      return [index, await iteratee(value, index, iterable)]
-    }, queue)) {
-      if (pass) {
-        return index
-      }
-    }
-    return -1
-  }
-
-  // setup full queue
-  const queue = new Queue(3)
-  const qd = [...range(3)].map(() => new Deferred())
-  for (const i of range(3)) {
-    queue.exec(async () => {
-      await qd[i].promise
-    })
-  }
-
-  const callCount = {}
-  ;[...range(10)].forEach((i) => { callCount[i] = 0 })
-  const d = new Deferred()
-  const ds = [...range(10)].map(() => new Deferred())
-  const p = findIndexLimit([...range(10)], async (v, i) => {
-    callCount[i] += 1
-    ds[i].resolve()
-    await d.promise
-    return v === 1
-  }, queue)
-  await delay()
-  expect(callCount[0]).toBe(0)
-  expect(callCount[1]).toBe(0)
-  expect(callCount[2]).toBe(0)
-  qd[0].resolve()
-  await ds[0].promise
-  expect(callCount[0]).toBe(1)
-  expect(callCount[1]).toBe(0)
-  expect(callCount[2]).toBe(0)
-  d.resolve()
-  const res = await p
-  expect(res).toBe(1)
-  expect(callCount[0]).toBe(1)
-  expect(callCount[1]).toBe(1)
-  expect(callCount[2]).toBe(0)
-  await delay()
-  expect(callCount[0]).toBe(1)
-  expect(callCount[1]).toBe(1)
-  expect(callCount[2]).toBe(0)
-  expect(queue.running).toStrictEqual(2)
-  expect(queue.pending).toStrictEqual(0)
-  queue.cancelAllPending()
-})
-
-// eslint-disable-next-line require-jsdoc
-class TestError extends Error {}
-
 test('mapGenerator fail fetch first', async () => {
   const bd = [...range(2)].map(() => new Deferred())
   const originGen = mapGenerator(range(2), async (x, i) => {
@@ -507,9 +441,7 @@ test('mapGenerator fail fetch first unordered', async () => {
 })
 
 test('mapGenerator fail fetch second unordered', async () => {
-  const bd = [...range(2)].map(() => new Deferred())
   const originGen = mapGenerator(range(2), async (x, i) => {
-    await bd[i].promise
     if (i === 1) {
       throw new TestError()
     } else {
@@ -517,21 +449,22 @@ test('mapGenerator fail fetch second unordered', async () => {
     }
   }, new Queue(2))
 
-  const gen = mapGenerator(originGen, async (x) => {
+  const bd = [...range(2)].map(() => new Deferred())
+  const gen = mapGenerator(originGen, async (x, i) => {
+    await bd[i].promise
     return (x + 1) * 2
   }, new Queue(2), false)
 
-  const p1 = gen.next()
+  const p1 = gen.next().then((r) => ['resolved', r], (e) => ['rejected', e])
 
-  bd[1].resolve()
+  await delay()
+
   bd[0].resolve()
 
-  try {
-    await p1
-    expect(false).toBe(true)
-  } catch (e) {
-    expect(e instanceof TestError).toBe(true)
-  }
+  const [state, result] = await p1
+
+  expect(state).toStrictEqual('rejected')
+  expect(result instanceof TestError).toBe(true)
 })
 
 test('mapGenerator fail process first unordered', async () => {
@@ -587,19 +520,16 @@ test('mapGenerator fail process second unordered', async () => {
   }
 })
 
-test('mapGenerator fail in fetch cancels sheduled tasks', async () => {
+test('mapGenerator unordered fail in fetch cancels sheduled tasks', async () => {
   const originGen = mapGenerator(range(2), async (x, i) => {
     if (i === 1) {
       throw new TestError()
     } else {
       return x
     }
-  }, new Queue(2))
-
-  const queue = new Queue(2)
-  queue.exec(async () => {
-    await new Promise(() => {})
   })
+
+  const queue = new Queue(1)
   const d = new Deferred()
   queue.exec(async () => {
     await d.promise
@@ -610,14 +540,11 @@ test('mapGenerator fail in fetch cancels sheduled tasks', async () => {
     return (x + 1) * 2
   }, queue, false)
 
-  const p1 = gen.next()
+  const p1 = gen.next().then((r) => ['resolved', r], (e) => ['rejected', e])
+  const [state, result] = await p1
+  expect(state).toStrictEqual('rejected')
+  expect(result).toBeInstanceOf(TestError)
 
-  try {
-    await p1
-    expect(false).toBe(true)
-  } catch (e) {
-    expect(e instanceof TestError).toBe(true)
-  }
   d.resolve()
   await delay()
   expect(callList).toStrictEqual([])

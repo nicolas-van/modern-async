@@ -1,5 +1,6 @@
 
 import findIndexLimitUnordered from './findIndexLimitUnordered.mjs'
+import Queue from './Queue.mjs'
 
 /**
  * Returns `true` if all elements of an iterable pass a truth test and `false` otherwise.
@@ -19,7 +20,8 @@ import findIndexLimitUnordered from './findIndexLimitUnordered.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {number} concurrency The number of times iteratee can be called concurrently.
+ * @param {number | Queue} concurrencyOrQueue The maximun number of times iteratee can be called concurrently or
+ * a queue.
  * @returns {Promise} A promise that will be resolved to `true` if all values pass the truth test and `false`
  * if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
  * an exception.
@@ -39,10 +41,10 @@ import findIndexLimitUnordered from './findIndexLimitUnordered.mjs'
  *   // total processing time should be ~ 20ms
  * })
  */
-async function everyLimit (iterable, iteratee, concurrency) {
+async function everyLimit (iterable, iteratee, concurrencyOrQueue) {
   const index = await findIndexLimitUnordered(iterable, async (value, index, iterable) => {
     return !(await iteratee(value, index, iterable))
-  }, concurrency)
+  }, concurrencyOrQueue)
   const result = index === -1
   return result
 }

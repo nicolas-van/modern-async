@@ -1,5 +1,4 @@
 
-import assert from 'nanoassert'
 import mapGenerator from './mapGenerator.mjs'
 import Queue from './Queue.mjs'
 
@@ -17,7 +16,8 @@ import Queue from './Queue.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {number} concurrency The number of times iteratee can be called concurrently.
+ * @param {number | Queue} concurrencyOrQueue The maximun number of times iteratee can be called concurrently or
+ * a queue.
  * @returns {Promise} A promise that will be resolved when all the calls to `iteratee` have been done.
  * This promise will be rejected if any call to `iteratee` throws an exception.
  * @example
@@ -33,13 +33,11 @@ import Queue from './Queue.mjs'
  *   }, 2)
  *   // prints 1, 2 and 3 in a random order (it will always print 1 or 2 before printing 3 due to
  *   // the concurrency limit and the internal scheduling order)
- * })
+ * })²
  */
-async function forEachLimit (iterable, iteratee, concurrency) {
-  assert(typeof iteratee === 'function', 'iteratee must be a function')
-  const queue = new Queue(concurrency)
+async function forEachLimit (iterable, iteratee, concurrencyOrQueue) {
   // eslint-disable-next-line no-unused-vars
-  for await (const _el of mapGenerator(iterable, iteratee, queue)) {
+  for await (const _el of mapGenerator(iterable, iteratee, concurrencyOrQueue)) {
     // do nothing
   }
 }

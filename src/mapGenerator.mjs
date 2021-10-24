@@ -1,124 +1,164 @@
 
 import assert from 'nanoassert'
+import asyncWrap from './asyncWrap.mjs'
 import asyncGeneratorWrap from './asyncGeneratorWrap.mjs'
+import getQueue from './getQueue.mjs'
 
 /**
  * @ignore
  * @param {*} asyncIterable ignore
  * @param {*} iteratee ignore
- * @param {*} queue ignore
+ * @param {*} concurrencyOrQueue ignore
  * @param {*} ordered ignore
  * @returns {*} ignore
  */
-async function * mapGenerator (asyncIterable, iteratee, queue, ordered = true) {
+async function * mapGenerator (asyncIterable, iteratee, concurrencyOrQueue = Number.POSITIVE_INFINITY, ordered = true) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
+  iteratee = asyncWrap(iteratee)
   const it = asyncGeneratorWrap(asyncIterable)
+  const queue = getQueue(concurrencyOrQueue)
+
+  /**
+   * @ignore
+   */
+  class CustomCancelledError extends Error {}
 
   let lastIndexFetched = -1
   let fetching = false
+  let hasFetchedValue = false
+  let fetchedValue = null
   let exhausted = false
-
-  const waitList = new Map()
-  let currentWaitListInternalIdentifier = 0
-  const addToWaitList = (identifier, fct) => {
-    const waitListIdentifier = currentWaitListInternalIdentifier
-    const p = (async () => {
-      try {
-        return [waitListIdentifier, identifier, 'resolved', await fct()]
-      } catch (e) {
-        return [waitListIdentifier, identifier, 'rejected', e]
-      }
-    })()
-    waitList.set(waitListIdentifier, [identifier, p])
-    currentWaitListInternalIdentifier += 1
-  }
-  const raceWaitList = async () => {
-    while (true) {
-      assert(waitList.size >= 1, 'Can not race on empty list')
-      const [waitListIdentifier, identifier, state, result] = await Promise.race([...waitList.values()].map(([k, v]) => v))
-      removeFromWaitList(waitListIdentifier)
-      return [identifier, state, result]
-    }
-  }
-  const removeFromWaitList = (waitListIdentifier) => {
-    waitList.delete(waitListIdentifier)
-  }
-
-  const scheduledList = []
-  const schedule = (value, index) => {
-    const task = {
-      value,
-      index,
-      cancel: null
-    }
-    scheduledList.push(task)
-    addToWaitList(task.index, async () => {
-      const [p, cancel] = queue.execCancellable(async () => {
-        const i = scheduledList.findIndex((el) => el === task)
-        assert(i !== -1, 'Couldn\'t find index in scheduledList for removal')
-        scheduledList.splice(i, 1)
-        return await iteratee(task.value, task.index, asyncIterable)
-      })
-      assert(task.cancel === null, 'task already has cancel')
-      task.cancel = cancel
-      return p
-    })
-  }
-  const cancelAllScheduled = () => {
-    for (const task of scheduledList) {
-      assert(task.cancel, 'task does not have cancel')
-      task.cancel()
-    }
-  }
+  let shouldStop = false
 
   let lastIndexReturned = -1
   const results = []
 
-  addToWaitList('next', async () => it.next())
-  while (true) {
-    const [identifier, state, result] = await raceWaitList()
-    if (identifier === 'next') {
+  const waitList = new Map()
+  const addToWaitList = (identifier, fct) => {
+    const p = (async () => {
+      try {
+        return [identifier, 'resolved', await fct()]
+      } catch (e) {
+        return [identifier, 'rejected', e]
+      }
+    })()
+    assert(!waitList.has('identifier'), 'waitList already contains identifier')
+    waitList.set(identifier, p)
+  }
+  const raceWaitList = async () => {
+    while (true) {
+      assert(waitList.size >= 1, 'Can not race on empty list')
+      const [identifier, state, result] = await Promise.race([...waitList.values()])
+      const removed = waitList.delete(identifier)
+      assert(removed, 'waitList does not contain identifier')
+      if (state === 'rejected' && result instanceof CustomCancelledError) {
+        continue
+      }
+      return
+    }
+  }
+
+  const scheduledList = new Map()
+  const schedule = (index, value) => {
+    const task = {
+      value,
+      index,
+      cancel: null,
+      state: null
+    }
+    scheduledList.set(index, task)
+    addToWaitList(task.index, async () => {
+      const p = queue.exec(async () => {
+        if (task.state === 'cancelled') {
+          throw new CustomCancelledError()
+        }
+        assert(task.state === 'scheduled', 'invalid task state')
+        const removed = scheduledList.delete(index)
+        assert(removed, 'Couldn\'t find index in scheduledList for removal')
+
+        const [state, result] = await iteratee(value, index, asyncIterable)
+          .then((r) => ['resolved', r], (e) => ['rejected', e])
+
+        insertInResults(index, state, result)
+        if (state === 'rejected') {
+          shouldStop = true
+          cancelAllScheduled(ordered ? index : 0)
+        }
+      })
+      assert(task.cancel === null, 'task already has cancel')
+      task.cancel = () => {
+        assert(task.state === 'scheduled', 'task should be scheduled')
+        task.state = 'cancelled'
+      }
+      assert(task.state === null, 'task should have no state')
+      task.state = 'scheduled'
+      return p
+    })
+  }
+  const cancelAllScheduled = (fromIndex) => {
+    for (const index of [...scheduledList.keys()].filter((el) => el >= fromIndex)) {
+      const task = scheduledList.get(index)
+      assert(task.cancel, 'task does not have cancel')
+      task.cancel()
+      const removed = scheduledList.delete(index)
+      assert(removed, 'Couldn\'t find index in scheduledList for removal')
+    }
+  }
+  const fetch = () => {
+    fetching = true
+    addToWaitList('next', async () => {
+      const [state, result] = await it.next().then((r) => ['resolved', r], (e) => ['rejected', e])
       fetching = false
-      if (state === 'rejected') {
-        lastIndexFetched += 1
-        exhausted = true
-        const index = ordered ? lastIndexFetched : lastIndexReturned + 1
-        assert(index - lastIndexReturned - 1 >= 0, 'invalid index to insert after fetching')
-        assert(results[index - lastIndexReturned - 1] === undefined, 'already inserted result after fetching')
-        results[index - lastIndexReturned - 1] = { state, index, result }
-      } else {
+      if (state === 'resolved') {
         const { value, done } = result
         if (!done) {
           lastIndexFetched += 1
-          const index = lastIndexFetched
-          schedule(value, index)
+          assert(fetchedValue === null, 'fetchedValue should be null')
+          fetchedValue = value
+          assert(!hasFetchedValue, 'hasFetchedValue should be false')
+          hasFetchedValue = true
         } else {
           exhausted = true
         }
+      } else {
+        exhausted = true
+        lastIndexFetched += 1
+        const index = lastIndexFetched
+        insertInResults(index, state, result)
+        cancelAllScheduled(ordered ? index : 0)
       }
-    } else { // result
-      const index = ordered ? identifier : lastIndexReturned + 1
-      assert(index - lastIndexReturned - 1 >= 0, 'invalid index to insert after result')
-      assert(results[index - lastIndexReturned - 1] === undefined, 'already inserted result after result')
-      results[index - lastIndexReturned - 1] = { state, index, result }
-    }
+    })
+  }
+
+  const insertInResults = (index, state, result) => {
+    const indexForInsert = ordered ? index : (lastIndexReturned + 1 + results.length)
+    assert(indexForInsert - lastIndexReturned - 1 >= 0, 'invalid index to insert')
+    assert(results[indexForInsert - lastIndexReturned - 1] === undefined, 'already inserted result')
+    results[indexForInsert - lastIndexReturned - 1] = { index, state, result }
+  }
+
+  fetch()
+  while (true) {
+    await raceWaitList()
     while (results.length >= 1 && results[0] !== undefined) {
       const result = results.shift()
-      assert(result.index === lastIndexReturned + 1, 'Invalid returned index')
+      lastIndexReturned += 1
       if (result.state === 'rejected') {
-        cancelAllScheduled()
         throw result.result
       } else {
         yield result.result
       }
-      lastIndexReturned += 1
     }
     if (exhausted && lastIndexFetched === lastIndexReturned) {
       return
     }
-    if (!fetching && !exhausted) {
-      addToWaitList('next', async () => it.next())
-      fetching = true
+    if (hasFetchedValue && !shouldStop) {
+      schedule(lastIndexFetched, fetchedValue)
+      hasFetchedValue = false
+      fetchedValue = null
+    }
+    if (!fetching && !exhausted && !shouldStop) {
+      fetch()
     }
   }
 }

@@ -17,7 +17,8 @@ import Queue from './Queue.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {number} concurrency The number of times `iteratee` can be called concurrently.
+ * @param {number | Queue} concurrencyOrQueue The maximun number of times iteratee can be called concurrently or
+ * a queue.
  * @returns {Promise} A promise that will be resolved with an array containing all the mapped value,
  * or will be rejected if any of the calls to `iteratee` throws an exception.
  * @example
@@ -35,11 +36,10 @@ import Queue from './Queue.mjs'
  *   // total processing time should be ~ 20ms
  * })
  */
-async function mapLimit (iterable, iteratee, concurrency) {
+async function mapLimit (iterable, iteratee, concurrencyOrQueue) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   const results = []
-  const queue = new Queue(concurrency)
-  for await (const el of mapGenerator(iterable, iteratee, queue)) {
+  for await (const el of mapGenerator(iterable, iteratee, concurrencyOrQueue)) {
     results.push(el)
   }
   return results

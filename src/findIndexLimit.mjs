@@ -22,7 +22,8 @@ import Queue from './Queue.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {number} concurrency The number of times iteratee can be called concurrently.
+ * @param {number | Queue} concurrencyOrQueue The maximun number of times iteratee can be called concurrently or
+ * a queue.
  * @returns {Promise} A promise that will be resolved with the index of the first found value or rejected if one of the
  * `iteratee` calls throws an exception before finding a value. If no value is found it will return `-1`.
  * @example
@@ -39,10 +40,9 @@ import Queue from './Queue.mjs'
  *   console.log(result) // will always print 0
  * })
  */
-async function findIndexLimit (iterable, iteratee, concurrency) {
+async function findIndexLimit (iterable, iteratee, concurrencyOrQueue) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
-  const queue = new Queue(concurrency)
-  const result = (await findInternal(iterable, iteratee, queue))[0]
+  const result = (await findInternal(iterable, iteratee, concurrencyOrQueue))[0]
   return result
 }
 
