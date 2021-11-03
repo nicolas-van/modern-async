@@ -35,8 +35,7 @@
     "coverage": "npm run jest-node -- --coverage",
     "lint": "eslint -c .eslintrc.cjs \"src/**/*.mjs\"",
     "jest-node": "NODE_OPTIONS=--experimental-vm-modules jest --config=./jest-node.config.cjs",
-    "docs": "jsdoc -c .jsdoc.json && node dev/docs-collect-version-numbers.cjs",
-    "babel": "babel --ignore \"**/*.test.js\" --out-dir dist/babel --config-file ./babel.config.cjs src"
+    "docs": "jsdoc -c .jsdoc.json && node dev/docs-collect-version-numbers.cjs"
   },
   "repository": {
     "type": "git",
@@ -49,16 +48,9 @@
   },
   "homepage": "https://nicolas-van.github.io/modern-async",
   "devDependencies": {
-    "@babel/cli": "^7.16.0",
-    "@babel/core": "^7.16.0",
-    "@babel/plugin-transform-modules-umd": "^7.16.0",
-    "@babel/preset-env": "^7.16.0",
-    "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.0.6",
-    "babel-jest": "^27.3.1",
     "clean-jsdoc-theme": "^3.2.10",
-    "core-js": "^3.19.1",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-compat": "^3.13.0",
