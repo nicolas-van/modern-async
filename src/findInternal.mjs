@@ -52,8 +52,10 @@ async function findInternal (iterable, iteratee, concurrencyOrQueue, ordered = t
     assert(removed, 'waitList does not contain identifier')
   }
 
+  let scheduledCount = 0
   const scheduledList = new Map()
   const schedule = (index, value) => {
+    scheduledCount += 1
     const task = {
       value,
       index,
@@ -73,6 +75,7 @@ async function findInternal (iterable, iteratee, concurrencyOrQueue, ordered = t
         const [state, result] = await iteratee(value, index, iterable)
           .then((r) => ['resolved', r], (e) => ['rejected', e])
 
+        scheduledCount -= 1
         insertInResults(index, value, state, result)
         if (state === 'rejected' || (state === 'resolved' && result)) {
           shouldStop = true
@@ -154,7 +157,7 @@ async function findInternal (iterable, iteratee, concurrencyOrQueue, ordered = t
       hasFetchedValue = false
       fetchedValue = null
     }
-    if (!fetching && !exhausted && !shouldStop) {
+    if (!fetching && !exhausted && !shouldStop && scheduledCount <= queue.concurrency) {
       fetch()
     }
   }

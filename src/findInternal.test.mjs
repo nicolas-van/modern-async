@@ -6,6 +6,7 @@ import { range } from 'itertools'
 import delay from './delay.mjs'
 import Queue from './Queue.mjs'
 import Deferred from './Deferred.mjs'
+import sleep from './sleep.mjs'
 
 // eslint-disable-next-line require-jsdoc
 class TestError extends Error {}
@@ -52,4 +53,32 @@ test('findInternal fail in fetch unordered', async () => {
   expect(callList[0]).toStrictEqual(0)
   expect(callList[1]).toStrictEqual(0)
   expect(callList[2]).toStrictEqual(0)
+})
+
+test('findInternal infinite sync operator', async () => {
+  let shouldStop = false
+  const infiniteSyncGenerator = function * () {
+    let i = 0
+    while (true) {
+      if (shouldStop) {
+        return
+      }
+      yield i
+      i += 1
+    }
+  }
+  sleep(10).then(() => {
+    shouldStop = true
+  })
+  const callList = []
+  const [index] = await findInternal(infiniteSyncGenerator(), async (v, i) => {
+    callList.push(i)
+    await sleep(1)
+    return false
+  }, 1)
+  expect(index).toStrictEqual(-1)
+  expect(callList.length).toBeGreaterThanOrEqual(3)
+  expect(callList[0]).toStrictEqual(0)
+  expect(callList[1]).toStrictEqual(1)
+  expect(callList[2]).toStrictEqual(2)
 })
