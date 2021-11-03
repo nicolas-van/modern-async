@@ -16,7 +16,7 @@ test('findInternal fail in fetch', async () => {
       throw new TestError()
     }
     return v
-  })
+  }, Number.POSITIVE_INFINITY)
   const callList = [...range(3)].map(() => 0)
   const [state, result] = await findInternal(originGen, async (v, i) => {
     callList[i] += 1
@@ -36,7 +36,7 @@ test('findInternal fail in fetch unordered', async () => {
       throw new TestError()
     }
     return v
-  })
+  }, Number.POSITIVE_INFINITY)
   const queue = new Queue(1)
   const d = new Deferred()
   queue.exec(async () => await d.promise)

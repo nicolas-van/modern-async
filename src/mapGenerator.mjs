@@ -24,7 +24,7 @@ import Queue from './Queue.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {number | Queue} concurrencyOrQueue Defaults to `Number.POSITIVE_INFINITY`. The maximum number of times
+ * @param {number | Queue} concurrencyOrQueue Defaults to `1`. The maximum number of times
  * iteratee can be called concurrently or a queue.
  * @param {boolean} ordered Defaults to `true`. If true the results will be yieled in the same order as in the source
  * iterable, regardless of which calls to iteratee returned first. If false the the results will be yielded as soon
@@ -33,7 +33,7 @@ import Queue from './Queue.mjs'
  * @example
  * TODO
  */
-async function * mapGenerator (iterable, iteratee, concurrencyOrQueue = Number.POSITIVE_INFINITY, ordered = true) {
+async function * mapGenerator (iterable, iteratee, concurrencyOrQueue = 1, ordered = true) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   iteratee = asyncWrap(iteratee)
   const it = asyncIterableWrap(iterable)

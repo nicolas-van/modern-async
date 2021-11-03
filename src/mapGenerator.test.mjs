@@ -216,15 +216,15 @@ test('mapGenerator same queue three levels concurrency 5 random delays', async (
   const gen1 = mapGenerator(range(100), async (x, i) => {
     await sleep(Math.floor(Math.random() * 10))
     return x * 2
-  }, queue, true, 1)
+  }, queue, true)
   const gen2 = mapGenerator(gen1, async (x, i) => {
     await sleep(Math.floor(Math.random() * 10))
     return x * 2
-  }, queue, true, 2)
+  }, queue, true)
   const gen3 = mapGenerator(gen2, async (x, i) => {
     await sleep(Math.floor(Math.random() * 10))
     return x * 2
-  }, queue, true, 3)
+  }, queue, true)
   const p = (async () => {
     const res = []
     for await (const el of gen3) {
@@ -527,7 +527,7 @@ test('mapGenerator unordered fail in fetch cancels sheduled tasks', async () => 
     } else {
       return x
     }
-  })
+  }, Number.POSITIVE_INFINITY)
 
   const queue = new Queue(1)
   const d = new Deferred()
