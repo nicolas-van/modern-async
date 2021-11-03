@@ -157,7 +157,7 @@ async function findInternal (iterable, iteratee, concurrencyOrQueue, ordered) {
       hasFetchedValue = false
       fetchedValue = null
     }
-    if (!fetching && !exhausted && !shouldStop && scheduledCount <= queue.concurrency) {
+    if (!fetching && !exhausted && !shouldStop && scheduledCount < queue.concurrency) {
       fetch()
     }
   }

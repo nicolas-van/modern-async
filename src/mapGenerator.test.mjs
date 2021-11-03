@@ -521,34 +521,51 @@ test('mapGenerator fail process second unordered', async () => {
   }
 })
 
-test('mapGenerator unordered fail in fetch cancels sheduled tasks', async () => {
+test('mapGenerator unordered fail in fetch', async () => {
   const originGen = mapGenerator(range(2), async (x, i) => {
-    if (i === 1) {
-      throw new TestError()
-    } else {
-      return x
-    }
+    throw new TestError()
   }, Number.POSITIVE_INFINITY)
 
-  const queue = new Queue(1)
-  const d = new Deferred()
-  queue.exec(async () => {
-    await d.promise
-  })
   const callList = []
   const gen = mapGenerator(originGen, async (x, i) => {
     callList.push(i)
     return (x + 1) * 2
-  }, queue, false)
+  }, 1, false)
 
   const p1 = gen.next().then((r) => ['resolved', r], (e) => ['rejected', e])
   const [state, result] = await p1
   expect(state).toStrictEqual('rejected')
   expect(result).toBeInstanceOf(TestError)
 
-  d.resolve()
   await delay()
   expect(callList).toStrictEqual([])
+})
+
+test('mapGenerator cancel scheduled busy queue', async () => {
+  const queue = new Queue(100)
+  const d = new Deferred()
+  const waiting = [...range(99)].map(() => {
+    return queue.exec(async () => await d.promise)
+  })
+  const callList = []
+  const gen = mapGenerator(range(100), async (x, i) => {
+    callList.push(i)
+    await sleep(1)
+    if (i === 50) {
+      throw new TestError()
+    }
+    return x
+  }, queue)
+
+  const [state, result] = await toArray(gen).then((r) => ['resolved', r], (e) => ['rejected', e])
+  expect(state).toStrictEqual('rejected')
+  expect(result).toBeInstanceOf(TestError)
+
+  d.resolve()
+  await Promise.all(waiting)
+  await delay()
+
+  expect(callList).toStrictEqual([...range(51)])
 })
 
 test('mapGenerator infinite sync operator', async () => {

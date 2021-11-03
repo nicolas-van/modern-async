@@ -33,26 +33,44 @@ test('findInternal fail in fetch', async () => {
 
 test('findInternal fail in fetch unordered', async () => {
   const originGen = mapGenerator(range(3), async (v, i) => {
-    if (i === 1) {
-      throw new TestError()
-    }
-    return v
+    throw new TestError()
   }, Number.POSITIVE_INFINITY)
-  const queue = new Queue(1)
-  const d = new Deferred()
-  queue.exec(async () => await d.promise)
   const callList = [...range(3)].map(() => 0)
   const [state, result] = await findInternal(originGen, async (v, i) => {
     callList[i] += 1
     return v === 2
-  }, queue, false).then((r) => ['resolved', r], (e) => ['rejected', e])
+  }, 1, false).then((r) => ['resolved', r], (e) => ['rejected', e])
   expect(state).toStrictEqual('rejected')
   expect(result).toBeInstanceOf(TestError)
-  d.resolve()
   await delay()
   expect(callList[0]).toStrictEqual(0)
   expect(callList[1]).toStrictEqual(0)
   expect(callList[2]).toStrictEqual(0)
+})
+
+test('findInternal cancel scheduled busy queue', async () => {
+  const queue = new Queue(100)
+  const d = new Deferred()
+  const waiting = [...range(99)].map(() => {
+    return queue.exec(async () => await d.promise)
+  })
+  const callList = []
+  const [state, result] = await findInternal(range(100), async (x, i) => {
+    callList.push(i)
+    await sleep(1)
+    if (i === 50) {
+      throw new TestError()
+    }
+    return false
+  }, queue).then((r) => ['resolved', r], (e) => ['rejected', e])
+  expect(state).toStrictEqual('rejected')
+  expect(result).toBeInstanceOf(TestError)
+
+  d.resolve()
+  await Promise.all(waiting)
+  await delay()
+
+  expect(callList).toStrictEqual([...range(51)])
 })
 
 test('findInternal infinite sync operator', async () => {

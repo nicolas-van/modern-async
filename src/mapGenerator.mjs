@@ -179,7 +179,7 @@ async function * mapGenerator (iterable, iteratee, concurrencyOrQueue = 1, order
       hasFetchedValue = false
       fetchedValue = null
     }
-    if (!fetching && !exhausted && !shouldStop && scheduledCount <= queue.concurrency) {
+    if (!fetching && !exhausted && !shouldStop && scheduledCount < queue.concurrency) {
       fetch()
     }
   }
