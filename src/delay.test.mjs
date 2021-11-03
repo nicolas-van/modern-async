@@ -1,5 +1,5 @@
 
-import { test } from '@jest/globals'
+import { test, expect } from '@jest/globals'
 import delay from './delay.mjs'
 
 test('delay', async () => {
