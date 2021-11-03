@@ -24,9 +24,9 @@ import Queue from './Queue.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {number | Queue} concurrencyOrQueue The maximum number of times iteratee can be called concurrently or
- * a queue.
- * @param {boolean} ordered Defaults to true. If true the results will be yieled in the same order as in the source
+ * @param {number | Queue} concurrencyOrQueue Defaults to `Number.POSITIVE_INFINITY`. The maximum number of times
+ * iteratee can be called concurrently or a queue.
+ * @param {boolean} ordered Defaults to `true`. If true the results will be yieled in the same order as in the source
  * iterable, regardless of which calls to iteratee returned first. If false the the results will be yielded as soon
  * as a call to iteratee returned.
  * @yields {*} Each element of `iterable` after processing it through `iteratee`.
