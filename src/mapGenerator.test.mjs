@@ -6,6 +6,7 @@ import delay from './delay.mjs'
 import Queue from './Queue.mjs'
 import Deferred from './Deferred.mjs'
 import sleep from './sleep'
+import toArray from './toArray.mjs'
 
 // eslint-disable-next-line require-jsdoc
 class TestError extends Error {}
@@ -576,4 +577,19 @@ test('mapGenerator infinite sync operator', async () => {
   expect(results[0]).toStrictEqual(0)
   expect(results[1]).toStrictEqual(2)
   expect(results[2]).toStrictEqual(4)
+})
+
+test('mapGenerator respect concurrency', async () => {
+  const callList = []
+  const d = new Deferred()
+  const p = toArray(mapGenerator(range(10), async (el, i) => {
+    callList.push(i)
+    await d.promise
+    return el
+  }, 3))
+  await delay()
+  expect(callList).toStrictEqual([0, 1, 2])
+  d.resolve()
+  const result = await p
+  expect(result).toStrictEqual(await toArray(range(10)))
 })

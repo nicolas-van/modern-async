@@ -82,3 +82,18 @@ test('findInternal infinite sync operator', async () => {
   expect(callList[1]).toStrictEqual(1)
   expect(callList[2]).toStrictEqual(2)
 })
+
+test('findInternal respect concurrency', async () => {
+  const callList = []
+  const d = new Deferred()
+  const p = findInternal(range(10), async (el, i) => {
+    callList.push(i)
+    await d.promise
+    return false
+  }, 3)
+  await delay()
+  expect(callList).toStrictEqual([0, 1, 2])
+  d.resolve()
+  const [index] = await p
+  expect(index).toStrictEqual(-1)
+})
