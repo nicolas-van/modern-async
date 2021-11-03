@@ -11,11 +11,11 @@ This library is a modernized alternative to a lot of libraries like [Async.js](h
 
 [See the documentation](https://nicolas-van.github.io/modern-async).
 
-* Exclusively uses async/await and promises in its code, tests and documentation.
+* Exclusively uses async/await, promises and async generators in its code, tests and documentation.
 * Has low bundle size.
 * Has 100% code coverage.
 * Bundled for ESM modules, CommonJS and UMD.
-* Works in node >= 10 and in the vast majority of browsers (very old browser compatibility can be achieved using Babel and shims).
+* Works in node >= 8 and in the vast majority of browsers (very old browser compatibility can be achieved using Babel and shims).
 
 [![Stargazers repo roster for @nicolas-van/modern-async](https://reporoster.com/stars/nicolas-van/modern-async)](https://github.com/nicolas-van/modern-async/stargazers)
 
