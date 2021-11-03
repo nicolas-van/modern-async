@@ -15,11 +15,9 @@ import sleepPreciseCancellable from './sleepPreciseCancellable.mjs'
  * @param {number} amount An amount of time in milliseconds
  * @returns {Promise} A promise that will be resolved after the given amount of time has passed.
  * @example
- * import { sleepPrecise, asyncRoot } from 'modern-async'
+ * import { sleepPrecise } from 'modern-async'
  *
- * asyncRoot(async () => {
- *   await sleepPrecise(100) // will wait 100ms
- * })
+ * await sleepPrecise(100) // will wait 100ms
  */
 async function sleepPrecise (amount) {
   return sleepPreciseCancellable(amount)[0]

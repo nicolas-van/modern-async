@@ -18,17 +18,15 @@ import forEachLimit from './forEachLimit.mjs'
  * @returns {Promise} A promise that will be resolved when all the calls to `iteratee` have been done.
  * This promise will be rejected if any call to `iteratee` throws an exception.
  * @example
- * import { forEachSeries, asyncRoot, sleep } from 'modern-async'
+ * import { forEachSeries, sleep } from 'modern-async'
  *
- * asyncRoot(async () => {
- *   const array = [1, 2, 3]
- *   await forEachSeries(array, async (v) => {
- *     // these calls will be performed sequentially
- *     await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
- *     console.log(v)
- *   })
- *   // prints 1, 2 and 3 in that exact order
+ * const array = [1, 2, 3]
+ * await forEachSeries(array, async (v) => {
+ *   // these calls will be performed sequentially
+ *   await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+ *   console.log(v)
  * })
+ * // prints 1, 2 and 3 in that exact order
  */
 async function forEachSeries (iterable, iteratee) {
   return forEachLimit(iterable, iteratee, 1)

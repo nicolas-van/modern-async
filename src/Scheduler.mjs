@@ -12,30 +12,28 @@ import CancelledError from './CancelledError.mjs'
  * tasks. Notably it can limit the concurrency of asynchronous tasks running in parallel.
  *
  * @example
- * import { Scheduler, asyncRoot, sleep } from 'modern-async'
+ * import { Scheduler, sleep } from 'modern-async'
  *
- * asyncRoot(async () => {
- *   let i = 0
- *   const scheduler = new Scheduler(async () => {
- *     const taskNbr = i
- *     i += 1
- *     console.log(`Starting task ${taskNbr}`)
- *     await sleep(10) // waits 10ms
- *     console.log(`Ending task ${taskNbr}`)
- *   }, 100) // a scheduler that triggers every 100ms
- *   // the default configuration uses a maximum concurrency of 1 and doesn't allow pending
- *   // tasks, which mean that if a task takes more time to complete than the delay it will be skipped
+ * let i = 0
+ * const scheduler = new Scheduler(async () => {
+ *   const taskNbr = i
+ *   i += 1
+ *   console.log(`Starting task ${taskNbr}`)
+ *   await sleep(10) // waits 10ms
+ *   console.log(`Ending task ${taskNbr}`)
+ * }, 100) // a scheduler that triggers every 100ms
+ * // the default configuration uses a maximum concurrency of 1 and doesn't allow pending
+ * // tasks, which mean that if a task takes more time to complete than the delay it will be skipped
  *
- *   scheduler.start() // starts the scheduler
+ * scheduler.start() // starts the scheduler
  *
- *   await sleep(1000) // waits 1s, during that time the task should trigger ~ 9 times
+ * await sleep(1000) // waits 1s, during that time the task should trigger ~ 9 times
  *
- *   scheduler.stop() // stops the scheduler
- *   console.log('Scheduler stopped')
- *   // no "Starting task" console message may appear from here but you could still see a
- *   // "Stopping task" as there could have a task that started before we stopped the
- *   // scheduler
- * })
+ * scheduler.stop() // stops the scheduler
+ * console.log('Scheduler stopped')
+ * // no "Starting task" console message may appear from here but you could still see a
+ * // "Stopping task" as there could have a task that started before we stopped the
+ * // scheduler
  */
 class Scheduler {
   /**

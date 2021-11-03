@@ -25,20 +25,18 @@ import Queue from './Queue.mjs'
  * @returns {Promise} A promise that will be resolved to `true` if at least one value pass the truth test and `false`
  * if none of them do. That promise will be rejected if one of the truth test throws an exception.
  * @example
- * import { someLimit, asyncRoot, sleep } from 'modern-async'
+ * import { someLimit, sleep } from 'modern-async'
  *
- * asyncRoot(async () => {
- *   const array = [1, 2, 3]
+ * const array = [1, 2, 3]
  *
- *   const result = await someLimit(array, async (v) => {
- *     // these calls will be performed in parallel with a maximum of 2
- *     // concurrent calls
- *     await sleep(10) // waits 10ms
- *     return v % 2 === 0
- *   }, 2)
- *   console.log(result) // prints true
- *   // total processing time should be ~ 10ms
- * })
+ * const result = await someLimit(array, async (v) => {
+ *   // these calls will be performed in parallel with a maximum of 2
+ *   // concurrent calls
+ *   await sleep(10) // waits 10ms
+ *   return v % 2 === 0
+ * }, 2)
+ * console.log(result) // prints true
+ * // total processing time should be ~ 10ms
  */
 async function someLimit (iterable, iteratee, concurrencyOrQueue) {
   const index = await findIndexLimit(iterable, iteratee, concurrencyOrQueue, false)

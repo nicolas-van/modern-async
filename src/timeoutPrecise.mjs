@@ -22,24 +22,22 @@ import Deferred from './Deferred.mjs'
  * to `fct`. If `amount` milliseconds pass before the call to `fct` returns or rejects, this promise will
  * be rejected with a `TimeoutError`.
  * @example
- * import { timeoutPrecise, sleep, asyncRoot } from 'modern-async'
+ * import { timeoutPrecise, sleep } from 'modern-async'
  *
- * asyncRoot(async () => {
- *   // the following statement will perform successfully because
- *   // the function will return before the delay
+ * // the following statement will perform successfully because
+ * // the function will return before the delay
+ * await timeoutPrecise(async () => {
+ *   await sleep(10)
+ * }, 100)
+ *
+ * try {
+ *   // the following statement will throw after 10ms
  *   await timeoutPrecise(async () => {
- *     await sleep(10)
- *   }, 100)
- *
- *   try {
- *     // the following statement will throw after 10ms
- *     await timeoutPrecise(async () => {
- *       await sleep(100)
- *     }, 10)
- *   } catch (e) {
- *     console.log(e.name) // prints TimeoutError
- *   }
- * })
+ *     await sleep(100)
+ *   }, 10)
+ * } catch (e) {
+ *   console.log(e.name) // prints TimeoutError
+ * }
  */
 async function timeoutPrecise (fct, amount) {
   const asyncFct = asyncWrap(fct)

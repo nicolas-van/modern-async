@@ -17,19 +17,17 @@ import CancelledError from './CancelledError.mjs'
  *   * `cancel`: The cancel function. It will return a boolean that will be `true` if the promise was effectively cancelled,
  *     `false` otherwise.
  * @example
- * import { sleepCancellable, asyncRoot } from 'modern-async'
+ * import { sleepCancellable } from 'modern-async'
  *
- * asyncRoot(async () => {
- *   const [promise, cancel] = sleepCancellable(100) // schedule to resolve the promise after 100ms
+ * const [promise, cancel] = sleepCancellable(100) // schedule to resolve the promise after 100ms
  *
- *   cancel()
+ * cancel()
  *
- *   try {
- *     await promise
- *   } catch (e) {
- *     console.log(e.name) // prints CancelledError
- *   }
- * })
+ * try {
+ *   await promise
+ * } catch (e) {
+ *   console.log(e.name) // prints CancelledError
+ * }
  */
 function sleepCancellable (amount) {
   assert(typeof amount === 'number', 'amount must be a number')

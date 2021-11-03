@@ -18,17 +18,15 @@ import assert from 'nanoassert'
  * the `delay()` function that will retrigger the operation in a later task of the event loop.
  *
  * @example
- * import { Delayer, asyncRoot } from 'modern-async'
+ * import { Delayer } from 'modern-async'
  *
- * asyncRoot(async () => {
- *   const delayer = new Delayer(10) // a delayer with 10ms trigger time
+ * const delayer = new Delayer(10) // a delayer with 10ms trigger time
  *
- *   // some cpu intensive operation that will run for a long time
- *   for (let i = 0; i < 100000000; i += 1) {
- *     // some code
- *     await delayer.checkDelay()
- *   }
- * })
+ * // some cpu intensive operation that will run for a long time
+ * for (let i = 0; i < 100000000; i += 1) {
+ *   // some code
+ *   await delayer.checkDelay()
+ * }
  */
 class Delayer {
   /**

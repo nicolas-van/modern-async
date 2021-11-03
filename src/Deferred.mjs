@@ -6,17 +6,15 @@
  * internally and can be useful to code other asynchronous helpers.
  *
  * @example
- * import { Deferred, asyncRoot, sleep } from 'modern-async'
+ * import { Deferred, sleep } from 'modern-async'
  *
- * asyncRoot(async () => {
- *   const deferred = new Deferred()
+ * const deferred = new Deferred()
  *
- *   sleep(10).then(() => {
- *     deferred.resolve('test')
- *   })
- *
- *   console.log(await deferred.promise) // will wait 10ms before printing 'test'
+ * sleep(10).then(() => {
+ *   deferred.resolve('test')
  * })
+ *
+ * console.log(await deferred.promise) // will wait 10ms before printing 'test'
  */
 class Deferred {
   /**

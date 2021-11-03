@@ -1,4 +1,5 @@
 
+export { default as asyncIterableWrap } from './asyncIterableWrap.mjs'
 export { default as asyncRoot } from './asyncRoot.mjs'
 export { default as asyncWrap } from './asyncWrap.mjs'
 export { default as CancelledError } from './CancelledError.mjs'

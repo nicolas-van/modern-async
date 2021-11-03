@@ -1,7 +1,7 @@
 
 import assert from 'nanoassert'
 import asyncWrap from './asyncWrap.mjs'
-import asyncGeneratorWrap from './asyncGeneratorWrap.mjs'
+import asyncIterableWrap from './asyncIterableWrap.mjs'
 import getQueue from './getQueue.mjs'
 
 /**
@@ -15,7 +15,7 @@ import getQueue from './getQueue.mjs'
 async function findInternal (iterable, iteratee, concurrencyOrQueue, ordered = true) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   iteratee = asyncWrap(iteratee)
-  const it = asyncGeneratorWrap(iterable)
+  const it = asyncIterableWrap(iterable)
   const queue = getQueue(concurrencyOrQueue)
 
   /**

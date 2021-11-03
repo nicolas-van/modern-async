@@ -1,5 +1,5 @@
 
-import queueMicrotask_ from 'core-js-pure/features/queue-microtask'
+import queueMicrotask_ from 'core-js-pure/features/queue-microtask.js'
 
 /**
  * An alternative to standard `queueMicrotask()` function.

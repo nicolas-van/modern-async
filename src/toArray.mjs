@@ -1,5 +1,5 @@
 
-import asyncGeneratorWrap from './asyncGeneratorWrap.mjs'
+import asyncIterableWrap from './asyncIterableWrap.mjs'
 
 /**
  * @ignore
@@ -7,7 +7,7 @@ import asyncGeneratorWrap from './asyncGeneratorWrap.mjs'
  * @returns {*} ignore
  */
 async function toArray (iterable) {
-  const it = asyncGeneratorWrap(iterable)
+  const it = asyncIterableWrap(iterable)
   const results = []
   for await (const el of it) {
     results.push(el)

@@ -1,8 +1,8 @@
 
 import Deferred from './Deferred.mjs'
 import CancelledError from './CancelledError.mjs'
-import setImmediate from 'core-js-pure/features/set-immediate'
-import clearImmediate from 'core-js-pure/features/clear-immediate'
+import setImmediate from 'core-js-pure/features/set-immediate.js'
+import clearImmediate from 'core-js-pure/features/clear-immediate.js'
 
 /**
  * A function returning a promise that will be resolved in a later tick of the event loop.
@@ -17,17 +17,15 @@ import clearImmediate from 'core-js-pure/features/clear-immediate'
  *   * The cancel function. It will return a boolean that will be true if the promise was effectively cancelled,
  *     false otherwise.
  * @example
- * import { delayCancellable, asyncRoot, CancelledError } from 'modern-async'
+ * import { delayCancellable, CancelledError } from 'modern-async'
  *
- * asyncRoot(async () => {
- *   const [promise, cancel] = delayCancellable()
- *   cancel()
- *   try {
- *     await promise
- *   } catch (e) {
- *     console.log(e instanceof CancelledError) // prints true
- *   }
- * })
+ * const [promise, cancel] = delayCancellable()
+ * cancel()
+ * try {
+ *   await promise
+ * } catch (e) {
+ *   console.log(e instanceof CancelledError) // prints true
+ * }
  */
 function delayCancellable () {
   const deferred = new Deferred()

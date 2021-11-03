@@ -19,19 +19,17 @@ import someLimit from './someLimit.mjs'
  * @returns {Promise} A promise that will be resolved to `true` if at least one value pass the truth test and `false`
  * if none of them do. That promise will be rejected if one of the truth test throws an exception.
  * @example
- * import { some, asyncRoot, sleep } from 'modern-async'
+ * import { some, sleep } from 'modern-async'
  *
- * asyncRoot(async () => {
- *   const array = [1, 2, 3]
+ * const array = [1, 2, 3]
  *
- *   const result = await some(array, async (v) => {
- *     // these calls will be performed in parallel
- *     await sleep(10) // waits 10ms
- *     return v % 2 === 0
- *   })
- *   console.log(result) // prints true
- *   // total processing time should be ~ 10ms
+ * const result = await some(array, async (v) => {
+ *   // these calls will be performed in parallel
+ *   await sleep(10) // waits 10ms
+ *   return v % 2 === 0
  * })
+ * console.log(result) // prints true
+ * // total processing time should be ~ 10ms
  */
 async function some (iterable, iteratee) {
   return someLimit(iterable, iteratee, Number.POSITIVE_INFINITY)

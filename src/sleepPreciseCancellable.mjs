@@ -23,19 +23,17 @@ import Deferred from './Deferred.mjs'
  *   * `cancel`: The cancel function. It will return a boolean that will be `true` if the promise was effectively cancelled,
  *     `false` otherwise.
  * @example
- * import { sleepPreciseCancellable, asyncRoot } from 'modern-async'
+ * import { sleepPreciseCancellable } from 'modern-async'
  *
- * asyncRoot(async () => {
- *   const [promise, cancel] = sleepPreciseCancellable(100) // schedule to resolve the promise after 100ms
+ * const [promise, cancel] = sleepPreciseCancellable(100) // schedule to resolve the promise after 100ms
  *
- *   cancel()
+ * cancel()
  *
- *   try {
- *     await promise
- *   } catch (e) {
- *     console.log(e.name) // prints CancelledError
- *   }
- * })
+ * try {
+ *   await promise
+ * } catch (e) {
+ *   console.log(e.name) // prints CancelledError
+ * }
  */
 function sleepPreciseCancellable (amount) {
   return _innerWaitPreciseCancellable(amount, (ellasped, amount) => {

@@ -20,19 +20,17 @@ import everyLimit from './everyLimit.mjs'
  * if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
  * an exception.
  * @example
- * import { every, asyncRoot, sleep } from 'modern-async'
+ * import { every, sleep } from 'modern-async'
  *
- * asyncRoot(async () => {
- *   const array = [1, 2, 3]
+ * const array = [1, 2, 3]
  *
- *   const result = await every(array, async (v) => {
- *     // these calls will be performed in parallel
- *     await sleep(10) // waits 10ms
- *     return v > 0
- *   })
- *   console.log(result) // prints true
- *   // total processing time should be ~ 10ms
+ * const result = await every(array, async (v) => {
+ *   // these calls will be performed in parallel
+ *   await sleep(10) // waits 10ms
+ *   return v > 0
  * })
+ * console.log(result) // prints true
+ * // total processing time should be ~ 10ms
  */
 async function every (iterable, iteratee) {
   return everyLimit(iterable, iteratee, Number.POSITIVE_INFINITY)

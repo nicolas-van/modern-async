@@ -28,20 +28,18 @@ import assert from 'nanoassert'
  * if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
  * an exception.
  * @example
- * import { everyLimit, asyncRoot, sleep } from 'modern-async'
+ * import { everyLimit, sleep } from 'modern-async'
  *
- * asyncRoot(async () => {
- *   const array = [1, 2, 3]
+ * const array = [1, 2, 3]
  *
- *   const result = await everyLimit(array, async (v) => {
- *     // these calls will be performed in parallel with a maximum of 2
- *     // concurrent calls
- *     await sleep(10) // waits 10ms
- *     return v > 0
- *   }, 2)
- *   console.log(result) // prints true
- *   // total processing time should be ~ 20ms
- * })
+ * const result = await everyLimit(array, async (v) => {
+ *   // these calls will be performed in parallel with a maximum of 2
+ *   // concurrent calls
+ *   await sleep(10) // waits 10ms
+ *   return v > 0
+ * }, 2)
+ * console.log(result) // prints true
+ * // total processing time should be ~ 20ms
  */
 async function everyLimit (iterable, iteratee, concurrencyOrQueue) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')

@@ -3,7 +3,7 @@ import { expect, test } from '@jest/globals'
 import Deferred from './Deferred.mjs'
 import reduce from './reduce.mjs'
 import { range } from 'itertools'
-import asyncGeneratorWrap from './asyncGeneratorWrap.mjs'
+import asyncIterableWrap from './asyncIterableWrap.mjs'
 
 test('reduce base', async () => {
   const arr = [...range(6)]
@@ -94,7 +94,7 @@ test('reduce index', async () => {
 })
 
 test('reduce async generator', async () => {
-  const gen = asyncGeneratorWrap(range(6))
+  const gen = asyncIterableWrap(range(6))
   const d = new Deferred()
   const p = reduce(gen, async (p, v) => {
     await d.promise

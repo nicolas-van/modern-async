@@ -2,7 +2,7 @@
 import { expect, test } from '@jest/globals'
 import reduceRight from './reduceRight.mjs'
 import { range } from 'itertools'
-import asyncGeneratorWrap from './asyncGeneratorWrap.mjs'
+import asyncIterableWrap from './asyncIterableWrap.mjs'
 import Deferred from './Deferred.mjs'
 
 test('reduceRight base', async () => {
@@ -40,7 +40,7 @@ test('reduceRight index', async () => {
 })
 
 test('reduceRight async generator', async () => {
-  const gen = asyncGeneratorWrap(range(6))
+  const gen = asyncIterableWrap(range(6))
   const d = new Deferred()
   const p = reduceRight(gen, async (p, v) => {
     await d.promise
