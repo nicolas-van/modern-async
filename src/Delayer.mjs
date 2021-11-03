@@ -46,7 +46,6 @@ class Delayer {
    * maximum amount of time before a call to `checkDelay()` decide to schedule a new task in the event loop.
    *
    * @member {number}
-   *
    * @returns {number} ignore
    */
   get triggerTime () {
@@ -55,7 +54,6 @@ class Delayer {
 
   /**
    * @ignore
-   *
    * @param {number} triggerTime ignore
    */
   set triggerTime (triggerTime) {

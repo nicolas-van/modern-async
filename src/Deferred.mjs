@@ -33,7 +33,6 @@ class Deferred {
    * (Read-only) The promise.
    *
    * @member {Promise}
-   *
    * @returns {Promise} ignored
    */
   get promise () {
@@ -44,7 +43,6 @@ class Deferred {
    * (Read-only) The resolve function.
    *
    * @member {Function}
-   *
    * @returns {Function} The resolve function
    */
   get resolve () {
@@ -55,7 +53,6 @@ class Deferred {
    * (Read-only) The reject function
    *
    * @member {Function}
-   *
    * @returns {Function} The reject function
    */
   get reject () {

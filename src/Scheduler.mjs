@@ -74,7 +74,6 @@ class Scheduler {
    * (Read-only) The delay between two triggering of the scheduler, in milliseconds.
    *
    * @member {number}
-   *
    * @returns {number} ignore
    */
   get delay () {
@@ -87,7 +86,6 @@ class Scheduler {
    * Defaults to false.
    *
    * @member {boolean}
-   *
    * @returns {boolean} ignore
    */
   get startImmediate () {
@@ -104,7 +102,6 @@ class Scheduler {
    * Defaults to 1.
    *
    * @member {number}
-   *
    * @returns {number} ignore
    */
   get concurrency () {
@@ -130,7 +127,6 @@ class Scheduler {
    * Defaults to 0.
    *
    * @member {number}
-   *
    * @returns {number} ignore
    */
   get maxPending () {
@@ -141,7 +137,6 @@ class Scheduler {
    * (Read-only) Whether or not the scheduler is actually started.
    *
    * @member {boolean}
-   *
    * @returns {boolean} ignore
    */
   get started () {

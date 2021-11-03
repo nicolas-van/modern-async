@@ -47,7 +47,6 @@ export default sleepPreciseCancellable
 
 /**
  * @ignore
- *
  * @param {*} amount ignored
  * @param {*} checkPassed ignored
  * @returns {*} ignored

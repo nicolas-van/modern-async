@@ -9,21 +9,22 @@ module.exports = {
     'plugin:jsdoc/recommended',
     'plugin:compat/recommended'
   ],
-  parserOptions: {
-    ecmaVersion: 2018
-  },
   plugins: [
     'jest',
     'jsdoc'
   ],
   rules: {
     'no-var': 'error',
-    'require-jsdoc': ['error', {
-      require: {
-        ClassDeclaration: true,
-        FunctionDeclaration: true,
-        MethodDefinition: true
-      }}]
+    'require-jsdoc': [
+      'error', {
+        require: {
+          ClassDeclaration: true,
+          FunctionDeclaration: true,
+          MethodDefinition: true
+        }
+      }
+    ],
+    'jsdoc/no-multi-asterisks': 'off'
   },
   globals: {
     Iterable: 'readonly',

@@ -25,9 +25,11 @@ test('reduceRight index', async () => {
   const arr = [...range(6)]
   arr.reduceRight((p, v, i) => {
     expect(i).toBe(v)
+    return v
   })
   arr.reduceRight((p, v, i) => {
     expect(i).toBe(v)
+    return v
   }, 0)
   await reduceRight(arr, async (p, v, i) => {
     expect(i).toBe(v)

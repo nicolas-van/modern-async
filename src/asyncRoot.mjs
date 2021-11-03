@@ -12,7 +12,6 @@ import asyncWrap from './asyncWrap.mjs'
  * @param {Function} fct An asynchronous function to call.
  * @param {Function} errorHandler (Optional) A facultative error handler. This function will receive a single argument:
  * the thrown exception. The default behavior is to output the exception in the console.
- *
  * @example
  * import { asyncRoot } from 'modern-async'
  *

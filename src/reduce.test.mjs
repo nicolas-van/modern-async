@@ -79,9 +79,11 @@ test('reduce index', async () => {
   const arr = [...range(6)]
   arr.reduce((p, v, i) => {
     expect(i).toBe(v)
+    return v
   })
   arr.reduce((p, v, i) => {
     expect(i).toBe(v)
+    return v
   }, 0)
   await reduce(arr, async (p, v, i) => {
     expect(i).toBe(v)

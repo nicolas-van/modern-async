@@ -6,7 +6,6 @@ import asyncWrap from './asyncWrap.mjs'
 
 /**
  * @ignore
- *
  * @param {Iterable | AsyncIterable} iterable An iterable or async iterable object.
  * @param {Function} iteratee A function that will be called with each member of `iterable`. It will receive
  * three arguments:

@@ -58,7 +58,6 @@ class Queue {
    * (Read-only) The concurrency of the queue.
    *
    * @member {number}
-   *
    * @returns {number} ignore
    */
   get concurrency () {
@@ -69,7 +68,6 @@ class Queue {
    * (Read-only) The current number of tasks that are processing.
    *
    * @member {number}
-   *
    * @returns {number} ignore
    */
   get running () {
@@ -80,7 +78,6 @@ class Queue {
    * (Read-only) The number of pending tasks.
    *
    * @member {number}
-   *
    * @returns {number} ignore
    */
   get pending () {
