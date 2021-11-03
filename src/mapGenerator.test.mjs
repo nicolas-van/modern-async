@@ -549,3 +549,31 @@ test('mapGenerator unordered fail in fetch cancels sheduled tasks', async () => 
   await delay()
   expect(callList).toStrictEqual([])
 })
+
+test('mapGenerator infinite sync operator', async () => {
+  let shouldStop = false
+  const infiniteSyncGenerator = function * () {
+    let i = 0
+    while (true) {
+      if (shouldStop) {
+        return
+      }
+      yield i
+      i += 1
+    }
+  }
+  sleep(10).then(() => {
+    shouldStop = true
+  })
+  const results = []
+  for await (const el of mapGenerator(infiniteSyncGenerator(), async (el) => {
+    await sleep(1)
+    return el * 2
+  })) {
+    results.push(el)
+  }
+  expect(results.length).toBeGreaterThanOrEqual(3)
+  expect(results[0]).toStrictEqual(0)
+  expect(results[1]).toStrictEqual(2)
+  expect(results[2]).toStrictEqual(4)
+})

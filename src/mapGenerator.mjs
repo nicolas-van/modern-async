@@ -73,8 +73,10 @@ async function * mapGenerator (iterable, iteratee, concurrencyOrQueue = 1, order
     assert(removed, 'waitList does not contain identifier')
   }
 
+  let scheduledCount = 0
   const scheduledList = new Map()
   const schedule = (index, value) => {
+    scheduledCount += 1
     const task = {
       value,
       index,
@@ -94,6 +96,7 @@ async function * mapGenerator (iterable, iteratee, concurrencyOrQueue = 1, order
         const [state, result] = await iteratee(value, index, iterable)
           .then((r) => ['resolved', r], (e) => ['rejected', e])
 
+        scheduledCount -= 1
         insertInResults(index, value, state, result)
         if (state === 'rejected') {
           shouldStop = true
@@ -175,7 +178,7 @@ async function * mapGenerator (iterable, iteratee, concurrencyOrQueue = 1, order
       hasFetchedValue = false
       fetchedValue = null
     }
-    if (!fetching && !exhausted && !shouldStop) {
+    if (!fetching && !exhausted && !shouldStop && scheduledCount <= queue.concurrency + 1) {
       fetch()
     }
   }
