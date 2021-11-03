@@ -16,7 +16,7 @@ import findLimit from './findLimit.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {boolean} ordered Defaults to true. If true this function will return on the first element in the iterable
+ * @param {boolean} ordered Defaults to `false`. If true this function will return on the first element in the iterable
  * order for which `iteratee` returned true. If false it will be the first in time.
  * @returns {Promise} A promise that will be resolved with the first found value or rejected if one of the
  * `iteratee` calls throws an exception before finding a value. If no value is found it will return `undefined`.
@@ -31,7 +31,7 @@ import findLimit from './findLimit.mjs'
  * })
  * console.log(result) // prints 1
  */
-async function find (iterable, iteratee, ordered = true) {
+async function find (iterable, iteratee, ordered = false) {
   return findLimit(iterable, iteratee, Number.POSITIVE_INFINITY, ordered)
 }
 

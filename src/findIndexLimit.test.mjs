@@ -96,7 +96,7 @@ test('findIndexLimit find first in order', async () => {
       await d2.promise
     }
     return v === 0
-  }, 3)
+  }, 3, true)
   d1.resolve()
   await delay()
   d2.resolve()
@@ -113,7 +113,7 @@ test('findIndexLimit find first in order', async () => {
       await d2.promise
     }
     return v === 0
-  }, 3)
+  }, 3, true)
   d2.resolve()
   await delay()
   d1.resolve()

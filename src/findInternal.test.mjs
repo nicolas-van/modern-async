@@ -22,7 +22,7 @@ test('findInternal fail in fetch', async () => {
   const [state, result] = await findInternal(originGen, async (v, i) => {
     callList[i] += 1
     return v === 2
-  }, 1).then((r) => ['resolved', r], (e) => ['rejected', e])
+  }, 1, true).then((r) => ['resolved', r], (e) => ['rejected', e])
   expect(state).toStrictEqual('rejected')
   expect(result).toBeInstanceOf(TestError)
   await delay()
@@ -75,7 +75,7 @@ test('findInternal infinite sync operator', async () => {
     callList.push(i)
     await sleep(1)
     return false
-  }, 1)
+  }, 1, true)
   expect(index).toStrictEqual(-1)
   expect(callList.length).toBeGreaterThanOrEqual(3)
   expect(callList[0]).toStrictEqual(0)

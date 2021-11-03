@@ -21,7 +21,7 @@ import Queue from './Queue.mjs'
  *   * `iterable`: The iterable on which the operation is being performed.
  * @param {number | Queue} concurrencyOrQueue The maximum number of times iteratee can be called concurrently or
  * a queue.
- * @param {boolean} ordered Defaults to true. If true this function will return on the first element in the iterable
+ * @param {boolean} ordered Defaults to `false`. If true this function will return on the first element in the iterable
  * order for which `iteratee` returned true. If false it will be the first in time.
  * @returns {Promise} A promise that will be resolved with the index of the first found value or rejected if one of the
  * `iteratee` calls throws an exception before finding a value. If no value is found it will return `-1`.
@@ -37,7 +37,7 @@ import Queue from './Queue.mjs'
  * }, 3)
  * console.log(result) // prints 0
  */
-async function findIndexLimit (iterable, iteratee, concurrencyOrQueue, ordered = true) {
+async function findIndexLimit (iterable, iteratee, concurrencyOrQueue, ordered = false) {
   const result = (await findInternal(iterable, iteratee, concurrencyOrQueue, ordered))[0]
   return result
 }

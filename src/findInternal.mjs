@@ -12,7 +12,7 @@ import getQueue from './getQueue.mjs'
  * @param {*} ordered ignore
  * @returns {*} ignore
  */
-async function findInternal (iterable, iteratee, concurrencyOrQueue, ordered = true) {
+async function findInternal (iterable, iteratee, concurrencyOrQueue, ordered) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   iteratee = asyncWrap(iteratee)
   const it = asyncIterableWrap(iterable)
