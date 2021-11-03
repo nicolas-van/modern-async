@@ -34,20 +34,14 @@ Or use [jsDelivr](https://www.jsdelivr.com/package/npm/modern-async) to get the 
 ## Usage
 
 ```javascript
-import { map, asyncRoot, sleep } from 'modern-async'
+import { map, sleep } from 'modern-async'
 
-// or
-
-const { map, asyncRoot, sleep } = require('modern-async')
-
-asyncRoot(async () => {
-  const array = [1, 2, 3]
-  const result = await map(array, async (v) => {
-    await sleep(10)
-    return v * 2
-  })
-  console.log(result)
+const array = [1, 2, 3]
+const result = await map(array, async (v) => {
+  await sleep(10)
+  return v * 2
 })
+console.log(result)
 ```
 
 [See the documentation for the rest](https://nicolas-van.github.io/modern-async).
