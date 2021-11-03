@@ -7,8 +7,9 @@ import asyncWrap from './asyncWrap.mjs'
 /**
  * Produces a an async iterator that will return each value or `iterable` which pass an asynchronous truth test.
  *
- * The iterator will try to consume as fast as possible the values from `iterable` and will performs the call
- * to `iteratee` in a queue. This allows to limit the concurrency of the calls to `iteratee`.
+ * The iterator will perform the calls to `iteratee` in a queue. This allows to limit the concurrency of
+ * the calls to `iteratee`. The iterator will consume values from `iterable` only if slots are available in the
+ * queue.
  *
  * If the returned iterator is not fully consumed it will stop consuming new values from `iterable` and scheduling
  * new calls to `iteratee` in the queue, but already scheduled tasks will still be executed.
