@@ -1,9 +1,9 @@
 
 /**
- * Wraps an iterator or async iterator into an iterator that is guaranted to be async.
+ * Wraps an iterable or async iterable into an iterable that is guaranted to be async.
  *
- * @param {Iterable | AsyncIterable} iterator An iterator or async iterator.
- * @yields {*} The elements returned by the original iterator.
+ * @param {Iterable | AsyncIterable} iterable An iterable or async iterable object.
+ * @yields {*} The elements returned by the original iterable.
  * @example
  * import { asyncIterableWrap } from 'modern-async'
  *
@@ -14,9 +14,9 @@
  *   }
  * }
  *
- * const asyncIterator = asyncIterableWrap(syncGenerator())
+ * const asyncIterable = asyncIterableWrap(syncGenerator())
  *
- * for await (const el of asyncIterator) {
+ * for await (const el of asyncIterable) {
  *   console.log(el)
  * }
  * // will print:
@@ -24,8 +24,8 @@
  * // 1
  * // 2
  */
-async function * asyncIterableWrap (iterator) {
-  for await (const el of iterator) {
+async function * asyncIterableWrap (iterable) {
+  for await (const el of iterable) {
     yield el
   }
 }
