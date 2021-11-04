@@ -12,7 +12,7 @@ import asyncWrap from './asyncWrap.mjs'
  *   * `value`: The current value
  *   * `index`: The current index in the iterable. Will start from 0 if no initial value is provided, 1 otherwise.
  *   * `iterable`: The iterable on which the reduce operation is performed.
- * @param {*} initial The initial value that will be used as accumulator in the first call to
+ * @param {any} [initial] The initial value that will be used as accumulator in the first call to
  *   `reducer`. If omitted the first element of `iterable` will be used as accumulator and `reducer`
  *   will only be called from from the second element of the list (as defined in the `Array.reduce()`
  *   function).

@@ -25,7 +25,7 @@ import assert from 'nanoassert'
  * @param {Queue | number} queueOrConcurrency If a queue is specified it will be used to schedule the calls to
  * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
  * implicitly for the same purpose.
- * @returns {Promise} A promise that will be resolved to `true` if all values pass the truth test and `false`
+ * @returns {Promise<boolean>} A promise that will be resolved to `true` if all values pass the truth test and `false`
  * if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
  * an exception.
  * @example

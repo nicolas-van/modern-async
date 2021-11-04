@@ -22,9 +22,9 @@ import Queue from './Queue.mjs'
  * @param {Queue | number} queueOrConcurrency If a queue is specified it will be used to schedule the calls to
  * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
  * implicitly for the same purpose.
- * @param {boolean} ordered Defaults to `false`. If true this function will return on the first element in the iterable
+ * @param {boolean} [ordered] If true this function will return on the first element in the iterable
  * order for which `iteratee` returned true. If false it will be the first in time.
- * @returns {Promise} A promise that will be resolved with the first found value or rejected if one of the
+ * @returns {Promise<any | undefined>} A promise that will be resolved with the first found value or rejected if one of the
  * `iteratee` calls throws an exception before finding a value. If no value is found it will return `undefined`.
  * @example
  * import { findLimit, sleep } from 'modern-async'

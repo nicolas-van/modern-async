@@ -88,7 +88,7 @@ class Queue {
    *
    * @param {Function} fct An asynchronous functions representing the task. It will be executed when the queue has
    * available slots and its result will be propagated to the promise returned by exec().
-   * @param {number} priority (Optional) The priority of the task. The higher the priority is, the sooner the task will be
+   * @param {number} [priority] The priority of the task. The higher the priority is, the sooner the task will be
    * executed regarding the priority of other pending tasks. Defaults to 0.
    * @returns {Promise} A promise that will be resolved or rejected once the task has completed. Its state will be the same
    * than the promise returned by the call to `fct`.
@@ -107,7 +107,7 @@ class Queue {
    *
    * @param {Function} fct An asynchronous functions representing the task. It will be executed when the queue has
    * available slots and its result will be propagated to the promise returned by exec().
-   * @param {number} priority (Optional) The priority of the task. The higher the priority is, the sooner the task will be
+   * @param {number} [priority] The priority of the task. The higher the priority is, the sooner the task will be
    * executed regarding the priority of other pending tasks. Defaults to 0.
    * @returns {Array} A tuple with two parameters:
    *   * `promise`: A promise that will be resolved or rejected once the task has completed. Its state will be the same

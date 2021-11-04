@@ -7,14 +7,14 @@ import asyncWrap from './asyncWrap.mjs'
  * Performs a reduce operation as defined in the `Array.reduceRight()` method but using an asynchronous
  * function as reducer. The reducer will be called sequentially.
  *
- * @param {Iterable} iterable An iterable object.
+ * @param {Iterable | AsyncIterable} iterable An iterable object.
  * @param {Function} reducer The reducer function. It will be called with four arguments:
  *   * `accumulator`: The last calculated value (or the first value of the iterable if no initial value is provided)
  *   * `value`: The current value
  *   * `index`: The current index in the iterable. Will start from the last index if no initial value is provided,
  *     the last index minus 1 otherwise.
  *   * `iterable`: The iterable on which the reduce operation is performed.
- * @param {*} initial The initial value that will be used as accumulator in the first call to
+ * @param {any} [initial] The initial value that will be used as accumulator in the first call to
  *   reducer. If omitted the first element of `iterable` will be used as accumulator and `reducer`
  *   will only be called from from the second element of the list (as defined in the `Array.reduce()`
  *   function).

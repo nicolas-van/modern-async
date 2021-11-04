@@ -21,7 +21,7 @@ import filterGenerator from './filterGenerator.mjs'
  * @param {Queue | number} queueOrConcurrency If a queue is specified it will be used to schedule the calls to
  * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
  * implicitly for the same purpose.
- * @returns {Promise} A promise that will be resolved with an array containing all the values that passed
+ * @returns {Promise<any[]>} A promise that will be resolved with an array containing all the values that passed
  * the truth test. This promise will be rejected if any of the `iteratee` calls throws an exception.
  * @example
  * import { filterLimit, sleep } from 'modern-async'

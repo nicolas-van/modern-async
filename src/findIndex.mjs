@@ -16,9 +16,9 @@ import findIndexLimit from './findIndexLimit.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {boolean} ordered Defaults to `false`. If true this function will return on the first element in the iterable
+ * @param {boolean} [ordered] If true this function will return on the first element in the iterable
  * order for which `iteratee` returned true. If false it will be the first in time.
- * @returns {Promise} A promise that will be resolved with the index of the first found value or rejected if one of the
+ * @returns {Promise<number>} A promise that will be resolved with the index of the first found value or rejected if one of the
  * `iteratee` calls throws an exception before finding a value. If no value is found it will return `-1`.
  * @example
  * import { findIndex, sleep } from 'modern-async'

@@ -8,7 +8,7 @@ import sleepCancellable from './sleepCancellable.mjs'
  * after the asked time (depending on other tasks running in the event loop) or a few milliseconds before.
  *
  * @param {number} amount An amount of time in milliseconds
- * @returns {Promise} A promise that will be resolved after the given amount of time has passed.
+ * @returns {Promise<void>} A promise that will be resolved after the given amount of time has passed.
  * @example
  * import { sleep } from 'modern-async'
  *

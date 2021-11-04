@@ -14,7 +14,7 @@ import mapLimit from './mapLimit.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @returns {Promise} A promise that will be resolved with an array containing all the mapped value,
+ * @returns {Promise<any[]>} A promise that will be resolved with an array containing all the mapped value,
  * or will be rejected if any of the calls to `iteratee` throws an exception.
  * @example
  * import { map, sleep } from 'modern-async'

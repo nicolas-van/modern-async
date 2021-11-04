@@ -23,13 +23,13 @@ import asyncWrap from './asyncWrap.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {Queue | number} queueOrConcurrency Defaults to `1`. If a queue is specified it will be used to schedule the calls to
+ * @param {Queue | number} [queueOrConcurrency] If a queue is specified it will be used to schedule the calls to
  * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
  * implicitly for the same purpose.
- * @param {boolean} ordered Defaults to `true`. If true the results will be yieled in the same order as in the source
+ * @param {boolean} [ordered] If true the results will be yieled in the same order as in the source
  * iterable, regardless of which calls to iteratee returned first. If false the the results will be yielded as soon
  * as a call to iteratee returned.
- * @yields {*} Each element of `iterable` for which `iteratee` returned `true`.
+ * @yields {any} Each element of `iterable` for which `iteratee` returned `true`.
  * @example
  * TODO
  */

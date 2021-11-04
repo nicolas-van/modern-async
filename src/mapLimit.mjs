@@ -20,7 +20,7 @@ import toArray from './toArray.mjs'
  * @param {Queue | number} queueOrConcurrency If a queue is specified it will be used to schedule the calls to
  * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
  * implicitly for the same purpose.
- * @returns {Promise} A promise that will be resolved with an array containing all the mapped value,
+ * @returns {Promise<any[]>} A promise that will be resolved with an array containing all the mapped value,
  * or will be rejected if any of the calls to `iteratee` throws an exception.
  * @example
  * import { mapLimit, sleep } from 'modern-async'

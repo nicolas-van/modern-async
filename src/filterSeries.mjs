@@ -15,7 +15,7 @@ import filterLimit from './filterLimit.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @returns {Promise} A promise that will be resolved with an array containing all the values that passed
+ * @returns {Promise<any[]>} A promise that will be resolved with an array containing all the values that passed
  * the truth test. This promise will be rejected if any of the `iteratee` calls throws an exception.
  * @example
  * import { filterSeries, sleep } from 'modern-async'

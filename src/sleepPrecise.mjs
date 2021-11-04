@@ -13,7 +13,7 @@ import sleepPreciseCancellable from './sleepPreciseCancellable.mjs'
  * milliseconds before the asked delay.
  *
  * @param {number} amount An amount of time in milliseconds
- * @returns {Promise} A promise that will be resolved after the given amount of time has passed.
+ * @returns {Promise<void>} A promise that will be resolved after the given amount of time has passed.
  * @example
  * import { sleepPrecise } from 'modern-async'
  *

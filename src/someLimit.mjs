@@ -23,7 +23,7 @@ import Queue from './Queue.mjs'
  * @param {Queue | number} queueOrConcurrency If a queue is specified it will be used to schedule the calls to
  * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
  * implicitly for the same purpose.
- * @returns {Promise} A promise that will be resolved to `true` if at least one value pass the truth test and `false`
+ * @returns {Promise<boolean>} A promise that will be resolved to `true` if at least one value pass the truth test and `false`
  * if none of them do. That promise will be rejected if one of the truth test throws an exception.
  * @example
  * import { someLimit, sleep } from 'modern-async'

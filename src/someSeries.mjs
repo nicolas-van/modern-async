@@ -16,7 +16,7 @@ import someLimit from './someLimit.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @returns {Promise} A promise that will be resolved to `true` if at least one value pass the truth test and `false`
+ * @returns {Promise<boolean>} A promise that will be resolved to `true` if at least one value pass the truth test and `false`
  * if none of them do. That promise will be rejected if one of the truth test throws an exception.
  * @example
  * import { someSeries, sleep } from 'modern-async'

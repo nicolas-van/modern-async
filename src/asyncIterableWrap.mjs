@@ -3,7 +3,7 @@
  * Wraps an iterable or async iterable into an iterable that is guaranted to be async.
  *
  * @param {Iterable | AsyncIterable} iterable An iterable or async iterable object.
- * @yields {*} The elements returned by the original iterable.
+ * @yields {any} The elements returned by the original iterable.
  * @example
  * import { asyncIterableWrap } from 'modern-async'
  *

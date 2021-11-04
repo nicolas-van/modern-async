@@ -15,7 +15,7 @@ import findLimit from './findLimit.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @returns {Promise} A promise that will be resolved with the first found value or rejected if one of the
+ * @returns {Promise<any | undefined>} A promise that will be resolved with the first found value or rejected if one of the
  * `iteratee` calls throws an exception before finding a value. If no value is found it will return `undefined`.
  * @example
  * import { findSeries, sleep } from 'modern-async'

@@ -6,7 +6,7 @@ import delayCancellable from './delayCancellable.mjs'
  *
  * This function uses core-js' shim for `setImmediate()` internally.
  *
- * @returns {Promise} A promise that will be resolved on a later tick of the event loop.
+ * @returns {Promise<void>} A promise that will be resolved on a later tick of the event loop.
  * @example
  * import { delay } from 'modern-async'
  *

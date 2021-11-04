@@ -41,7 +41,7 @@ class Scheduler {
    *
    * @param {Function} fct The asynchronous function to call when the scheduler is triggered.
    * @param {number} delay The delay between two triggering of the scheduler, in ms.
-   * @param {object} options (Optional) An object that can contain additional options:
+   * @param {{startImmediate: boolean, concurrency: number, maxPending: number}} [options] An object that can contain additional options:
    *
    *   * `startImmediate`: If true a new task will be triggered as soon as the start() method is called.
    *     Defaults to ´false`.

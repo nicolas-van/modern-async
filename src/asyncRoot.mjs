@@ -8,7 +8,7 @@ import asyncWrap from './asyncWrap.mjs'
  * This function is trivial but useful when you can't use top-level await for compatibility reasons.
  *
  * @param {Function} fct An asynchronous function to call.
- * @param {Function} errorHandler (Optional) A facultative error handler. This function will receive a single argument:
+ * @param {Function} [errorHandler] A facultative error handler. This function will receive a single argument:
  * the thrown exception. The default behavior is to output the exception in the console.
  * @example
  * import { asyncRoot } from 'modern-async'
