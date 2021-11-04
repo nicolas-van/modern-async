@@ -1,9 +1,9 @@
 
 /**
- * Wrap an iterator or async iterator into an iterator that is guaranted to be async.
+ * Wraps an iterator or async iterator into an iterator that is guaranted to be async.
  *
  * @param {Iterable | AsyncIterable} iterator An iterator or async iterator.
- * @yields {*} Any of the elements returned by the original iterator.
+ * @yields {*} The elements returned by the original iterator.
  * @example
  * import { asyncIterableWrap } from 'modern-async'
  *

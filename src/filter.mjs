@@ -2,12 +2,11 @@
 import filterLimit from './filterLimit.mjs'
 
 /**
- * Returns a new array of all the values in iterable which pass an asynchronous truth test.
+ * Returns an array of all the values in `iterable` which pass an asynchronous truth test.
  *
- * The calls to `iteratee` will perform in parallel, but the results array will be in the same order
- * than the original.
+ * The calls to `iteratee` will perform in parallel. The results will be in the same order than in `iterable`.
  *
- * If any of the calls to iteratee throws an exception the returned promise will be rejected.
+ * If any of the calls to `iteratee` throws an exception the returned promise will be rejected.
  *
  * @param {Iterable | AsyncIterable} iterable An iterable or async iterable object.
  * @param {Function} iteratee A function that will be called with each member of `iterable`. It will receive

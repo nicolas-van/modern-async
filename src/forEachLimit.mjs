@@ -5,7 +5,7 @@ import Queue from './Queue.mjs'
 /**
  * Calls a function on each element of iterable.
  *
- * Multiple calls to `iteratee` will be performed in parallel, up to the concurrency limit.
+ * The calls to `iteratee` will be performed in a queue to limit the concurrency of these calls.
  *
  * If any of the calls to iteratee throws an exception the returned promise will be rejected and the remaining
  * pending tasks will be cancelled.
@@ -16,8 +16,9 @@ import Queue from './Queue.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {number | Queue} concurrencyOrQueue The maximum number of times iteratee can be called concurrently or
- * a queue.
+ * @param {Queue | number} queueOrConcurrency If a queue is specified it will be used to schedule the calls to
+ * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
+ * implicitly for the same purpose.
  * @returns {Promise} A promise that will be resolved when all the calls to `iteratee` have been done.
  * This promise will be rejected if any call to `iteratee` throws an exception.
  * @example
@@ -33,9 +34,9 @@ import Queue from './Queue.mjs'
  * // prints 1, 2 and 3 in a random order (it will always print 1 or 2 before printing 3 due to
  * // the concurrency limit and the internal scheduling order)
  */
-async function forEachLimit (iterable, iteratee, concurrencyOrQueue) {
+async function forEachLimit (iterable, iteratee, queueOrConcurrency) {
   // eslint-disable-next-line no-unused-vars
-  for await (const _el of mapGenerator(iterable, iteratee, concurrencyOrQueue)) {
+  for await (const _el of mapGenerator(iterable, iteratee, queueOrConcurrency)) {
     // do nothing
   }
 }

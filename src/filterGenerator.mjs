@@ -7,8 +7,8 @@ import asyncWrap from './asyncWrap.mjs'
 /**
  * Produces a an async iterator that will return each value or `iterable` which pass an asynchronous truth test.
  *
- * The iterator will perform the calls to `iteratee` in a queue. This allows to limit the concurrency of
- * the calls to `iteratee`. The iterator will consume values from `iterable` only if slots are available in the
+ * The iterator will perform the calls to `iteratee` in a queue to limit the concurrency of
+ * these calls. The iterator will consume values from `iterable` only if slots are available in the
  * queue.
  *
  * If the returned iterator is not fully consumed it will stop consuming new values from `iterable` and scheduling
@@ -23,8 +23,9 @@ import asyncWrap from './asyncWrap.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {number | Queue} concurrencyOrQueue Defaults to `1`. The maximum number of times
- * iteratee can be called concurrently or a queue.
+ * @param {Queue | number} queueOrConcurrency Defaults to `1`. If a queue is specified it will be used to schedule the calls to
+ * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
+ * implicitly for the same purpose.
  * @param {boolean} ordered Defaults to `true`. If true the results will be yieled in the same order as in the source
  * iterable, regardless of which calls to iteratee returned first. If false the the results will be yielded as soon
  * as a call to iteratee returned.
@@ -32,12 +33,12 @@ import asyncWrap from './asyncWrap.mjs'
  * @example
  * TODO
  */
-async function * filterGenerator (iterable, iteratee, concurrencyOrQueue = 1, ordered = true) {
+async function * filterGenerator (iterable, iteratee, queueOrConcurrency = 1, ordered = true) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   iteratee = asyncWrap(iteratee)
   for await (const [value, pass] of mapGenerator(iterable, async (v, i, t) => {
     return [v, await iteratee(v, i, t)]
-  }, concurrencyOrQueue, ordered)) {
+  }, queueOrConcurrency, ordered)) {
     if (pass) {
       yield value
     }

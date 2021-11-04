@@ -5,8 +5,8 @@ import Queue from './Queue.mjs'
 /**
  * Returns `true` if at least one element of an iterable pass a truth test and `false` otherwise.
  *
- * The calls to `iteratee` will run in parallel, up to a concurrency limit. If any truth test returns `true`
- * the promise is immediately resolved.
+ * The calls to `iteratee` will be performed in a queue to limit the concurrency of these calls. If any
+ * truth test returns `true` the promise is immediately resolved.
  *
  * Whenever a test returns `true`, all the remaining tasks will be cancelled as long
  * as they didn't started already. In case of exception in one of the `iteratee` calls the promise
@@ -20,8 +20,9 @@ import Queue from './Queue.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {number | Queue} concurrencyOrQueue The maximum number of times iteratee can be called concurrently or
- * a queue.
+ * @param {Queue | number} queueOrConcurrency If a queue is specified it will be used to schedule the calls to
+ * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
+ * implicitly for the same purpose.
  * @returns {Promise} A promise that will be resolved to `true` if at least one value pass the truth test and `false`
  * if none of them do. That promise will be rejected if one of the truth test throws an exception.
  * @example
@@ -38,8 +39,8 @@ import Queue from './Queue.mjs'
  * console.log(result) // prints true
  * // total processing time should be ~ 10ms
  */
-async function someLimit (iterable, iteratee, concurrencyOrQueue) {
-  const index = await findIndexLimit(iterable, iteratee, concurrencyOrQueue, false)
+async function someLimit (iterable, iteratee, queueOrConcurrency) {
+  const index = await findIndexLimit(iterable, iteratee, queueOrConcurrency, false)
   const result = index !== -1
   return result
 }

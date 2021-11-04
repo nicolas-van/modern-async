@@ -3,14 +3,14 @@ import Queue from './Queue.mjs'
 
 /**
  * @ignore
- * @param {*} concurrencyOrQueue ignore
+ * @param {*} queueOrConcurrency ignore
  * @returns {*} ignore
  */
-function getQueue (concurrencyOrQueue) {
-  if (typeof concurrencyOrQueue === 'number') {
-    return new Queue(concurrencyOrQueue)
+function getQueue (queueOrConcurrency) {
+  if (typeof queueOrConcurrency === 'number') {
+    return new Queue(queueOrConcurrency)
   } else {
-    return concurrencyOrQueue
+    return queueOrConcurrency
   }
 }
 
