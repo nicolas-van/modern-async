@@ -1,7 +1,7 @@
 {
   "name": "modern-async",
   "version": "1.1.0",
-  "description": "A modern tooling library for asynchronous operations using async/await and promises",
+  "description": "A modern tooling library for asynchronous operations using async/await, promises and async generators",
   "keywords": [
     "async",
     "await",
@@ -11,7 +11,8 @@
     "util",
     "async/await",
     "queue",
-    "scheduler"
+    "scheduler",
+    "generators"
   ],
   "type": "module",
   "main": "dist/modern-async.cjs",
