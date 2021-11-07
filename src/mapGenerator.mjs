@@ -28,12 +28,27 @@ import Queue from './Queue.mjs'
  * @param {Queue | number} [queueOrConcurrency] If a queue is specified it will be used to schedule the calls to
  * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
  * implicitly for the same purpose.
- * @param {boolean} [ordered] If true the results will be yieled in the same order as in the source
+ * @param {boolean} [ordered] If true the results will be yielded in the same order as in the source
  * iterable, regardless of which calls to iteratee returned first. If false the the results will be yielded as soon
  * as a call to iteratee returned.
  * @yields {any} Each element of `iterable` after processing it through `iteratee`.
  * @example
- * TODO
+ * import {mapGenerator, sleep} from 'modern-async'
+ *
+ * const iterator = function * () {
+ *   for (let i = 0; i < 10000; i += 1) {
+ *     yield i
+ *   }
+ * }
+ * const mapIterator = mapGenerator(iterator(), async (v) => {
+ *   await sleep(1000)
+ *   return v * 2
+ * })
+ * for await (const el of mapIterator) {
+ *   console.log(el)
+ * }
+ * // Will print "0", "2", "4", etc... Only one number will be printed per second.
+ * // Numbers from `iterator` will be consumed progressively
  */
 async function * mapGenerator (iterable, iteratee, queueOrConcurrency = 1, ordered = true) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
