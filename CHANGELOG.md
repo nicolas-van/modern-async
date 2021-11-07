@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.1.0
+
+* Changed most of the functions that took `Iterable` as argument to make them also take an
+  `AsyncIterable`.
+* Changed most of the functions that used a `concurrency` argument to allow them to take a
+  `Queue` instead.
+* Added `ordered` argument to `find`, `findIndex`, `findLimit` and `findIndexLimit`.
+* Added new functions `filterGenerator`, `mapGenerator`, `asyncIterableWrap`, `queueMicrotask`,
+  and `toArray`.
+* Fixed `delay` and `delayCancellable` inconsistencies due to `setTimeout` usage. Now they
+  use corejs' `setTimeout` implementation.
+
 ## 1.0.4
 
 * Fixed bug in `forEachLimit`
