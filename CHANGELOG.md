@@ -11,6 +11,7 @@
   and `toArray`.
 * Fixed `delay` and `delayCancellable` inconsistencies due to `setTimeout` usage. Now they
   use corejs' `setTimeout` implementation.
+* Added Typescript declarations.
 
 ## 1.0.4
 
