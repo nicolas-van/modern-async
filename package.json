@@ -30,7 +30,7 @@
     "dist/*",
     "README.md",
     "LICENSE.md",
-    "tsconfig.json"
+    "*.d.ts"
   ],
   "scripts": {
     "build": "rollup -c rollup.config.js",
