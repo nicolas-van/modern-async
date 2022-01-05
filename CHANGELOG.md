@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+* Fixed issue where the typescript definition file was not exported to npm
+
 ## 1.1.0
 
 * Changed most of the functions that took `Iterable` as argument to make them also take an
