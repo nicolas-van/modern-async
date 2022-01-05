@@ -1,6 +1,6 @@
 {
   "name": "modern-async",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A modern tooling library for asynchronous operations using async/await, promises and async generators",
   "keywords": [
     "async",
