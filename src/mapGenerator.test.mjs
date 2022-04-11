@@ -590,7 +590,7 @@ test('mapGenerator infinite sync operator', async () => {
   })) {
     results.push(el)
   }
-  expect(results.length).toBeGreaterThanOrEqual(3)
+  expect(results.length).toBeGreaterThanOrEqual(1)
   expect(results[0]).toStrictEqual(0)
   expect(results[1]).toStrictEqual(2)
   expect(results[2]).toStrictEqual(4)
