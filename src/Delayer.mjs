@@ -13,9 +13,10 @@ import assert from 'nanoassert'
  *
  * When using Delayer your code should contain frequent calls to `await delayer.checkDelay()`, usually
  * at the end of every loop. `checkDelay()` will check the amount of time that ellasped since the last time
- * your called it. If the amount of time is below the trigger time it returns an already resolved promise
- * and the remaining computation will be able to continue processing in a microtask. If not it will call
- * the `delay()` function that will retrigger the operation in a later task of the event loop.
+ * it triggered a new task in the event loop. If the amount of time is below the trigger time it returns
+ * an already resolved promise and the remaining computation will be able to continue processing in a
+ * microtask. If not it will call the `delay()` function that will retrigger the operation in a later task
+ * of the event loop.
  *
  * @example
  * import { Delayer } from 'modern-async'
