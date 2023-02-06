@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.3
+
+* Fixed Typescript definitions for `reduce()` and `reduceRight()`.
+* Minor adjustments to the documentation.
+
 ## 1.1.1
 
 * Fixed issue where the typescript definition file was not exported to npm
