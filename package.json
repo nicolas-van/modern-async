@@ -53,7 +53,7 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.0.6",
-    "clean-jsdoc-theme": "^4.2.6",
+    "clean-jsdoc-theme": "3.0.3",
     "eslint": "^7.32.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-compat": "^3.13.0",
@@ -65,9 +65,9 @@
     "eslint-plugin-standard": "^4.1.0",
     "itertools": "^1.7.1",
     "jest": "^27.3.1",
-    "jsdoc": "^4.0.2",
+    "jsdoc": "^3.6.7",
     "rollup": "^2.59.0",
-    "semver-sort": "^1.0.0"
+    "semver-sort": "0.0.4"
   },
   "dependencies": {
     "core-js-pure": "^3.19.1",
