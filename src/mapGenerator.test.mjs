@@ -580,16 +580,17 @@ test('mapGenerator infinite sync operator', async () => {
       i += 1
     }
   }
-  sleep(10).then(() => {
-    shouldStop = true
-  })
   const results = []
   for await (const el of mapGenerator(infiniteSyncGenerator(), async (el) => {
     await sleep(1)
+    if (el === 10) {
+      shouldStop = true
+    }
     return el * 2
   })) {
     results.push(el)
   }
+  expect(shouldStop).toStrictEqual(true)
   expect(results.length).toBeGreaterThanOrEqual(1)
   expect(results[0]).toStrictEqual(0)
   expect(results[1]).toStrictEqual(2)
