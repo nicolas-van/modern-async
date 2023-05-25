@@ -19,6 +19,7 @@
   "browser": "src/modern-async.mjs",
   "module": "src/modern-async.mjs",
   "exports": {
+    "types": "./modern-async.d.ts",
     "import": "./src/modern-async.mjs",
     "require": "./dist/modern-async.cjs"
   },
