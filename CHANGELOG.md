@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.4
+
+* Fixed typescript declarations.
+
 ## 1.1.3
 
 * Fixed Typescript definitions for `reduce()` and `reduceRight()`.
