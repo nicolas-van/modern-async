@@ -72,13 +72,16 @@ async function * mapGenerator (iterable, iteratee, queueOrConcurrency = 1, order
   let lastIndexHandled = -1
   const results = []
 
+  let waitListIndex = 0
   const waitList = new Map()
-  const addToWaitList = (identifier, fct) => {
+  const addToWaitList = (fct) => {
+    const identifier = waitListIndex
+    waitListIndex += 1
     const p = (async () => {
       const snapshot = await reflectStatus(fct)
       return [identifier, snapshot]
     })()
-    assert(!waitList.has(identifier), 'waitList already contains identifier')
+    assert(!waitList.has(identifier), 'waitList contains identifier')
     waitList.set(identifier, p)
   }
   const raceWaitList = async () => {
@@ -99,7 +102,7 @@ async function * mapGenerator (iterable, iteratee, queueOrConcurrency = 1, order
       state: null
     }
     scheduledList.set(index, task)
-    addToWaitList(task.index, async () => {
+    addToWaitList(async () => {
       const p = queue.exec(async () => {
         if (task.state === 'cancelled') {
           throw new CustomCancelledError()
@@ -138,7 +141,7 @@ async function * mapGenerator (iterable, iteratee, queueOrConcurrency = 1, order
   }
   const fetch = () => {
     fetching = true
-    addToWaitList('next', async () => {
+    addToWaitList(async () => {
       const snapshot = await reflectStatus(() => it.next())
       fetching = false
       if (snapshot.status === 'fulfilled') {

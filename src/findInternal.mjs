@@ -33,8 +33,11 @@ async function findInternal (iterable, iteratee, queueOrConcurrency, ordered) {
   let lastIndexHandled = -1
   const results = []
 
+  let waitListIndex = 0
   const waitList = new Map()
-  const addToWaitList = (identifier, fct) => {
+  const addToWaitList = (fct) => {
+    const identifier = waitListIndex
+    waitListIndex += 1
     const p = (async () => {
       try {
         return [identifier, 'resolved', await fct()]
@@ -42,7 +45,7 @@ async function findInternal (iterable, iteratee, queueOrConcurrency, ordered) {
         return [identifier, 'rejected', e]
       }
     })()
-    assert(!waitList.has('identifier'), 'waitList already contains identifier')
+    assert(!waitList.has(identifier), 'waitList already contains identifier')
     waitList.set(identifier, p)
   }
   const raceWaitList = async () => {
@@ -63,7 +66,7 @@ async function findInternal (iterable, iteratee, queueOrConcurrency, ordered) {
       state: null
     }
     scheduledList.set(index, task)
-    addToWaitList(task.index, async () => {
+    addToWaitList(async () => {
       const p = queue.exec(async () => {
         if (task.state === 'cancelled') {
           throw new CustomCancelledError()
@@ -103,7 +106,7 @@ async function findInternal (iterable, iteratee, queueOrConcurrency, ordered) {
   }
   const fetch = () => {
     fetching = true
-    addToWaitList('next', async () => {
+    addToWaitList(async () => {
       const [state, result] = await it.next().then((r) => ['resolved', r], (e) => ['rejected', e])
       fetching = false
       if (state === 'resolved') {
