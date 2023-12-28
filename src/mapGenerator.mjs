@@ -5,6 +5,7 @@ import asyncIterableWrap from './asyncIterableWrap.mjs'
 import getQueue from './getQueue.mjs'
 import Queue from './Queue.mjs'
 import reflectStatus from './reflectStatus.mjs'
+import queueMicrotask from './queueMicrotask.mjs'
 
 /**
  * Produces a an async iterator that will return each value or `iterable` after having processed them through
@@ -75,9 +76,10 @@ async function * mapGenerator (iterable, iteratee, queueOrConcurrency = 1, order
   const waitList = new Map()
   const addToWaitList = (identifier, fct) => {
     const p = (async () => {
-      return [identifier, await reflectStatus(fct)]
+      const snapshot = await reflectStatus(fct)
+      return [identifier, snapshot]
     })()
-    assert(!waitList.has('identifier'), 'waitList already contains identifier')
+    assert(!waitList.has(identifier), 'waitList already contains identifier')
     waitList.set(identifier, p)
   }
   const raceWaitList = async () => {
