@@ -85,13 +85,13 @@ test('findInternal infinite sync operator', async () => {
       i += 1
     }
   }
-  sleep(10).then(() => {
-    shouldStop = true
-  })
   const callList = []
   const [index] = await findInternal(infiniteSyncGenerator(), async (v, i) => {
     callList.push(i)
     await sleep(1)
+    if (i === 2) {
+      shouldStop = true
+    }
     return false
   }, 1, true)
   expect(index).toStrictEqual(-1)
