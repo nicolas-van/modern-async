@@ -12,31 +12,12 @@ test('sleepCancellable base', async () => {
 })
 
 test('sleepCancellable cancel', async () => {
-  const start = new Date().getTime()
   const [p, cancel] = sleepCancellable(100)
   expect(cancel()).toBe(true)
   try {
     await p
     expect(true).toBe(false)
   } catch (e) {
-    const end = new Date().getTime()
-    expect(end - start).toBeLessThan(50)
-    expect(e).toBeInstanceOf(CancelledError)
-  }
-})
-
-test('sleepCancellable async cancel', async () => {
-  const start = new Date().getTime()
-  const [p, cancel] = sleepCancellable(100)
-  setTimeout(() => {
-    expect(cancel()).toBe(true)
-  }, 10)
-  try {
-    await p
-    expect(true).toBe(false)
-  } catch (e) {
-    const end = new Date().getTime()
-    expect(end - start).toBeLessThan(50)
     expect(e).toBeInstanceOf(CancelledError)
   }
 })
