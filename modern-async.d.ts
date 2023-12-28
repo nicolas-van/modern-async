@@ -145,18 +145,10 @@ declare module "sleepPrecise" {
     export default sleepPrecise;
     function sleepPrecise(amount: number): Promise<void>;
 }
-declare module "someLimit" {
-    export default someLimit;
-    function someLimit<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency: Queue | number): Promise<boolean>;
-    import Queue from "Queue";
-}
 declare module "some" {
     export default some;
-    function some<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean): Promise<boolean>;
-}
-declare module "someSeries" {
-    export default someSeries;
-    function someSeries<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean): Promise<boolean>;
+    function some<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<boolean>;
+    import Queue from "Queue";
 }
 declare module "TimeoutError" {
     export default TimeoutError;
@@ -203,8 +195,6 @@ declare module "modern-async" {
     export { default as sleepPrecise } from "sleepPrecise";
     export { default as sleepPreciseCancellable } from "sleepPreciseCancellable";
     export { default as some } from "some";
-    export { default as someLimit } from "someLimit";
-    export { default as someSeries } from "someSeries";
     export { default as timeout } from "timeout";
     export { default as TimeoutError } from "TimeoutError";
     export { default as timeoutPrecise } from "timeoutPrecise";
