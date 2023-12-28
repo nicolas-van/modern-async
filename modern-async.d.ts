@@ -81,18 +81,9 @@ declare module "filterGenerator" {
     function filterGenerator<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): AsyncIterable<V>;
     import Queue from "Queue";
 }
-declare module "filterLimit" {
-    export default filterLimit;
-    function filterLimit<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency: Queue | number): Promise<V[]>;
-    import Queue from "Queue";
-}
 declare module "filter" {
     export default filter;
-    function filter<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean): Promise<V[]>;
-}
-declare module "filterSeries" {
-    export default filterSeries;
-    function filterSeries<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean): Promise<V[]>;
+    function filter<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency: Queue | number): Promise<V[]>;
 }
 declare module "findLimit" {
     export default findLimit;
@@ -227,8 +218,6 @@ declare module "modern-async" {
     export { default as every } from "every";
     export { default as filter } from "filter";
     export { default as filterGenerator } from "filterGenerator";
-    export { default as filterLimit } from "filterLimit";
-    export { default as filterSeries } from "filterSeries";
     export { default as find } from "find";
     export { default as findIndex } from "findIndex";
     export { default as findIndexLimit } from "findIndexLimit";
