@@ -3,7 +3,7 @@ import { expect, test } from '@jest/globals'
 import asyncEvery from './asyncEvery.mjs'
 import Deferred from './Deferred.mjs'
 import { range } from 'itertools'
-import delay from './delay.mjs'
+import asyncDelay from './asyncDelay.mjs'
 
 // eslint-disable-next-line require-jsdoc
 class TestError extends Error {}
@@ -118,7 +118,7 @@ test('asyncEvery error', async () => {
   } catch (e) {
     expect(e).toBeInstanceOf(TestError)
   }
-  await delay()
+  await asyncDelay()
   expect(callList[0]).toStrictEqual(1)
   expect(callList[1]).toStrictEqual(1)
   expect(callList[2]).toStrictEqual(0)
@@ -188,7 +188,7 @@ test('asyncEvery infinite concurrency error', async () => {
   } catch (e) {
     expect(e).toBeInstanceOf(TestError)
   }
-  await delay()
+  await asyncDelay()
 })
 
 test('asyncEvery concurrency 1 all pass', async () => {
@@ -256,7 +256,7 @@ test('asyncEvery concurrency 1 error', async () => {
   } catch (e) {
     expect(e).toBeInstanceOf(TestError)
   }
-  await delay()
+  await asyncDelay()
   expect(callList[0]).toStrictEqual(1)
   expect(callList[1]).toStrictEqual(1)
   expect(callList[2]).toStrictEqual(0)

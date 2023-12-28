@@ -1,7 +1,7 @@
 
-import mapGenerator from './mapGenerator.mjs'
+import asyncGeneratorMap from './asyncGeneratorMap.mjs'
 import Queue from './Queue.mjs'
-import toArray from './toArray.mjs'
+import iterableToArray from './iterableToArray.mjs'
 
 /**
  * Produces a new collection of values by mapping each value in `iterable` through the `iteratee` function.
@@ -23,10 +23,10 @@ import toArray from './toArray.mjs'
  * @returns {Promise<any[]>} A promise that will be resolved with an array containing all the mapped value,
  * or will be rejected if any of the calls to `iteratee` throws an exception.
  * @example
- * import { map, sleep } from 'modern-async'
+ * import { asyncMap, sleep } from 'modern-async'
  *
  * const array = [1, 2, 3]
- * const result = await map(array, async (v) => {
+ * const result = await asyncMap(array, async (v) => {
  *   // these calls will be performed in parallel with a maximum of 2
  *   // concurrent calls
  *   await sleep(10) // waits 10ms
@@ -35,8 +35,8 @@ import toArray from './toArray.mjs'
  * console.log(result) // prints [2, 4, 6]
  * // total processing time should be ~ 20ms
  */
-async function map (iterable, iteratee, queueOrConcurrency = 1) {
-  return await toArray(mapGenerator(iterable, iteratee, queueOrConcurrency))
+async function asyncMap (iterable, iteratee, queueOrConcurrency = 1) {
+  return await iterableToArray(asyncGeneratorMap(iterable, iteratee, queueOrConcurrency))
 }
 
-export default map
+export default asyncMap

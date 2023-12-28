@@ -1,13 +1,13 @@
 
 import { expect, test } from '@jest/globals'
-import findIndex from './findIndex.mjs'
+import asyncFindIndex from './asyncFindIndex.mjs'
 import Deferred from './Deferred.mjs'
 import { range } from 'itertools'
-import delay from './delay.mjs'
+import asyncDelay from './asyncDelay.mjs'
 
-test('findIndex compatibility', async () => {
+test('asyncFindIndex compatibility', async () => {
   let d = new Deferred()
-  let p = findIndex([...range(3)], async (v) => {
+  let p = asyncFindIndex([...range(3)], async (v) => {
     await d.promise
     return v === 2
   }, 1)
@@ -15,7 +15,7 @@ test('findIndex compatibility', async () => {
   expect(await p).toBe([...range(3)].findIndex((v) => v === 2))
 
   d = new Deferred()
-  p = findIndex([...range(3)], async (v) => {
+  p = asyncFindIndex([...range(3)], async (v) => {
     await d.promise
     return v === 5
   }, 1)
@@ -23,7 +23,7 @@ test('findIndex compatibility', async () => {
   expect(await p).toBe([...range(3)].findIndex((v) => v === 5))
 
   d = new Deferred()
-  p = findIndex([], async (v) => {
+  p = asyncFindIndex([], async (v) => {
     await d.promise
     return v === 5
   }, 1)
@@ -31,12 +31,12 @@ test('findIndex compatibility', async () => {
   expect(await p).toBe([].findIndex((v) => v === 5))
 })
 
-test('findIndex cancel subsequent', async () => {
+test('asyncFindIndex cancel subsequent', async () => {
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const ds = [...range(3)].map(() => new Deferred())
-  const p = findIndex([...range(3)], async (v, i) => {
+  const p = asyncFindIndex([...range(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -47,7 +47,7 @@ test('findIndex cancel subsequent', async () => {
   expect(callCount[1]).toBe(0)
   expect(callCount[2]).toBe(0)
   d.resolve()
-  await delay()
+  await asyncDelay()
   const res = await p
   expect(res).toBe(0)
   expect(callCount[0]).toBe(1)
@@ -55,12 +55,12 @@ test('findIndex cancel subsequent', async () => {
   expect(callCount[2]).toBe(0)
 })
 
-test('findIndex cancel subsequent 2', async () => {
+test('asyncFindIndex cancel subsequent 2', async () => {
   const callCount = {}
   ;[...range(6)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const ds = [...range(3)].map(() => new Deferred())
-  const p = findIndex([...range(6)], async (v, i) => {
+  const p = asyncFindIndex([...range(6)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -74,7 +74,7 @@ test('findIndex cancel subsequent 2', async () => {
   expect(callCount[4]).toBe(0)
   expect(callCount[5]).toBe(0)
   d.resolve()
-  await delay()
+  await asyncDelay()
   const res = await p
   expect(res === 0 || res === 1).toBe(true)
   expect(callCount[0]).toBe(1)
@@ -85,11 +85,11 @@ test('findIndex cancel subsequent 2', async () => {
   expect(callCount[5]).toBe(0)
 })
 
-test('findIndex find first in order', async () => {
+test('asyncFindIndex find first in order', async () => {
   const arr = [0, 1, 0]
   let d1 = new Deferred()
   let d2 = new Deferred()
-  let p = findIndex(arr, async (v, index) => {
+  let p = asyncFindIndex(arr, async (v, index) => {
     if (index === 0) {
       await d1.promise
     } else {
@@ -98,7 +98,7 @@ test('findIndex find first in order', async () => {
     return v === 0
   }, 3, true)
   d1.resolve()
-  await delay()
+  await asyncDelay()
   d2.resolve()
   let res = await p
   expect(res).toBe(0)
@@ -106,7 +106,7 @@ test('findIndex find first in order', async () => {
 
   d1 = new Deferred()
   d2 = new Deferred()
-  p = findIndex(arr, async (v, index) => {
+  p = asyncFindIndex(arr, async (v, index) => {
     if (index === 0) {
       await d1.promise
     } else {
@@ -115,18 +115,18 @@ test('findIndex find first in order', async () => {
     return v === 0
   }, 3, true)
   d2.resolve()
-  await delay()
+  await asyncDelay()
   d1.resolve()
   res = await p
   expect(res).toBe(0)
   d1.resolve()
 })
 
-test('findIndex error', async () => {
+test('asyncFindIndex error', async () => {
   const arr = [0, 1, 2]
   try {
     const d = new Deferred()
-    const p = findIndex(arr, async (v, index) => {
+    const p = asyncFindIndex(arr, async (v, index) => {
       if (index === 1) {
         throw new Error('test')
       } else {
@@ -142,11 +142,11 @@ test('findIndex error', async () => {
   }
 })
 
-test('findIndex error after completion', async () => {
+test('asyncFindIndex error after completion', async () => {
   const arr = [0, 1]
   const d1 = new Deferred()
   const d2 = new Deferred()
-  const p = findIndex(arr, async (v, index) => {
+  const p = asyncFindIndex(arr, async (v, index) => {
     if (index === 0) {
       await d1.promise
       return true
@@ -161,18 +161,18 @@ test('findIndex error after completion', async () => {
   expect(res).toBe(0)
 })
 
-test('findIndex concurrency', async () => {
+test('asyncFindIndex concurrency', async () => {
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const ds = [...range(3)].map(() => new Deferred())
-  const p = findIndex([...range(10)], async (v, i) => {
+  const p = asyncFindIndex([...range(10)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
     return v === 1
   }, 3)
-  await delay()
+  await asyncDelay()
   expect(callCount[0]).toBe(1)
   expect(callCount[1]).toBe(1)
   expect(callCount[2]).toBe(1)
@@ -181,12 +181,12 @@ test('findIndex concurrency', async () => {
   expect(res).toBe(1)
 })
 
-test('findIndex infinite concurrency', async () => {
+test('asyncFindIndex infinite concurrency', async () => {
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const ds = [...range(3)].map(() => new Deferred())
-  const p = findIndex([...range(3)], async (v, i) => {
+  const p = asyncFindIndex([...range(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -204,12 +204,12 @@ test('findIndex infinite concurrency', async () => {
   expect(callCount[2]).toBe(1)
 })
 
-test('findIndex concurrency 1', async () => {
+test('asyncFindIndex concurrency 1', async () => {
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const ds = [...range(3)].map(() => new Deferred())
-  const p = findIndex([...range(3)], async (v, i) => {
+  const p = asyncFindIndex([...range(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -227,12 +227,12 @@ test('findIndex concurrency 1', async () => {
   expect(callCount[2]).toBe(0)
 })
 
-test('findIndex concurrency 1 ordered', async () => {
+test('asyncFindIndex concurrency 1 ordered', async () => {
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const ds = [...range(3)].map(() => new Deferred())
-  const p = findIndex([...range(3)], async (v, i) => {
+  const p = asyncFindIndex([...range(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     if (i === 0) {
@@ -252,11 +252,11 @@ test('findIndex concurrency 1 ordered', async () => {
   expect(callCount[2]).toBe(0)
 })
 
-test('findIndex concurrency 1 error', async () => {
+test('asyncFindIndex concurrency 1 error', async () => {
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   try {
-    await findIndex([...range(3)], async (v, i) => {
+    await asyncFindIndex([...range(3)], async (v, i) => {
       callCount[i] += 1
       if (i === 0) {
         throw new Error('test')

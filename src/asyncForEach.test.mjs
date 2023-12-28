@@ -1,15 +1,15 @@
 
 import { expect, test } from '@jest/globals'
-import forEach from './forEach.mjs'
+import asyncForEach from './asyncForEach.mjs'
 import Deferred from './Deferred.mjs'
 import { range } from 'itertools'
-import delay from './delay.mjs'
+import asyncDelay from './asyncDelay.mjs'
 
-test('forEach base', async () => {
+test('asyncForEach base', async () => {
   const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
-  await forEach(arr, async (x) => {
+  await asyncForEach(arr, async (x) => {
     called[x] += 1
   }, 2)
   expect(called[0]).toBe(1)
@@ -20,11 +20,11 @@ test('forEach base', async () => {
   expect(called[5]).toBe(1)
 })
 
-test('forEach no async', async () => {
+test('asyncForEach no async', async () => {
   const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
-  await forEach(arr, (x) => {
+  await asyncForEach(arr, (x) => {
     called[x] += 1
   }, 2)
   expect(called[0]).toBe(1)
@@ -35,13 +35,13 @@ test('forEach no async', async () => {
   expect(called[5]).toBe(1)
 })
 
-test('forEach concurrency', async () => {
+test('asyncForEach concurrency', async () => {
   const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   const d = new Deferred()
   const ds = arr.map(() => new Deferred())
-  const p = forEach(arr, async (x) => {
+  const p = asyncForEach(arr, async (x) => {
     called[x] += 1
     ds[x].resolve()
     await d.promise
@@ -53,7 +53,7 @@ test('forEach concurrency', async () => {
   expect(called[3]).toBe(0)
   expect(called[4]).toBe(0)
   expect(called[5]).toBe(0)
-  await delay()
+  await asyncDelay()
   expect(called[0]).toBe(1)
   expect(called[1]).toBe(1)
   expect(called[2]).toBe(0)
@@ -70,11 +70,11 @@ test('forEach concurrency', async () => {
   expect(called[5]).toBe(1)
 })
 
-test('forEach infinite concurrency base', async () => {
+test('asyncForEach infinite concurrency base', async () => {
   const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
-  await forEach(arr, async (x) => {
+  await asyncForEach(arr, async (x) => {
     called[x] += 1
   }, Number.POSITIVE_INFINITY)
   expect(called[0]).toBe(1)
@@ -85,11 +85,11 @@ test('forEach infinite concurrency base', async () => {
   expect(called[5]).toBe(1)
 })
 
-test('forEach infinite concurrency no async', async () => {
+test('asyncForEach infinite concurrency no async', async () => {
   const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
-  await forEach(arr, (x) => {
+  await asyncForEach(arr, (x) => {
     called[x] += 1
   }, Number.POSITIVE_INFINITY)
   expect(called[0]).toBe(1)
@@ -100,13 +100,13 @@ test('forEach infinite concurrency no async', async () => {
   expect(called[5]).toBe(1)
 })
 
-test('forEach infinite concurrency concurrency', async () => {
+test('asyncForEach infinite concurrency concurrency', async () => {
   const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   const d = new Deferred()
   const ds = arr.map(() => new Deferred())
-  const p = forEach(arr, async (x) => {
+  const p = asyncForEach(arr, async (x) => {
     called[x] += 1
     ds[x].resolve()
     await d.promise
@@ -128,11 +128,11 @@ test('forEach infinite concurrency concurrency', async () => {
   expect(called[5]).toBe(1)
 })
 
-test('forEach concurrency 1 base', async () => {
+test('asyncForEach concurrency 1 base', async () => {
   const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
-  await forEach(arr, async (x) => {
+  await asyncForEach(arr, async (x) => {
     called[x] += 1
   })
   expect(called[0]).toBe(1)
@@ -143,11 +143,11 @@ test('forEach concurrency 1 base', async () => {
   expect(called[5]).toBe(1)
 })
 
-test('forEach concurrency 1 no async', async () => {
+test('asyncForEach concurrency 1 no async', async () => {
   const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
-  await forEach(arr, (x) => {
+  await asyncForEach(arr, (x) => {
     called[x] += 1
   })
   expect(called[0]).toBe(1)
@@ -158,13 +158,13 @@ test('forEach concurrency 1 no async', async () => {
   expect(called[5]).toBe(1)
 })
 
-test('forEach concurrency 1 concurrency', async () => {
+test('asyncForEach concurrency 1 concurrency', async () => {
   const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   const d = new Deferred()
   const ds = arr.map(() => new Deferred())
-  const p = forEach(arr, async (x) => {
+  const p = asyncForEach(arr, async (x) => {
     called[x] += 1
     ds[x].resolve()
     await d.promise

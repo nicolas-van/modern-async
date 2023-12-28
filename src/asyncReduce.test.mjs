@@ -1,14 +1,14 @@
 
 import { expect, test } from '@jest/globals'
 import Deferred from './Deferred.mjs'
-import reduce from './reduce.mjs'
+import asyncReduce from './asyncReduce.mjs'
 import { range } from 'itertools'
 import asyncIterableWrap from './asyncIterableWrap.mjs'
 
-test('reduce base', async () => {
+test('asyncReduce base', async () => {
   const arr = [...range(6)]
   const d = new Deferred()
-  const p = reduce(arr, async (p, v) => {
+  const p = asyncReduce(arr, async (p, v) => {
     await d.promise
     return p + v
   }, 0)
@@ -17,10 +17,10 @@ test('reduce base', async () => {
   expect(result).toEqual(arr.reduce((p, v) => p + v), 0)
 })
 
-test('reduce no accumulator', async () => {
+test('asyncReduce no accumulator', async () => {
   const arr = [...range(6)]
   const d = new Deferred()
-  const p = reduce(arr, async (p, v) => {
+  const p = asyncReduce(arr, async (p, v) => {
     await d.promise
     return p + v
   })
@@ -29,17 +29,17 @@ test('reduce no accumulator', async () => {
   expect(result).toEqual(arr.reduce((p, v) => p + v))
 })
 
-test('reduce no async', async () => {
+test('asyncReduce no async', async () => {
   const arr = [...range(6)]
-  const result = await reduce(arr, (p, v) => {
+  const result = await asyncReduce(arr, (p, v) => {
     return p + v
   }, 0)
   expect(result).toEqual(arr.reduce((p, v) => p + v), 0)
 })
 
-test('reduce no async exception', async () => {
+test('asyncReduce no async exception', async () => {
   const arr = [...range(6)]
-  const p = reduce(arr, (p, v) => {
+  const p = asyncReduce(arr, (p, v) => {
     throw new Error('test')
   }, 0)
   try {
@@ -50,32 +50,32 @@ test('reduce no async exception', async () => {
   }
 })
 
-test('reduce one', async () => {
+test('asyncReduce one', async () => {
   const arr = [1]
-  const result = await reduce(arr, (p, v) => p + v)
+  const result = await asyncReduce(arr, (p, v) => p + v)
   expect(result).toEqual(arr.reduce((p, v) => p + v))
 })
 
-test('reduce no args', async () => {
+test('asyncReduce no args', async () => {
   const arr = []
   try {
-    await reduce(arr, (p, v) => p + v)
+    await asyncReduce(arr, (p, v) => p + v)
     expect(true).toBe(false)
   } catch (e) {
     expect(e).toBeInstanceOf(TypeError)
   }
 })
 
-test('reduce iterable', async () => {
+test('asyncReduce iterable', async () => {
   const arr = [...range(6)]
-  const result = await reduce(arr, async (p, v, index, iterable) => {
+  const result = await asyncReduce(arr, async (p, v, index, iterable) => {
     expect(iterable).toBe(arr)
     return p + v
   })
   expect(result).toEqual(arr.reduce((p, v) => p + v))
 })
 
-test('reduce index', async () => {
+test('asyncReduce index', async () => {
   const arr = [...range(6)]
   arr.reduce((p, v, i) => {
     expect(i).toBe(v)
@@ -85,18 +85,18 @@ test('reduce index', async () => {
     expect(i).toBe(v)
     return v
   }, 0)
-  await reduce(arr, async (p, v, i) => {
+  await asyncReduce(arr, async (p, v, i) => {
     expect(i).toBe(v)
   })
-  await reduce(arr, async (p, v, i) => {
+  await asyncReduce(arr, async (p, v, i) => {
     expect(i).toBe(v)
   }, 0)
 })
 
-test('reduce async generator', async () => {
+test('asyncReduce async generator', async () => {
   const gen = asyncIterableWrap(range(6))
   const d = new Deferred()
-  const p = reduce(gen, async (p, v) => {
+  const p = asyncReduce(gen, async (p, v) => {
     await d.promise
     return p + v
   }, 0)

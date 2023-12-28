@@ -4,7 +4,7 @@ import Queue from './Queue.mjs'
 import Deferred from './Deferred.mjs'
 import CancelledError from './CancelledError.mjs'
 import { range } from 'itertools'
-import delay from './delay.mjs'
+import asyncDelay from './asyncDelay.mjs'
 
 test('Queue base 1', async () => {
   const queue = new Queue(1)
@@ -565,7 +565,7 @@ test('Queue concurrency 1 priority', async () => {
 })
 
 test('Queue all resolve in micro tasks', async () => {
-  const del = delay()
+  const del = asyncDelay()
   const queue = new Queue(1)
   const ps = []
   ps.push(queue.exec(async () => {}))
@@ -580,7 +580,7 @@ test('Queue all resolve in micro tasks', async () => {
 })
 
 test('Queue infinity all resolve in micro tasks', async () => {
-  const del = delay()
+  const del = asyncDelay()
   const queue = new Queue(Number.POSITIVE_INFINITY)
   const ps = []
   ps.push(queue.exec(async () => {}))

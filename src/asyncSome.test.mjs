@@ -1,78 +1,78 @@
 
 import { expect, test } from '@jest/globals'
-import some from './some.mjs'
+import asyncSome from './asyncSome.mjs'
 import { range } from 'itertools'
 import Deferred from './Deferred.mjs'
 
-test('some compatibility', async () => {
+test('asyncSome compatibility', async () => {
   const p = Promise.resolve()
-  let res = await some([...range(3)], async (v) => {
+  let res = await asyncSome([...range(3)], async (v) => {
     await p
     return true
   }, 1)
   expect(res).toBe([...range(3)].some((v) => true))
 
-  res = await some([...range(3)], async (v) => {
+  res = await asyncSome([...range(3)], async (v) => {
     await p
     return v !== 2
   }, 1)
   expect(res).toBe([...range(3)].some((v) => v !== 2))
 
-  res = await some([...range(3)], async (v) => {
+  res = await asyncSome([...range(3)], async (v) => {
     await p
     return false
   }, 1)
   expect(res).toBe([...range(3)].some((v) => false))
 
-  res = await some([], async (v) => {
+  res = await asyncSome([], async (v) => {
     await p
     return false
   }, 1)
   expect(res).toBe([].some((v) => false))
 
-  res = await some([], async (v) => {
+  res = await asyncSome([], async (v) => {
     await p
     return true
   }, 1)
   expect(res).toBe([].some((v) => true))
 })
 
-test('some parallel', async () => {
+test('asyncSome parallel', async () => {
   const p = Promise.resolve()
-  let res = await some([...range(3)], async (v) => {
+  let res = await asyncSome([...range(3)], async (v) => {
     await p
     return true
   }, 10)
   expect(res).toBe([...range(3)].some((v) => true))
 
-  res = await some([...range(3)], async (v) => {
+  res = await asyncSome([...range(3)], async (v) => {
     await p
     return v !== 2
   }, 10)
   expect(res).toBe([...range(3)].some((v) => v !== 2))
 
-  res = await some([...range(3)], async (v) => {
+  res = await asyncSome([...range(3)], async (v) => {
     await p
     return false
   }, 10)
   expect(res).toBe([...range(3)].some((v) => false))
 
-  res = await some([], async (v) => {
+  res = await asyncSome([], async (v) => {
     await p
     return false
   }, 10)
   expect(res).toBe([].some((v) => false))
 
-  res = await some([], async (v) => {
+  res = await asyncSome([], async (v) => {
     await p
     return true
   }, 10)
   expect(res).toBe([].some((v) => true))
 })
 
-test('some first in time', async () => {
+test('asyncSome first in time', async () => {
   const ds = [...range(3)].map(() => new Deferred())
-  const p = some(range(3), async (v, i) => {
+  const p = asyncSome(range(3), async (v, i) => {
     await ds[i]
     return true
   }, 3)
@@ -81,12 +81,12 @@ test('some first in time', async () => {
   expect(res).toBe(true)
 })
 
-test('some infinite concurrency all no pass', async () => {
+test('asyncSome infinite concurrency all no pass', async () => {
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const ds = [...range(3)].map(() => new Deferred())
-  const p = some([...range(3)], async (v, i) => {
+  const p = asyncSome([...range(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -104,12 +104,12 @@ test('some infinite concurrency all no pass', async () => {
   expect(callCount[2]).toBe(1)
 })
 
-test('some infinite concurrency some pass', async () => {
+test('asyncSome infinite concurrency some pass', async () => {
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const ds = [...range(3)].map(() => new Deferred())
-  const p = some([...range(3)], async (v, i) => {
+  const p = asyncSome([...range(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -131,12 +131,12 @@ test('some infinite concurrency some pass', async () => {
   expect(callCount[2]).toBe(1)
 })
 
-test('some concurrency 1 all no pass', async () => {
+test('asyncSome concurrency 1 all no pass', async () => {
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const ds = [...range(3)].map(() => new Deferred())
-  const p = some([...range(3)], async (v, i) => {
+  const p = asyncSome([...range(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -154,12 +154,12 @@ test('some concurrency 1 all no pass', async () => {
   expect(callCount[2]).toBe(1)
 })
 
-test('some concurrency 1 some pass', async () => {
+test('asyncSome concurrency 1 some pass', async () => {
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const ds = [...range(3)].map(() => new Deferred())
-  const p = some([...range(3)], async (v, i) => {
+  const p = asyncSome([...range(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise

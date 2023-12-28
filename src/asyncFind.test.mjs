@@ -1,16 +1,16 @@
 
 import { expect, test } from '@jest/globals'
-import find from './find.mjs'
+import asyncFind from './asyncFind.mjs'
 import Deferred from './Deferred.mjs'
 import { range } from 'itertools'
 
-test('find', async () => {
+test('asyncFind', async () => {
   const arr = ['a', 'b', 'c']
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const ds = [...range(3)].map(() => new Deferred())
-  const p = find(arr, async (v, i) => {
+  const p = asyncFind(arr, async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -28,12 +28,12 @@ test('find', async () => {
   expect(callCount[2]).toBe(0)
 })
 
-test('find not found', async () => {
+test('asyncFind not found', async () => {
   const arr = ['a', 'b', 'c']
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
-  const p = find(arr, async (v, i) => {
+  const p = asyncFind(arr, async (v, i) => {
     callCount[i] += 1
     await d.promise
     return v === 'd'
@@ -43,13 +43,13 @@ test('find not found', async () => {
   expect(res).toBe(arr.find((v) => v === 'd'))
 })
 
-test('find infinite concurrency', async () => {
+test('asyncFind infinite concurrency', async () => {
   const arr = ['a', 'b', 'c']
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const ds = arr.map(() => new Deferred())
-  const p = find(arr, async (v, i) => {
+  const p = asyncFind(arr, async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -67,13 +67,13 @@ test('find infinite concurrency', async () => {
   expect(callCount[2]).toBe(1)
 })
 
-test('find concurrency 1', async () => {
+test('asyncFind concurrency 1', async () => {
   const arr = ['a', 'b', 'c']
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const ds = [...range(3)].map(() => new Deferred())
-  const p = find(arr, async (v, i) => {
+  const p = asyncFind(arr, async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise

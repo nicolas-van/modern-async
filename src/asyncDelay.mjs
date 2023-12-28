@@ -8,14 +8,14 @@ import delayCancellable from './delayCancellable.mjs'
  *
  * @returns {Promise<void>} A promise that will be resolved on a later tick of the event loop.
  * @example
- * import { delay } from 'modern-async'
+ * import { asyncDelay } from 'modern-async'
  *
  * console.log('this executes in a tick of the event loop')
- * await delay()
+ * await asyncDelay()
  * console.log('this executes in another tick of the event loop')
  */
-async function delay () {
+async function asyncDelay () {
   return delayCancellable()[0]
 }
 
-export default delay
+export default asyncDelay

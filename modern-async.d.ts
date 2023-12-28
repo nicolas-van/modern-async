@@ -28,9 +28,9 @@ declare module "delayCancellable" {
     export default delayCancellable;
     function delayCancellable(): [Promise<void>, () => boolean];
 }
-declare module "delay" {
-    export default delay;
-    function delay(): Promise<void>;
+declare module "asyncDelay" {
+    export default asyncDelay;
+    function asyncDelay(): Promise<void>;
 }
 declare module "Delayer" {
     export default Delayer;
@@ -63,18 +63,18 @@ declare module "asyncEvery" {
     function asyncEvery<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<boolean>;
     import Queue from "Queue";
 }
-declare module "toArray" {
-    export default toArray;
-    function toArray<V>(iterable: Iterable<V> | AsyncIterable<V>): Promise<V[]>;
+declare module "iterableToArray" {
+    export default iterableToArray;
+    function iterableToArray<V>(iterable: Iterable<V> | AsyncIterable<V>): Promise<V[]>;
 }
-declare module "mapGenerator" {
-    export default mapGenerator;
-    function mapGenerator<V, M>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<M> | M, queueOrConcurrency?: Queue | number, ordered?: boolean): AsyncIterable<M>;
+declare module "asyncGeneratorMap" {
+    export default asyncGeneratorMap;
+    function asyncGeneratorMap<V, M>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<M> | M, queueOrConcurrency?: Queue | number, ordered?: boolean): AsyncIterable<M>;
     import Queue from "Queue";
 }
-declare module "filterGenerator" {
-    export default filterGenerator;
-    function filterGenerator<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): AsyncIterable<V>;
+declare module "asyncGeneratorFilter" {
+    export default asyncGeneratorFilter;
+    function asyncGeneratorFilter<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): AsyncIterable<V>;
     import Queue from "Queue";
 }
 declare module "asyncFilter" {
@@ -82,35 +82,35 @@ declare module "asyncFilter" {
     function asyncFilter<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<V[]>;
     import Queue from "Queue";
 }
-declare module "find" {
-    export default find;
-    function find<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): Promise<V>;
+declare module "asyncFind" {
+    export default asyncFind;
+    function asyncFind<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): Promise<V>;
     import Queue from "Queue";
 }
-declare module "findIndex" {
-    export default findIndex;
-    function findIndex<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): Promise<number>;
+declare module "asyncFindIndex" {
+    export default asyncFindIndex;
+    function asyncFindIndex<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): Promise<number>;
     import Queue from "Queue";
 }
-declare module "forEach" {
-    export default forEach;
-    function forEach<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<void> | void, queueOrConcurrency?: Queue | number): Promise<void>;
+declare module "asyncForEach" {
+    export default asyncForEach;
+    function asyncForEach<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<void> | void, queueOrConcurrency?: Queue | number): Promise<void>;
     import Queue from "Queue";
 }
-declare module "map" {
-    export default map;
-    function map<V, M>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<M> | M, queueOrConcurrency?: Queue | number): Promise<M[]>;
+declare module "asyncMap" {
+    export default asyncMap;
+    function asyncMap<V, M>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<M> | M, queueOrConcurrency?: Queue | number): Promise<M[]>;
     import Queue from "Queue";
 }
-declare module "reduce" {
-    export default reduce;
-    function reduce<V, A>(iterable: Iterable<V> | AsyncIterable<V>,reducer: (accumulator: A, value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<A> | A, initial: A): Promise<A>;
-    function reduce<V>(iterable: Iterable<V> | AsyncIterable<V>, reducer: (accumulator: V, value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<V> | V): Promise<V>;
+declare module "asyncReduce" {
+    export default asyncReduce;
+    function asyncReduce<V, A>(iterable: Iterable<V> | AsyncIterable<V>,reducer: (accumulator: A, value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<A> | A, initial: A): Promise<A>;
+    function asyncReduce<V>(iterable: Iterable<V> | AsyncIterable<V>, reducer: (accumulator: V, value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<V> | V): Promise<V>;
 }
-declare module "reduceRight" {
-    export default reduceRight;
-    function reduceRight<V, A>(iterable: Iterable<V> | AsyncIterable<V>,reducer: (accumulator: A, value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<A> | A, initial: A): Promise<A>;
-    function reduceRight<V>(iterable: Iterable<V> | AsyncIterable<V>, reducer: (accumulator: V, value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<V> | V): Promise<V>;
+declare module "asyncReduceRight" {
+    export default asyncReduceRight;
+    function asyncReduceRight<V, A>(iterable: Iterable<V> | AsyncIterable<V>,reducer: (accumulator: A, value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<A> | A, initial: A): Promise<A>;
+    function asyncReduceRight<V>(iterable: Iterable<V> | AsyncIterable<V>, reducer: (accumulator: V, value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<V> | V): Promise<V>;
 }
 declare module "sleepCancellable" {
     export default sleepCancellable;
@@ -145,9 +145,9 @@ declare module "sleepPrecise" {
     export default sleepPrecise;
     function sleepPrecise(amount: number): Promise<void>;
 }
-declare module "some" {
-    export default some;
-    function some<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<boolean>;
+declare module "asyncSome" {
+    export default asyncSome;
+    function asyncSome<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<boolean>;
     import Queue from "Queue";
 }
 declare module "TimeoutError" {
@@ -174,30 +174,30 @@ declare module "modern-async" {
     export { default as asyncWrap } from "asyncWrap";
     export { default as CancelledError } from "CancelledError";
     export { default as Deferred } from "Deferred";
-    export { default as delay } from "delay";
+    export { default as asyncDelay } from "asyncDelay";
     export { default as delayCancellable } from "delayCancellable";
     export { default as Delayer } from "Delayer";
     export { default as asyncEvery } from "asyncEvery";
     export { default as asyncFilter } from "asyncFilter";
-    export { default as filterGenerator } from "filterGenerator";
-    export { default as find } from "find";
-    export { default as findIndex } from "findIndex";
-    export { default as forEach } from "forEach";
-    export { default as map } from "map";
-    export { default as mapGenerator } from "mapGenerator";
+    export { default as asyncGeneratorFilter } from "asyncGeneratorFilter";
+    export { default as asyncFind } from "asyncFind";
+    export { default as asyncFindIndex } from "asyncFindIndex";
+    export { default as asyncForEach } from "asyncForEach";
+    export { default as asyncMap } from "asyncMap";
+    export { default as asyncGeneratorMap } from "asyncGeneratorMap";
     export { default as Queue } from "Queue";
     export { default as queueMicrotask } from "queueMicrotask";
-    export { default as reduce } from "reduce";
-    export { default as reduceRight } from "reduceRight";
+    export { default as asyncReduce } from "asyncReduce";
+    export { default as asyncReduceRight } from "asyncReduceRight";
     export { default as Scheduler } from "Scheduler";
     export { default as sleep } from "sleep";
     export { default as sleepCancellable } from "sleepCancellable";
     export { default as sleepPrecise } from "sleepPrecise";
     export { default as sleepPreciseCancellable } from "sleepPreciseCancellable";
-    export { default as some } from "some";
+    export { default as asyncSome } from "asyncSome";
     export { default as timeout } from "timeout";
     export { default as TimeoutError } from "TimeoutError";
     export { default as timeoutPrecise } from "timeoutPrecise";
-    export { default as toArray } from "toArray";
+    export { default as iterableToArray } from "iterableToArray";
     export { default as reflectStatus } from "reflectStatus";
 }

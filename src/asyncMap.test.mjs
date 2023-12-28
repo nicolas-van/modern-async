@@ -1,28 +1,28 @@
 
 import { expect, test } from '@jest/globals'
-import map from './map.mjs'
+import asyncMap from './asyncMap.mjs'
 import Deferred from './Deferred.mjs'
 import { range } from 'itertools'
 
-test('map base', async () => {
+test('asyncMap base', async () => {
   const arr = [...range(6)]
-  const res = await map(arr, async (x) => x * 2, 2)
+  const res = await asyncMap(arr, async (x) => x * 2, 2)
   expect(res).toEqual([0, 2, 4, 6, 8, 10])
 })
 
-test('map no async', async () => {
+test('asyncMap no async', async () => {
   const arr = [...range(6)]
-  const res = await map(arr, (x) => x * 2, 2)
+  const res = await asyncMap(arr, (x) => x * 2, 2)
   expect(res).toEqual([0, 2, 4, 6, 8, 10])
 })
 
-test('map concurrency', async () => {
+test('asyncMap concurrency', async () => {
   const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   const d = new Deferred()
   const ds = arr.map(() => new Deferred())
-  const p = map(arr, async (x) => {
+  const p = asyncMap(arr, async (x) => {
     called[x] += 1
     ds[x].resolve()
     await d.promise
@@ -46,9 +46,9 @@ test('map concurrency', async () => {
   expect(called[5]).toBe(1)
 })
 
-test('map index & iterable', async () => {
+test('asyncMap index & iterable', async () => {
   const arr = [...range(6)]
-  const res = await map(arr, async (x, index, iterable) => {
+  const res = await asyncMap(arr, async (x, index, iterable) => {
     expect(index).toBe(x)
     expect(iterable).toBe(arr)
     return x * 2
@@ -56,13 +56,13 @@ test('map index & iterable', async () => {
   expect(res).toEqual([0, 2, 4, 6, 8, 10])
 })
 
-test('map one exception', async () => {
+test('asyncMap one exception', async () => {
   const arr = [...range(3)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   try {
     const d = new Deferred()
-    const p = map(arr, async (x) => {
+    const p = asyncMap(arr, async (x) => {
       called[x] += 1
       await d.promise
       if (x === 1) {
@@ -81,13 +81,13 @@ test('map one exception', async () => {
   expect(called[2]).toBe(0)
 })
 
-test('map all exception c 1', async () => {
+test('asyncMap all exception c 1', async () => {
   const arr = [...range(3)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   try {
     const d = new Deferred()
-    const p = map(arr, async (x) => {
+    const p = asyncMap(arr, async (x) => {
       called[x] += 1
       await d.promise
       throw new Error('test')
@@ -103,14 +103,14 @@ test('map all exception c 1', async () => {
   expect(called[2]).toBe(0)
 })
 
-test('map all exception c 2', async () => {
+test('asyncMap all exception c 2', async () => {
   const arr = [...range(3)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   const ds = arr.map(() => new Deferred())
   try {
     const d = new Deferred()
-    const p = map(arr, async (x) => {
+    const p = asyncMap(arr, async (x) => {
       called[x] += 1
       ds[x].resolve()
       await d.promise
@@ -129,25 +129,25 @@ test('map all exception c 2', async () => {
   expect(called[2]).toBe(0)
 })
 
-test('map infinite concurrency base', async () => {
+test('asyncMap infinite concurrency base', async () => {
   const arr = [...range(6)]
-  const res = await map(arr, async (x) => x * 2, Number.POSITIVE_INFINITY)
+  const res = await asyncMap(arr, async (x) => x * 2, Number.POSITIVE_INFINITY)
   expect(res).toEqual([0, 2, 4, 6, 8, 10])
 })
 
-test('map infinite concurrency no async', async () => {
+test('asyncMap infinite concurrency no async', async () => {
   const arr = [...range(6)]
-  const res = await map(arr, (x) => x * 2, Number.POSITIVE_INFINITY)
+  const res = await asyncMap(arr, (x) => x * 2, Number.POSITIVE_INFINITY)
   expect(res).toEqual([0, 2, 4, 6, 8, 10])
 })
 
-test('map infinite concurrency concurrency', async () => {
+test('asyncMap infinite concurrency concurrency', async () => {
   const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   const d = new Deferred()
   const ds = arr.map(() => new Deferred())
-  const p = map(arr, async (x) => {
+  const p = asyncMap(arr, async (x) => {
     called[x] += 1
     ds[x].resolve()
     await d.promise
@@ -171,25 +171,25 @@ test('map infinite concurrency concurrency', async () => {
   expect(called[5]).toBe(1)
 })
 
-test('map concurrency 1 base', async () => {
+test('asyncMap concurrency 1 base', async () => {
   const arr = [...range(6)]
-  const res = await map(arr, async (x) => x * 2)
+  const res = await asyncMap(arr, async (x) => x * 2)
   expect(res).toEqual([0, 2, 4, 6, 8, 10])
 })
 
-test('map concurrency 1 no async', async () => {
+test('asyncMap concurrency 1 no async', async () => {
   const arr = [...range(6)]
-  const res = await map(arr, (x) => x * 2)
+  const res = await asyncMap(arr, (x) => x * 2)
   expect(res).toEqual([0, 2, 4, 6, 8, 10])
 })
 
-test('map concurrency 1 concurrency', async () => {
+test('asyncMap concurrency 1 concurrency', async () => {
   const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   const d = new Deferred()
   const ds = arr.map(() => new Deferred())
-  const p = map(arr, async (x) => {
+  const p = asyncMap(arr, async (x) => {
     ds[x].resolve()
     called[x] += 1
     await d.promise

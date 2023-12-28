@@ -1,11 +1,11 @@
 
 import { expect, test } from '@jest/globals'
 import reflectStatus from './reflectStatus.mjs'
-import delay from './delay.mjs'
+import asyncDelay from './asyncDelay.mjs'
 
 test('reflectStatus base test', async () => {
   const res1 = await reflectStatus(async () => {
-    await delay()
+    await asyncDelay()
     return 3
   })
 
@@ -17,7 +17,7 @@ test('reflectStatus base test', async () => {
 
 test('reflectStatus falure', async () => {
   const res1 = await reflectStatus(async () => {
-    await delay()
+    await asyncDelay()
     throw new Error('error')
   })
 

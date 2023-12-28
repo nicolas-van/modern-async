@@ -1,10 +1,10 @@
 
 import { test, expect } from '@jest/globals'
-import delay from './delay.mjs'
+import asyncDelay from './asyncDelay.mjs'
 
-test('delay', async () => {
+test('asyncDelay', async () => {
   const events = []
-  const p = delay().then(() => {
+  const p = asyncDelay().then(() => {
     events.push('resolved')
   })
   Promise.resolve().then(() => {

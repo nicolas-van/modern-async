@@ -1,7 +1,7 @@
 
 import Queue from './Queue.mjs'
-import toArray from './toArray.mjs'
-import filterGenerator from './filterGenerator.mjs'
+import iterableToArray from './iterableToArray.mjs'
+import asyncGeneratorFilter from './asyncGeneratorFilter.mjs'
 
 /**
  * Returns an array of all the values in `iterable` which pass an asynchronous truth test.
@@ -37,7 +37,7 @@ import filterGenerator from './filterGenerator.mjs'
  * // total processing time should be ~ 20ms
  */
 async function asyncFilter (iterable, iteratee, queueOrConcurrency = 1) {
-  return await toArray(filterGenerator(iterable, iteratee, queueOrConcurrency))
+  return await iterableToArray(asyncGeneratorFilter(iterable, iteratee, queueOrConcurrency))
 }
 
 export default asyncFilter

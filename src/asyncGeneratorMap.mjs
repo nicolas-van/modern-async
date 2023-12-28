@@ -3,17 +3,55 @@ import assert from 'nanoassert'
 import asyncWrap from './asyncWrap.mjs'
 import asyncIterableWrap from './asyncIterableWrap.mjs'
 import getQueue from './getQueue.mjs'
+import Queue from './Queue.mjs'
 import reflectStatus from './reflectStatus.mjs'
 
 /**
- * @ignore
- * @param {*} iterable ignore
- * @param {*} iteratee ignore
- * @param {*} queueOrConcurrency ignore
- * @param {*} ordered ignore
- * @returns {*} ignore
+ * Produces a an async iterator that will return each value or `iterable` after having processed them through
+ * the `iteratee` function.
+ *
+ * The iterator will perform the calls to `iteratee` in a queue to limit the concurrency of
+ * these calls. The iterator will consume values from `iterable` only if slots are available in the
+ * queue.
+ *
+ * If the returned iterator is not fully consumed it will stop consuming new values from `iterable` and scheduling
+ * new calls to `iteratee` in the queue, but already scheduled tasks will still be executed.
+ *
+ * If `iterable` or any of the calls to `iteratee` throws an exception all pending tasks will be cancelled and the
+ * returned async iterator will throw that exception.
+ *
+ * @param {Iterable | AsyncIterable} iterable An iterable or async iterable object.
+ * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
+ * three arguments:
+ *   * `value`: The current value to process
+ *   * `index`: The index in the iterable. Will start from 0.
+ *   * `iterable`: The iterable on which the operation is being performed.
+ * @param {Queue | number} [queueOrConcurrency] If a queue is specified it will be used to schedule the calls to
+ * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
+ * implicitly for the same purpose. Defaults to `1`.
+ * @param {boolean} [ordered] If true the results will be yielded in the same order as in the source
+ * iterable, regardless of which calls to iteratee returned first. If false the the results will be yielded as soon
+ * as a call to iteratee returned. Defaults to `true`.
+ * @yields {any} Each element of `iterable` after processing it through `iteratee`.
+ * @example
+ * import {asyncGeneratorMap, sleep} from 'modern-async'
+ *
+ * const iterator = function * () {
+ *   for (let i = 0; i < 10000; i += 1) {
+ *     yield i
+ *   }
+ * }
+ * const mapIterator = asyncGeneratorMap(iterator(), async (v) => {
+ *   await sleep(1000)
+ *   return v * 2
+ * })
+ * for await (const el of mapIterator) {
+ *   console.log(el)
+ * }
+ * // Will print "0", "2", "4", etc... Only one number will be printed per second.
+ * // Numbers from `iterator` will be consumed progressively
  */
-async function findInternal (iterable, iteratee, queueOrConcurrency, ordered) {
+async function * asyncGeneratorMap (iterable, iteratee, queueOrConcurrency = 1, ordered = true) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   iteratee = asyncWrap(iteratee)
   const it = asyncIterableWrap(iterable)
@@ -42,7 +80,7 @@ async function findInternal (iterable, iteratee, queueOrConcurrency, ordered) {
     const p = (async () => {
       return [identifier, await reflectStatus(fct)]
     })()
-    assert(!waitList.has(identifier), 'waitList already contains identifier')
+    assert(!waitList.has(identifier), 'waitList contains identifier')
     waitList.set(identifier, p)
   }
   const raceWaitList = async () => {
@@ -76,7 +114,7 @@ async function findInternal (iterable, iteratee, queueOrConcurrency, ordered) {
 
         scheduledCount -= 1
         insertInResults(index, value, snapshot)
-        if (snapshot.status === 'rejected' || (snapshot.status === 'fulfilled' && snapshot.value)) {
+        if (snapshot.status === 'rejected') {
           shouldStop = true
           cancelAllScheduled(ordered ? index : 0)
         }
@@ -144,12 +182,12 @@ async function findInternal (iterable, iteratee, queueOrConcurrency, ordered) {
       lastIndexHandled += 1
       if (result.snapshot.status === 'rejected') {
         throw result.snapshot.reason
-      } else if (result.snapshot.value) {
-        return [result.index, result.value]
+      } else {
+        yield result.snapshot.value
       }
     }
     if (exhausted && lastIndexFetched === lastIndexHandled) {
-      return [-1, undefined]
+      return
     }
     if (hasFetchedValue && !shouldStop) {
       schedule(lastIndexFetched, fetchedValue)
@@ -162,4 +200,4 @@ async function findInternal (iterable, iteratee, queueOrConcurrency, ordered) {
   }
 }
 
-export default findInternal
+export default asyncGeneratorMap

@@ -1,5 +1,5 @@
 
-import findIndex from './findIndex.mjs'
+import asyncFindIndex from './asyncFindIndex.mjs'
 import Queue from './Queue.mjs'
 
 /**
@@ -26,11 +26,11 @@ import Queue from './Queue.mjs'
  * @returns {Promise<boolean>} A promise that will be resolved to `true` if at least one value pass the truth test and `false`
  * if none of them do. That promise will be rejected if one of the truth test throws an exception.
  * @example
- * import { some, sleep } from 'modern-async'
+ * import { asyncSome, sleep } from 'modern-async'
  *
  * const array = [1, 2, 3]
  *
- * const result = await some(array, async (v) => {
+ * const result = await asyncSome(array, async (v) => {
  *   // these calls will be performed in parallel with a maximum of 2
  *   // concurrent calls
  *   await sleep(10) // waits 10ms
@@ -39,10 +39,10 @@ import Queue from './Queue.mjs'
  * console.log(result) // prints true
  * // total processing time should be ~ 10ms
  */
-async function some (iterable, iteratee, queueOrConcurrency = 1) {
-  const index = await findIndex(iterable, iteratee, queueOrConcurrency, false)
+async function asyncSome (iterable, iteratee, queueOrConcurrency = 1) {
+  const index = await asyncFindIndex(iterable, iteratee, queueOrConcurrency, false)
   const result = index !== -1
   return result
 }
 
-export default some
+export default asyncSome

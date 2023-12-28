@@ -1,5 +1,5 @@
 
-import mapGenerator from './mapGenerator.mjs'
+import asyncGeneratorMap from './asyncGeneratorMap.mjs'
 import assert from 'nanoassert'
 import Queue from './Queue.mjs'
 import asyncWrap from './asyncWrap.mjs'
@@ -31,14 +31,14 @@ import asyncWrap from './asyncWrap.mjs'
  * as a call to iteratee returned. Defaults to `true`.
  * @yields {any} Each element of `iterable` for which `iteratee` returned `true`.
  * @example
- * import {filterGenerator, sleep} from 'modern-async'
+ * import {asyncGeneratorFilter, sleep} from 'modern-async'
  *
  * const iterator = function * () {
  *   for (let i = 0; i < 10000; i += 1) {
  *     yield i
  *   }
  * }
- * const filterIterator = filterGenerator(iterator(), async (v) => {
+ * const filterIterator = asyncGeneratorFilter(iterator(), async (v) => {
  *   await sleep(1000)
  *   return v % 3 === 0
  * })
@@ -47,10 +47,10 @@ import asyncWrap from './asyncWrap.mjs'
  * }
  * // will print "0", "3", "6", etc... Only one number will be printed every 3 seconds.
  */
-async function * filterGenerator (iterable, iteratee, queueOrConcurrency = 1, ordered = true) {
+async function * asyncGeneratorFilter (iterable, iteratee, queueOrConcurrency = 1, ordered = true) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   iteratee = asyncWrap(iteratee)
-  for await (const [value, pass] of mapGenerator(iterable, async (v, i, t) => {
+  for await (const [value, pass] of asyncGeneratorMap(iterable, async (v, i, t) => {
     return [v, await iteratee(v, i, t)]
   }, queueOrConcurrency, ordered)) {
     if (pass) {
@@ -59,4 +59,4 @@ async function * filterGenerator (iterable, iteratee, queueOrConcurrency = 1, or
   }
 }
 
-export default filterGenerator
+export default asyncGeneratorFilter

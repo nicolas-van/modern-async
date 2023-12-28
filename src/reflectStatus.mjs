@@ -22,11 +22,11 @@
  * @returns {Promise<any>} A promise that will always be resolved with an object containing
  * a snapshot of the original promise state.
  * @example
- * import { reflectStatus, map, sleep } from 'modern-async'
+ * import { reflectStatus, asyncMap, sleep } from 'modern-async'
  *
  * const array = [1, 2, 3]
  *
- * const result = await map(array, (v) => reflectStatus(async () => {
+ * const result = await asyncMap(array, (v) => reflectStatus(async () => {
  *   await sleep(10) // waits 10ms
  *   if (v % 2 === 0) { // throws error on some values
  *     throw Error("error")

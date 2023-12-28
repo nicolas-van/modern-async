@@ -1,9 +1,9 @@
 
 import { expect, test } from '@jest/globals'
-import findInternal from './findInternal.mjs'
-import mapGenerator from './mapGenerator.mjs'
+import asyncFindInternal from './asyncFindInternal.mjs'
+import asyncGeneratorMap from './asyncGeneratorMap.mjs'
 import { range } from 'itertools'
-import delay from './delay.mjs'
+import asyncDelay from './asyncDelay.mjs'
 import Queue from './Queue.mjs'
 import Deferred from './Deferred.mjs'
 import sleep from './sleep.mjs'
@@ -11,51 +11,51 @@ import sleep from './sleep.mjs'
 // eslint-disable-next-line require-jsdoc
 class TestError extends Error {}
 
-test('findInternal fail in fetch', async () => {
-  const originGen = mapGenerator(range(3), async (v, i) => {
+test('asyncFindInternal fail in fetch', async () => {
+  const originGen = asyncGeneratorMap(range(3), async (v, i) => {
     if (i === 1) {
       throw new TestError()
     }
     return v
   }, Number.POSITIVE_INFINITY)
   const callList = [...range(3)].map(() => 0)
-  const [state, result] = await findInternal(originGen, async (v, i) => {
+  const [state, result] = await asyncFindInternal(originGen, async (v, i) => {
     callList[i] += 1
     return v === 2
   }, 1, true).then((r) => ['resolved', r], (e) => ['rejected', e])
   expect(state).toStrictEqual('rejected')
   expect(result).toBeInstanceOf(TestError)
-  await delay()
+  await asyncDelay()
   expect(callList[0]).toStrictEqual(1)
   expect(callList[1]).toStrictEqual(0)
   expect(callList[2]).toStrictEqual(0)
 })
 
-test('findInternal fail in fetch unordered', async () => {
-  const originGen = mapGenerator(range(3), async (v, i) => {
+test('asyncFindInternal fail in fetch unordered', async () => {
+  const originGen = asyncGeneratorMap(range(3), async (v, i) => {
     throw new TestError()
   }, Number.POSITIVE_INFINITY)
   const callList = [...range(3)].map(() => 0)
-  const [state, result] = await findInternal(originGen, async (v, i) => {
+  const [state, result] = await asyncFindInternal(originGen, async (v, i) => {
     callList[i] += 1
     return v === 2
   }, 1, false).then((r) => ['resolved', r], (e) => ['rejected', e])
   expect(state).toStrictEqual('rejected')
   expect(result).toBeInstanceOf(TestError)
-  await delay()
+  await asyncDelay()
   expect(callList[0]).toStrictEqual(0)
   expect(callList[1]).toStrictEqual(0)
   expect(callList[2]).toStrictEqual(0)
 })
 
-test('findInternal cancel scheduled busy queue', async () => {
+test('asyncFindInternal cancel scheduled busy queue', async () => {
   const queue = new Queue(100)
   const d = new Deferred()
   const waiting = [...range(99)].map(() => {
     return queue.exec(async () => await d.promise)
   })
   const callList = []
-  const [state, result] = await findInternal(range(100), async (x, i) => {
+  const [state, result] = await asyncFindInternal(range(100), async (x, i) => {
     callList.push(i)
     await sleep(1)
     if (i === 50) {
@@ -68,12 +68,12 @@ test('findInternal cancel scheduled busy queue', async () => {
 
   d.resolve()
   await Promise.all(waiting)
-  await delay()
+  await asyncDelay()
 
   expect(callList).toStrictEqual([...range(51)])
 })
 
-test('findInternal infinite sync operator', async () => {
+test('asyncFindInternal infinite sync operator', async () => {
   let shouldStop = false
   const infiniteSyncGenerator = function * () {
     let i = 0
@@ -86,7 +86,7 @@ test('findInternal infinite sync operator', async () => {
     }
   }
   const callList = []
-  const [index] = await findInternal(infiniteSyncGenerator(), async (v, i) => {
+  const [index] = await asyncFindInternal(infiniteSyncGenerator(), async (v, i) => {
     callList.push(i)
     await sleep(1)
     if (i === 2) {
@@ -101,15 +101,15 @@ test('findInternal infinite sync operator', async () => {
   expect(callList[2]).toStrictEqual(2)
 })
 
-test('findInternal respect concurrency', async () => {
+test('asyncFindInternal respect concurrency', async () => {
   const callList = []
   const d = new Deferred()
-  const p = findInternal(range(10), async (el, i) => {
+  const p = asyncFindInternal(range(10), async (el, i) => {
     callList.push(i)
     await d.promise
     return false
   }, 3)
-  await delay()
+  await asyncDelay()
   expect(callList).toStrictEqual([0, 1, 2])
   d.resolve()
   const [index] = await p
