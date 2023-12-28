@@ -60,7 +60,7 @@ declare module "Queue" {
 }
 declare module "every" {
     export default every;
-    function every<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency: Queue | number): Promise<boolean>;
+    function every<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<boolean>;
     import Queue from "Queue";
 }
 declare module "toArray" {
@@ -89,26 +89,18 @@ declare module "find" {
 }
 declare module "findIndex" {
     export default findIndex;
-    function findIndex<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency: Queue | number, ordered?: boolean): Promise<number>;
+    function findIndex<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): Promise<number>;
     import Queue from "Queue";
 }
 declare module "forEach" {
     export default forEach;
-    function forEach<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<void> | void, queueOrConcurrency: Queue | number): Promise<void>;
-    import Queue from "Queue";
-}
-declare module "mapLimit" {
-    export default mapLimit;
-    function mapLimit<V, M>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<M> | M, queueOrConcurrency: Queue | number): Promise<M[]>;
+    function forEach<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<void> | void, queueOrConcurrency?: Queue | number): Promise<void>;
     import Queue from "Queue";
 }
 declare module "map" {
     export default map;
-    function map<V, M>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<M> | M): Promise<M[]>;
-}
-declare module "mapSeries" {
-    export default mapSeries;
-    function mapSeries<V, M>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<M> | M): Promise<M[]>;
+    function map<V, M>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<M> | M, queueOrConcurrency?: Queue | number): Promise<M[]>;
+    import Queue from "Queue";
 }
 declare module "reduce" {
     export default reduce;
@@ -201,8 +193,6 @@ declare module "modern-async" {
     export { default as forEach } from "forEach";
     export { default as map } from "map";
     export { default as mapGenerator } from "mapGenerator";
-    export { default as mapLimit } from "mapLimit";
-    export { default as mapSeries } from "mapSeries";
     export { default as Queue } from "Queue";
     export { default as queueMicrotask } from "queueMicrotask";
     export { default as reduce } from "reduce";

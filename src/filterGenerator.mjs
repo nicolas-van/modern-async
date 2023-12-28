@@ -25,10 +25,10 @@ import asyncWrap from './asyncWrap.mjs'
  *   * `iterable`: The iterable on which the operation is being performed.
  * @param {Queue | number} [queueOrConcurrency] If a queue is specified it will be used to schedule the calls to
  * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
- * implicitly for the same purpose.
+ * implicitly for the same purpose. Defaults to `1`.
  * @param {boolean} [ordered] If true the results will be yielded in the same order as in the source
  * iterable, regardless of which calls to iteratee returned first. If false the the results will be yielded as soon
- * as a call to iteratee returned.
+ * as a call to iteratee returned. Defaults to `true`.
  * @yields {any} Each element of `iterable` for which `iteratee` returned `true`.
  * @example
  * import {filterGenerator, sleep} from 'modern-async'
