@@ -66,6 +66,7 @@ declare module "findIndexLimit" {
 declare module "every" {
     export default every;
     function every<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency: Queue | number): Promise<boolean>;
+    import Queue from "Queue";
 }
 declare module "toArray" {
     export default toArray;
@@ -83,16 +84,13 @@ declare module "filterGenerator" {
 }
 declare module "filter" {
     export default filter;
-    function filter<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency: Queue | number): Promise<V[]>;
-}
-declare module "findLimit" {
-    export default findLimit;
-    function findLimit<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency: Queue | number, ordered?: boolean): Promise<V>;
+    function filter<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<V[]>;
     import Queue from "Queue";
 }
 declare module "find" {
     export default find;
-    function find<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, ordered?: boolean): Promise<V>;
+    function find<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): Promise<V>;
+    import Queue from "Queue";
 }
 declare module "findIndex" {
     export default findIndex;
@@ -101,10 +99,6 @@ declare module "findIndex" {
 declare module "findIndexSeries" {
     export default findIndexSeries;
     function findIndexSeries<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean): Promise<number>;
-}
-declare module "findSeries" {
-    export default findSeries;
-    function findSeries<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean): Promise<V>;
 }
 declare module "forEachLimit" {
     export default forEachLimit;
@@ -222,8 +216,6 @@ declare module "modern-async" {
     export { default as findIndex } from "findIndex";
     export { default as findIndexLimit } from "findIndexLimit";
     export { default as findIndexSeries } from "findIndexSeries";
-    export { default as findLimit } from "findLimit";
-    export { default as findSeries } from "findSeries";
     export { default as forEach } from "forEach";
     export { default as forEachLimit } from "forEachLimit";
     export { default as forEachSeries } from "forEachSeries";
