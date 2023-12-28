@@ -63,18 +63,9 @@ declare module "findIndexLimit" {
     function findIndexLimit<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency: Queue | number, ordered?: boolean): Promise<number>;
     import Queue from "Queue";
 }
-declare module "everyLimit" {
-    export default everyLimit;
-    function everyLimit<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency: Queue | number): Promise<boolean>;
-    import Queue from "Queue";
-}
 declare module "every" {
     export default every;
-    function every<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean): Promise<boolean>;
-}
-declare module "everySeries" {
-    export default everySeries;
-    function everySeries<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean): Promise<boolean>;
+    function every<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency: Queue | number): Promise<boolean>;
 }
 declare module "toArray" {
     export default toArray;
@@ -234,8 +225,6 @@ declare module "modern-async" {
     export { default as delayCancellable } from "delayCancellable";
     export { default as Delayer } from "Delayer";
     export { default as every } from "every";
-    export { default as everyLimit } from "everyLimit";
-    export { default as everySeries } from "everySeries";
     export { default as filter } from "filter";
     export { default as filterGenerator } from "filterGenerator";
     export { default as filterLimit } from "filterLimit";
