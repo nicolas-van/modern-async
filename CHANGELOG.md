@@ -1,5 +1,9 @@
 # Changelog
 
+## next version
+
+* Added `reflectStatus()` function.
+
 ## 1.1.4
 
 * Fixed typescript declarations.
