@@ -5,7 +5,6 @@ import asyncIterableWrap from './asyncIterableWrap.mjs'
 import getQueue from './getQueue.mjs'
 import Queue from './Queue.mjs'
 import reflectStatus from './reflectStatus.mjs'
-import queueMicrotask from './queueMicrotask.mjs'
 
 /**
  * Produces a an async iterator that will return each value or `iterable` after having processed them through
