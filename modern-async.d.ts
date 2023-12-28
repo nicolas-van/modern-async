@@ -58,9 +58,9 @@ declare module "Queue" {
         cancelAllPending(): number;
     }
 }
-declare module "every" {
-    export default every;
-    function every<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<boolean>;
+declare module "asyncEvery" {
+    export default asyncEvery;
+    function asyncEvery<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<boolean>;
     import Queue from "Queue";
 }
 declare module "toArray" {
@@ -77,9 +77,9 @@ declare module "filterGenerator" {
     function filterGenerator<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): AsyncIterable<V>;
     import Queue from "Queue";
 }
-declare module "filter" {
-    export default filter;
-    function filter<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<V[]>;
+declare module "asyncFilter" {
+    export default asyncFilter;
+    function asyncFilter<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<V[]>;
     import Queue from "Queue";
 }
 declare module "find" {
@@ -177,8 +177,8 @@ declare module "modern-async" {
     export { default as delay } from "delay";
     export { default as delayCancellable } from "delayCancellable";
     export { default as Delayer } from "Delayer";
-    export { default as every } from "every";
-    export { default as filter } from "filter";
+    export { default as asyncEvery } from "asyncEvery";
+    export { default as asyncFilter } from "asyncFilter";
     export { default as filterGenerator } from "filterGenerator";
     export { default as find } from "find";
     export { default as findIndex } from "findIndex";

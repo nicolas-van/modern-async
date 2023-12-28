@@ -24,10 +24,10 @@ import filterGenerator from './filterGenerator.mjs'
  * @returns {Promise<any[]>} A promise that will be resolved with an array containing all the values that passed
  * the truth test. This promise will be rejected if any of the `iteratee` calls throws an exception.
  * @example
- * import { filter, sleep } from 'modern-async'
+ * import { asyncFilter, sleep } from 'modern-async'
  *
  * const array = [1, 2, 3]
- * const result = await filter(array, async (v) => {
+ * const result = await asyncFilter(array, async (v) => {
  *   // these calls will be performed in parallel with a maximum of 2
  *   // concurrent calls
  *   await sleep(10) // waits 10ms
@@ -36,8 +36,8 @@ import filterGenerator from './filterGenerator.mjs'
  * console.log(result) // prints [1, 3]
  * // total processing time should be ~ 20ms
  */
-async function filter (iterable, iteratee, queueOrConcurrency = 1) {
+async function asyncFilter (iterable, iteratee, queueOrConcurrency = 1) {
   return await toArray(filterGenerator(iterable, iteratee, queueOrConcurrency))
 }
 
-export default filter
+export default asyncFilter

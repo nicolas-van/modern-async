@@ -1,28 +1,28 @@
 
 import { expect, test } from '@jest/globals'
-import filter from './filter.mjs'
+import asyncFilter from './asyncFilter.mjs'
 import Deferred from './Deferred.mjs'
 import { range } from 'itertools'
 
-test('filter base', async () => {
+test('asyncFilter base', async () => {
   const arr = [...range(6)]
-  const res = await filter(arr, async (x) => x % 2 === 0, 2)
+  const res = await asyncFilter(arr, async (x) => x % 2 === 0, 2)
   expect(res).toEqual([0, 2, 4])
 })
 
-test('filter no async', async () => {
+test('asyncFilter no async', async () => {
   const arr = [...range(6)]
-  const res = await filter(arr, (x) => x % 2 === 0, 2)
+  const res = await asyncFilter(arr, (x) => x % 2 === 0, 2)
   expect(res).toEqual([0, 2, 4])
 })
 
-test('filter concurrency', async () => {
+test('asyncFilter concurrency', async () => {
   const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   const d = new Deferred()
   const ds = arr.map(() => new Deferred())
-  const p = filter(arr, async (x) => {
+  const p = asyncFilter(arr, async (x) => {
     called[x] += 1
     ds[x].resolve()
     await d.promise
@@ -46,25 +46,25 @@ test('filter concurrency', async () => {
   expect(called[5]).toBe(1)
 })
 
-test('filter infinite concurrency base', async () => {
+test('asyncFilter infinite concurrency base', async () => {
   const arr = [...range(6)]
-  const res = await filter(arr, async (x) => x % 2 === 0, Number.POSITIVE_INFINITY)
+  const res = await asyncFilter(arr, async (x) => x % 2 === 0, Number.POSITIVE_INFINITY)
   expect(res).toEqual([0, 2, 4])
 })
 
-test('filter infinite concurrency no async', async () => {
+test('asyncFilter infinite concurrency no async', async () => {
   const arr = [...range(6)]
-  const res = await filter(arr, (x) => x % 2 === 0, Number.POSITIVE_INFINITY)
+  const res = await asyncFilter(arr, (x) => x % 2 === 0, Number.POSITIVE_INFINITY)
   expect(res).toEqual([0, 2, 4])
 })
 
-test('filter infinite concurrency concurrency', async () => {
+test('asyncFilter infinite concurrency concurrency', async () => {
   const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   const d = new Deferred()
   const ds = arr.map(() => new Deferred())
-  const p = filter(arr, async (x) => {
+  const p = asyncFilter(arr, async (x) => {
     called[x] += 1
     ds[x].resolve()
     await d.promise
@@ -88,25 +88,25 @@ test('filter infinite concurrency concurrency', async () => {
   expect(called[5]).toBe(1)
 })
 
-test('filter concurrency 1 base', async () => {
+test('asyncFilter concurrency 1 base', async () => {
   const arr = [...range(6)]
-  const res = await filter(arr, async (x) => x % 2 === 0)
+  const res = await asyncFilter(arr, async (x) => x % 2 === 0)
   expect(res).toEqual([0, 2, 4])
 })
 
-test('filter concurrency 1 no async', async () => {
+test('asyncFilter concurrency 1 no async', async () => {
   const arr = [...range(6)]
-  const res = await filter(arr, (x) => x % 2 === 0)
+  const res = await asyncFilter(arr, (x) => x % 2 === 0)
   expect(res).toEqual([0, 2, 4])
 })
 
-test('filter concurrency 1 concurrency', async () => {
+test('asyncFilter concurrency 1 concurrency', async () => {
   const arr = [...range(6)]
   const called = {}
   arr.forEach((v) => { called[v] = 0 })
   const d = new Deferred()
   const ds = arr.map(() => new Deferred())
-  const p = filter(arr, async (x) => {
+  const p = asyncFilter(arr, async (x) => {
     called[x] += 1
     ds[x].resolve()
     await d.promise

@@ -1,6 +1,6 @@
 
 import { expect, test } from '@jest/globals'
-import every from './every.mjs'
+import asyncEvery from './asyncEvery.mjs'
 import Deferred from './Deferred.mjs'
 import { range } from 'itertools'
 import delay from './delay.mjs'
@@ -8,9 +8,9 @@ import delay from './delay.mjs'
 // eslint-disable-next-line require-jsdoc
 class TestError extends Error {}
 
-test('every compatibility', async () => {
+test('asyncEvery compatibility', async () => {
   let d = new Deferred()
-  let p = every([...range(3)], async (v) => {
+  let p = asyncEvery([...range(3)], async (v) => {
     await d.promise
     return true
   }, 1)
@@ -18,7 +18,7 @@ test('every compatibility', async () => {
   expect(await p).toBe([...range(3)].every((v) => true))
 
   d = new Deferred()
-  p = every([...range(3)], async (v) => {
+  p = asyncEvery([...range(3)], async (v) => {
     await d.promise
     return v !== 2
   }, 1)
@@ -26,7 +26,7 @@ test('every compatibility', async () => {
   expect(await p).toBe([...range(3)].every((v) => v !== 2))
 
   d = new Deferred()
-  p = every([...range(3)], async (v) => {
+  p = asyncEvery([...range(3)], async (v) => {
     await d.promise
     return false
   }, 1)
@@ -34,7 +34,7 @@ test('every compatibility', async () => {
   expect(await p).toBe([...range(3)].every((v) => false))
 
   d = new Deferred()
-  p = every([], async (v) => {
+  p = asyncEvery([], async (v) => {
     await d.promise
     return false
   }, 1)
@@ -42,7 +42,7 @@ test('every compatibility', async () => {
   expect(await p).toBe([].every((v) => false))
 
   d = new Deferred()
-  p = every([], async (v) => {
+  p = asyncEvery([], async (v) => {
     await d.promise
     return true
   }, 1)
@@ -50,9 +50,9 @@ test('every compatibility', async () => {
   expect(await p).toBe([].every((v) => true))
 })
 
-test('every parallel', async () => {
+test('asyncEvery parallel', async () => {
   let d = new Deferred()
-  let p = every([...range(3)], async (v) => {
+  let p = asyncEvery([...range(3)], async (v) => {
     await d.promise
     return true
   }, 10)
@@ -60,7 +60,7 @@ test('every parallel', async () => {
   expect(await p).toBe([...range(3)].every((v) => true))
 
   d = new Deferred()
-  p = every([...range(3)], async (v) => {
+  p = asyncEvery([...range(3)], async (v) => {
     await d.promise
     return v !== 2
   }, 10)
@@ -68,7 +68,7 @@ test('every parallel', async () => {
   expect(await p).toBe([...range(3)].every((v) => v !== 2))
 
   d = new Deferred()
-  p = every([...range(3)], async (v) => {
+  p = asyncEvery([...range(3)], async (v) => {
     await d.promise
     return false
   }, 10)
@@ -76,7 +76,7 @@ test('every parallel', async () => {
   expect(await p).toBe([...range(3)].every((v) => false))
 
   d = new Deferred()
-  p = every([], async (v) => {
+  p = asyncEvery([], async (v) => {
     await d.promise
     return false
   }, 10)
@@ -84,7 +84,7 @@ test('every parallel', async () => {
   expect(await p).toBe([].every((v) => false))
 
   d = new Deferred()
-  p = every([], async (v) => {
+  p = asyncEvery([], async (v) => {
     await d.promise
     return true
   }, 10)
@@ -92,9 +92,9 @@ test('every parallel', async () => {
   expect(await p).toBe([].every((v) => true))
 })
 
-test('every first in time', async () => {
+test('asyncEvery first in time', async () => {
   const ds = [...range(3)].map(() => new Deferred())
-  const p = every(range(3), async (v, i) => {
+  const p = asyncEvery(range(3), async (v, i) => {
     await ds[i]
     return false
   }, 3)
@@ -103,9 +103,9 @@ test('every first in time', async () => {
   expect(res).toBe(false)
 })
 
-test('every error', async () => {
+test('asyncEvery error', async () => {
   const callList = [...range(3)].map(() => 0)
-  const p = every([...range(3)], async (v, i) => {
+  const p = asyncEvery([...range(3)], async (v, i) => {
     callList[i] += 1
     if (i === 1) {
       throw new TestError()
@@ -124,12 +124,12 @@ test('every error', async () => {
   expect(callList[2]).toStrictEqual(0)
 })
 
-test('every infinite concurrency all pass', async () => {
+test('asyncEvery infinite concurrency all pass', async () => {
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const ds = [...range(3)].map(() => new Deferred())
-  const p = every([...range(3)], async (v, i) => {
+  const p = asyncEvery([...range(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -147,12 +147,12 @@ test('every infinite concurrency all pass', async () => {
   expect(callCount[2]).toBe(1)
 })
 
-test('every infinite concurrency no all pass', async () => {
+test('asyncEvery infinite concurrency no all pass', async () => {
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const ds = [...range(3)].map(() => new Deferred())
-  const p = every([...range(3)], async (v, i) => {
+  const p = asyncEvery([...range(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -174,8 +174,8 @@ test('every infinite concurrency no all pass', async () => {
   expect(callCount[2]).toBe(1)
 })
 
-test('every infinite concurrency error', async () => {
-  const p = every([...range(3)], async (v, i) => {
+test('asyncEvery infinite concurrency error', async () => {
+  const p = asyncEvery([...range(3)], async (v, i) => {
     if (i === 1) {
       throw new TestError()
     }
@@ -191,12 +191,12 @@ test('every infinite concurrency error', async () => {
   await delay()
 })
 
-test('every concurrency 1 all pass', async () => {
+test('asyncEvery concurrency 1 all pass', async () => {
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const ds = [...range(3)].map(() => new Deferred())
-  const p = every([...range(3)], async (v, i) => {
+  const p = asyncEvery([...range(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -214,12 +214,12 @@ test('every concurrency 1 all pass', async () => {
   expect(callCount[2]).toBe(1)
 })
 
-test('every concurrency 1 no all pass', async () => {
+test('asyncEvery concurrency 1 no all pass', async () => {
   const callCount = {}
   ;[...range(3)].forEach((i) => { callCount[i] = 0 })
   const d = new Deferred()
   const ds = [...range(3)].map(() => new Deferred())
-  const p = every([...range(3)], async (v, i) => {
+  const p = asyncEvery([...range(3)], async (v, i) => {
     callCount[i] += 1
     ds[i].resolve()
     await d.promise
@@ -241,9 +241,9 @@ test('every concurrency 1 no all pass', async () => {
   expect(callCount[2]).toBe(0)
 })
 
-test('every concurrency 1 error', async () => {
+test('asyncEvery concurrency 1 error', async () => {
   const callList = [...range(3)].map(() => 0)
-  const p = every([...range(3)], async (v, i) => {
+  const p = asyncEvery([...range(3)], async (v, i) => {
     callList[i] += 1
     if (i === 1) {
       throw new TestError()

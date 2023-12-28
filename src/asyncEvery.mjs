@@ -29,11 +29,11 @@ import findIndex from './findIndex.mjs'
  * if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
  * an exception.
  * @example
- * import { every, sleep } from 'modern-async'
+ * import { asyncEvery, sleep } from 'modern-async'
  *
  * const array = [1, 2, 3]
  *
- * const result = await every(array, async (v) => {
+ * const result = await asyncEvery(array, async (v) => {
  *   // these calls will be performed in parallel with a maximum of 2
  *   // concurrent calls
  *   await sleep(10) // waits 10ms
@@ -42,7 +42,7 @@ import findIndex from './findIndex.mjs'
  * console.log(result) // prints true
  * // total processing time should be ~ 20ms
  */
-async function every (iterable, iteratee, queueOrConcurrency = 1) {
+async function asyncEvery (iterable, iteratee, queueOrConcurrency = 1) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   iteratee = asyncWrap(iteratee)
   const index = await findIndex(iterable, async (value, index, iterable) => {
@@ -52,4 +52,4 @@ async function every (iterable, iteratee, queueOrConcurrency = 1) {
   return result
 }
 
-export default every
+export default asyncEvery
