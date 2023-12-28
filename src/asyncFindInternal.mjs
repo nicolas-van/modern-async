@@ -3,7 +3,7 @@ import assert from 'nanoassert'
 import asyncWrap from './asyncWrap.mjs'
 import asyncIterableWrap from './asyncIterableWrap.mjs'
 import getQueue from './getQueue.mjs'
-import reflectStatus from './reflectStatus.mjs'
+import reflectAsyncStatus from './reflectAsyncStatus.mjs'
 
 /**
  * @ignore
@@ -40,7 +40,7 @@ async function asyncFindInternal (iterable, iteratee, queueOrConcurrency, ordere
     const identifier = waitListIndex
     waitListIndex += 1
     const p = (async () => {
-      return [identifier, await reflectStatus(fct)]
+      return [identifier, await reflectAsyncStatus(fct)]
     })()
     assert(!waitList.has(identifier), 'waitList already contains identifier')
     waitList.set(identifier, p)
@@ -72,7 +72,7 @@ async function asyncFindInternal (iterable, iteratee, queueOrConcurrency, ordere
         const removed = scheduledList.delete(index)
         assert(removed, 'Couldn\'t find index in scheduledList for removal')
 
-        const snapshot = await reflectStatus(() => iteratee(value, index, iterable))
+        const snapshot = await reflectAsyncStatus(() => iteratee(value, index, iterable))
 
         scheduledCount -= 1
         insertInResults(index, value, snapshot)
@@ -103,7 +103,7 @@ async function asyncFindInternal (iterable, iteratee, queueOrConcurrency, ordere
   const fetch = () => {
     fetching = true
     addToWaitList(async () => {
-      const snapshot = await reflectStatus(() => it.next())
+      const snapshot = await reflectAsyncStatus(() => it.next())
       fetching = false
       if (snapshot.status === 'fulfilled') {
         const { value, done } = snapshot.value

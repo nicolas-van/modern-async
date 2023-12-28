@@ -31,7 +31,7 @@ import asyncWrap from './asyncWrap.mjs'
  * as a call to iteratee returned. Defaults to `true`.
  * @yields {any} Each element of `iterable` for which `iteratee` returned `true`.
  * @example
- * import {asyncGeneratorFilter, sleep} from 'modern-async'
+ * import {asyncGeneratorFilter, asyncSleep} from 'modern-async'
  *
  * const iterator = function * () {
  *   for (let i = 0; i < 10000; i += 1) {
@@ -39,7 +39,7 @@ import asyncWrap from './asyncWrap.mjs'
  *   }
  * }
  * const filterIterator = asyncGeneratorFilter(iterator(), async (v) => {
- *   await sleep(1000)
+ *   await asyncSleep(1000)
  *   return v % 3 === 0
  * })
  * for await (const el of filterIterator) {

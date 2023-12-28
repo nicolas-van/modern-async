@@ -1,6 +1,6 @@
 
 import { expect, test } from '@jest/globals'
-import sleepPrecise from './sleepPrecise.mjs'
+import asyncSleepPrecise from './asyncSleepPrecise.mjs'
 import Scheduler, { exceptionHandler } from './Scheduler.mjs'
 import CancelledError from './CancelledError.mjs'
 import Deferred from './Deferred.mjs'
@@ -21,7 +21,7 @@ test('Scheduler base', async () => {
   scheduler.start()
   expect(scheduler.started).toBe(true)
   d.resolve()
-  await sleepPrecise(unit * 1.5 * 3)
+  await asyncSleepPrecise(unit * 1.5 * 3)
   scheduler.stop()
   expect(scheduler.started).toBe(false)
   expect(callCount).toBeGreaterThanOrEqual(3)
@@ -45,7 +45,7 @@ test('Scheduler multi start stop', async () => {
   scheduler.start()
   expect(scheduler.started).toBe(true)
   d.resolve()
-  await sleepPrecise(unit * 1.5 * 3)
+  await asyncSleepPrecise(unit * 1.5 * 3)
   scheduler.stop()
   expect(scheduler.started).toBe(false)
   scheduler.stop()
@@ -71,7 +71,7 @@ test('Scheduler startImmediate', async () => {
   scheduler.start()
   expect(scheduler.started).toBe(true)
   d.resolve()
-  await sleepPrecise(unit * 1.5 * 3)
+  await asyncSleepPrecise(unit * 1.5 * 3)
   scheduler.stop()
   expect(scheduler.started).toBe(false)
   expect(callCount).toBeGreaterThanOrEqual(4)
@@ -87,13 +87,13 @@ test('Scheduler concurrency 1', async () => {
   expect(scheduler.started).toBe(false)
   scheduler.start()
   expect(scheduler.started).toBe(true)
-  await sleepPrecise(100)
+  await asyncSleepPrecise(100)
   d.resolve()
   expect(scheduler._queue.pending).toBe(0)
   scheduler.stop()
   expect(scheduler.started).toBe(false)
   expect(callCount).toBe(1)
-  await sleepPrecise(100)
+  await asyncSleepPrecise(100)
   expect(callCount).toBe(1)
 })
 
@@ -109,14 +109,14 @@ test('Scheduler pending', async () => {
   expect(scheduler.started).toBe(false)
   scheduler.start()
   expect(scheduler.started).toBe(true)
-  await sleepPrecise(150)
+  await asyncSleepPrecise(150)
   expect(scheduler._queue.pending).toBeGreaterThan(3)
   scheduler.stop()
   expect(scheduler._queue.pending).toBe(0)
   expect(scheduler.started).toBe(false)
   expect(callCount).toBe(1)
   d.resolve()
-  await sleepPrecise(150)
+  await asyncSleepPrecise(150)
   expect(callCount).toBe(1)
 })
 
@@ -132,13 +132,13 @@ test('Scheduler concurrency 2', async () => {
   expect(scheduler.started).toBe(false)
   scheduler.start()
   expect(scheduler.started).toBe(true)
-  await sleepPrecise(150)
+  await asyncSleepPrecise(150)
   expect(scheduler._queue.pending).toBe(0)
   scheduler.stop()
   expect(scheduler.started).toBe(false)
   expect(callCount).toBe(2)
   d.resolve()
-  await sleepPrecise(150)
+  await asyncSleepPrecise(150)
   expect(callCount).toBe(2)
 })
 

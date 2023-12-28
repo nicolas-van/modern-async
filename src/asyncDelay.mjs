@@ -1,5 +1,5 @@
 
-import delayCancellable from './delayCancellable.mjs'
+import asyncDelayCancellable from './asyncDelayCancellable.mjs'
 
 /**
  * A function returning a promise that will be resolved in a later task of the event loop.
@@ -15,7 +15,7 @@ import delayCancellable from './delayCancellable.mjs'
  * console.log('this executes in another tick of the event loop')
  */
 async function asyncDelay () {
-  return delayCancellable()[0]
+  return asyncDelayCancellable()[0]
 }
 
 export default asyncDelay

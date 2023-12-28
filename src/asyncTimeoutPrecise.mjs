@@ -1,5 +1,5 @@
 
-import sleepPreciseCancellable from './sleepPreciseCancellable.mjs'
+import asyncSleepPreciseCancellable from './asyncSleepPreciseCancellable.mjs'
 import TimeoutError from './TimeoutError.mjs'
 import asyncWrap from './asyncWrap.mjs'
 import Deferred from './Deferred.mjs'
@@ -8,7 +8,7 @@ import Deferred from './Deferred.mjs'
  * Wraps a call to an asynchronous function to add a timer on it. If the delay is exceeded
  * the returned promise will be rejected with a `TimeoutError`.
  *
- * This function is similar to `timeout()` except it ensures that the amount of time measured
+ * This function is similar to `asyncTimeout()` except it ensures that the amount of time measured
  * using the `Date` object is always greater than or equal the asked amount of time.
  *
  * This function can imply additional delay that can be bad for performances. As such it is
@@ -22,27 +22,27 @@ import Deferred from './Deferred.mjs'
  * to `fct`. If `amount` milliseconds pass before the call to `fct` returns or rejects, this promise will
  * be rejected with a `TimeoutError`.
  * @example
- * import { timeoutPrecise, sleep } from 'modern-async'
+ * import { asyncTimeoutPrecise, asyncSleep } from 'modern-async'
  *
  * // the following statement will perform successfully because
  * // the function will return before the delay
- * await timeoutPrecise(async () => {
- *   await sleep(10)
+ * await asyncTimeoutPrecise(async () => {
+ *   await asyncSleep(10)
  * }, 100)
  *
  * try {
  *   // the following statement will throw after 10ms
- *   await timeoutPrecise(async () => {
- *     await sleep(100)
+ *   await asyncTimeoutPrecise(async () => {
+ *     await asyncSleep(100)
  *   }, 10)
  * } catch (e) {
  *   console.log(e.name) // prints TimeoutError
  * }
  */
-async function timeoutPrecise (fct, amount) {
+async function asyncTimeoutPrecise (fct, amount) {
   const asyncFct = asyncWrap(fct)
 
-  const [timoutPromise, cancelTimeout] = sleepPreciseCancellable(amount)
+  const [timoutPromise, cancelTimeout] = asyncSleepPreciseCancellable(amount)
 
   const basePromise = asyncFct()
 
@@ -59,4 +59,4 @@ async function timeoutPrecise (fct, amount) {
   return deferred.promise.finally(cancelTimeout)
 }
 
-export default timeoutPrecise
+export default asyncTimeoutPrecise

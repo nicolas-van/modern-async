@@ -1,19 +1,19 @@
 
 import { expect, test } from '@jest/globals'
-import sleepPreciseCancellable, { _innerWaitPreciseCancellable } from './sleepPreciseCancellable.mjs'
+import asyncSleepPreciseCancellable, { _innerWaitPreciseCancellable } from './asyncSleepPreciseCancellable.mjs'
 import CancelledError from './CancelledError.mjs'
 
-test('sleepPreciseCancellable base', async () => {
+test('asyncSleepPreciseCancellable base', async () => {
   const start = new Date().getTime()
-  const [p] = sleepPreciseCancellable(100)
+  const [p] = asyncSleepPreciseCancellable(100)
   await p
   const end = new Date().getTime()
   expect(end - start).toBeGreaterThanOrEqual(100)
 })
 
-test('sleepPreciseCancellable cancel', async () => {
+test('asyncSleepPreciseCancellable cancel', async () => {
   const start = new Date().getTime()
-  const [p, cancel] = sleepPreciseCancellable(100)
+  const [p, cancel] = asyncSleepPreciseCancellable(100)
   expect(cancel()).toBe(true)
   try {
     await p
@@ -25,9 +25,9 @@ test('sleepPreciseCancellable cancel', async () => {
   }
 })
 
-test('sleepPreciseCancellable async cancel', async () => {
+test('asyncSleepPreciseCancellable async cancel', async () => {
   const start = new Date().getTime()
-  const [p, cancel] = sleepPreciseCancellable(100)
+  const [p, cancel] = asyncSleepPreciseCancellable(100)
   setTimeout(() => {
     expect(cancel()).toBe(true)
   }, 10)
@@ -41,9 +41,9 @@ test('sleepPreciseCancellable async cancel', async () => {
   }
 })
 
-test('sleepPreciseCancellable double cancel', async () => {
+test('asyncSleepPreciseCancellable double cancel', async () => {
   const start = new Date().getTime()
-  const [p, cancel] = sleepPreciseCancellable(100)
+  const [p, cancel] = asyncSleepPreciseCancellable(100)
   expect(cancel()).toBe(true)
   expect(cancel()).toBe(false)
   try {
@@ -56,14 +56,14 @@ test('sleepPreciseCancellable double cancel', async () => {
   }
 })
 
-test('sleepPreciseCancellable too late cancel', async () => {
-  const [p, cancel] = sleepPreciseCancellable(0)
-  await sleepPreciseCancellable(50)[0]
+test('asyncSleepPreciseCancellable too late cancel', async () => {
+  const [p, cancel] = asyncSleepPreciseCancellable(0)
+  await asyncSleepPreciseCancellable(50)[0]
   expect(cancel()).toBe(false)
   await p
 })
 
-test('sleepPreciseCancellable retriggers', async () => {
+test('asyncSleepPreciseCancellable retriggers', async () => {
   const start = new Date().getTime()
   let first = false
   let callCount = 0

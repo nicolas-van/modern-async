@@ -24,9 +24,9 @@ declare module "Deferred" {
         get reject(): (v: any) => void;
     }
 }
-declare module "delayCancellable" {
-    export default delayCancellable;
-    function delayCancellable(): [Promise<void>, () => boolean];
+declare module "asyncDelayCancellable" {
+    export default asyncDelayCancellable;
+    function asyncDelayCancellable(): [Promise<void>, () => boolean];
 }
 declare module "asyncDelay" {
     export default asyncDelay;
@@ -63,9 +63,9 @@ declare module "asyncEvery" {
     function asyncEvery<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<boolean>;
     import Queue from "Queue";
 }
-declare module "iterableToArray" {
-    export default iterableToArray;
-    function iterableToArray<V>(iterable: Iterable<V> | AsyncIterable<V>): Promise<V[]>;
+declare module "asyncIterableToArray" {
+    export default asyncIterableToArray;
+    function asyncIterableToArray<V>(iterable: Iterable<V> | AsyncIterable<V>): Promise<V[]>;
 }
 declare module "asyncGeneratorMap" {
     export default asyncGeneratorMap;
@@ -112,9 +112,9 @@ declare module "asyncReduceRight" {
     function asyncReduceRight<V, A>(iterable: Iterable<V> | AsyncIterable<V>,reducer: (accumulator: A, value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<A> | A, initial: A): Promise<A>;
     function asyncReduceRight<V>(iterable: Iterable<V> | AsyncIterable<V>, reducer: (accumulator: V, value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<V> | V): Promise<V>;
 }
-declare module "sleepCancellable" {
-    export default sleepCancellable;
-    function sleepCancellable(amount: number): [Promise<void>, () => boolean];
+declare module "asyncSleepCancellable" {
+    export default asyncSleepCancellable;
+    function asyncSleepCancellable(amount: number): [Promise<void>, () => boolean];
 }
 declare module "Scheduler" {
     export default Scheduler;
@@ -133,17 +133,17 @@ declare module "Scheduler" {
         stop(): void;
     }
 }
-declare module "sleep" {
-    export default sleep;
-    function sleep(amount: number): Promise<void>;
+declare module "asyncSleep" {
+    export default asyncSleep;
+    function asyncSleep(amount: number): Promise<void>;
 }
-declare module "sleepPreciseCancellable" {
-    export default sleepPreciseCancellable;
-    function sleepPreciseCancellable(amount: number): [Promise<void>, () => boolean];
+declare module "asyncSleepPreciseCancellable" {
+    export default asyncSleepPreciseCancellable;
+    function asyncSleepPreciseCancellable(amount: number): [Promise<void>, () => boolean];
 }
-declare module "sleepPrecise" {
-    export default sleepPrecise;
-    function sleepPrecise(amount: number): Promise<void>;
+declare module "asyncSleepPrecise" {
+    export default asyncSleepPrecise;
+    function asyncSleepPrecise(amount: number): Promise<void>;
 }
 declare module "asyncSome" {
     export default asyncSome;
@@ -156,17 +156,17 @@ declare module "TimeoutError" {
         constructor(message: string);
     }
 }
-declare module "timeout" {
-    export default timeout;
-    function timeout<T>(fct: () => Promise<T> | T, amount: number): Promise<T>;
+declare module "asyncTimeout" {
+    export default asyncTimeout;
+    function asyncTimeout<T>(fct: () => Promise<T> | T, amount: number): Promise<T>;
 }
-declare module "timeoutPrecise" {
-    export default timeoutPrecise;
-    function timeoutPrecise<T>(fct: () => Promise<T> | T, amount: number): Promise<T>;
+declare module "asyncTimeoutPrecise" {
+    export default asyncTimeoutPrecise;
+    function asyncTimeoutPrecise<T>(fct: () => Promise<T> | T, amount: number): Promise<T>;
 }
-declare module "reflectStatus" {
-    export default reflectStatus;
-    function reflectStatus<T>(fct: () => Promise<T> | T): Promise<PromiseSettledResult<T>>;
+declare module "reflectAsyncStatus" {
+    export default reflectAsyncStatus;
+    function reflectAsyncStatus<T>(fct: () => Promise<T> | T): Promise<PromiseSettledResult<T>>;
 }
 declare module "modern-async" {
     export { default as asyncIterableWrap } from "asyncIterableWrap";
@@ -175,7 +175,7 @@ declare module "modern-async" {
     export { default as CancelledError } from "CancelledError";
     export { default as Deferred } from "Deferred";
     export { default as asyncDelay } from "asyncDelay";
-    export { default as delayCancellable } from "delayCancellable";
+    export { default as asyncDelayCancellable } from "asyncDelayCancellable";
     export { default as Delayer } from "Delayer";
     export { default as asyncEvery } from "asyncEvery";
     export { default as asyncFilter } from "asyncFilter";
@@ -190,14 +190,14 @@ declare module "modern-async" {
     export { default as asyncReduce } from "asyncReduce";
     export { default as asyncReduceRight } from "asyncReduceRight";
     export { default as Scheduler } from "Scheduler";
-    export { default as sleep } from "sleep";
-    export { default as sleepCancellable } from "sleepCancellable";
-    export { default as sleepPrecise } from "sleepPrecise";
-    export { default as sleepPreciseCancellable } from "sleepPreciseCancellable";
+    export { default as asyncSleep } from "asyncSleep";
+    export { default as asyncSleepCancellable } from "asyncSleepCancellable";
+    export { default as asyncSleepPrecise } from "asyncSleepPrecise";
+    export { default as asyncSleepPreciseCancellable } from "asyncSleepPreciseCancellable";
     export { default as asyncSome } from "asyncSome";
-    export { default as timeout } from "timeout";
+    export { default as asyncTimeout } from "asyncTimeout";
     export { default as TimeoutError } from "TimeoutError";
-    export { default as timeoutPrecise } from "timeoutPrecise";
-    export { default as iterableToArray } from "iterableToArray";
-    export { default as reflectStatus } from "reflectStatus";
+    export { default as asyncTimeoutPrecise } from "asyncTimeoutPrecise";
+    export { default as asyncIterableToArray } from "asyncIterableToArray";
+    export { default as reflectAsyncStatus } from "reflectAsyncStatus";
 }

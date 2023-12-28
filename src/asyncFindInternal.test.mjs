@@ -6,7 +6,7 @@ import { range } from 'itertools'
 import asyncDelay from './asyncDelay.mjs'
 import Queue from './Queue.mjs'
 import Deferred from './Deferred.mjs'
-import sleep from './sleep.mjs'
+import asyncSleep from './asyncSleep.mjs'
 
 // eslint-disable-next-line require-jsdoc
 class TestError extends Error {}
@@ -57,7 +57,7 @@ test('asyncFindInternal cancel scheduled busy queue', async () => {
   const callList = []
   const [state, result] = await asyncFindInternal(range(100), async (x, i) => {
     callList.push(i)
-    await sleep(1)
+    await asyncSleep(1)
     if (i === 50) {
       throw new TestError()
     }
@@ -88,7 +88,7 @@ test('asyncFindInternal infinite sync operator', async () => {
   const callList = []
   const [index] = await asyncFindInternal(infiniteSyncGenerator(), async (v, i) => {
     callList.push(i)
-    await sleep(1)
+    await asyncSleep(1)
     if (i === 2) {
       shouldStop = true
     }

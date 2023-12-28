@@ -17,9 +17,9 @@ import clearImmediate from 'core-js-pure/features/clear-immediate.js'
  *   * The cancel function. It will return a boolean that will be true if the promise was effectively cancelled,
  *     false otherwise.
  * @example
- * import { delayCancellable, CancelledError } from 'modern-async'
+ * import { asyncDelayCancellable, CancelledError } from 'modern-async'
  *
- * const [promise, cancel] = delayCancellable()
+ * const [promise, cancel] = asyncDelayCancellable()
  * cancel()
  * try {
  *   await promise
@@ -27,7 +27,7 @@ import clearImmediate from 'core-js-pure/features/clear-immediate.js'
  *   console.log(e instanceof CancelledError) // prints true
  * }
  */
-function delayCancellable () {
+function asyncDelayCancellable () {
   const deferred = new Deferred()
   const id = setImmediate(deferred.resolve)
   let terminated = false
@@ -45,4 +45,4 @@ function delayCancellable () {
   }]
 }
 
-export default delayCancellable
+export default asyncDelayCancellable

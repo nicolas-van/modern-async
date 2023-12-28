@@ -22,13 +22,13 @@ import Queue from './Queue.mjs'
  * @returns {Promise} A promise that will be resolved when all the calls to `iteratee` have been done.
  * This promise will be rejected if any call to `iteratee` throws an exception.
  * @example
- * import { asyncForEach, sleep } from 'modern-async'
+ * import { asyncForEach, asyncSleep } from 'modern-async'
  *
  * const array = [1, 2, 3]
  * await asyncForEach(array, async (v) => {
  *   // these calls will be performed in parallel with a maximum of 2
  *   // concurrent calls
- *   await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+ *   await asyncSleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
  *   console.log(v)
  * }, 2)
  * // prints 1, 2 and 3 in a random order (it will always print 1 or 2 before printing 3 due to

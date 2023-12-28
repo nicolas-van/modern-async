@@ -6,11 +6,11 @@
  * internally and can be useful to code other asynchronous helpers.
  *
  * @example
- * import { Deferred, sleep } from 'modern-async'
+ * import { Deferred, asyncSleep } from 'modern-async'
  *
  * const deferred = new Deferred()
  *
- * sleep(10).then(() => {
+ * asyncSleep(10).then(() => {
  *   deferred.resolve('test')
  * })
  *

@@ -1,5 +1,5 @@
 
-import sleepCancellable from './sleepCancellable.mjs'
+import asyncSleepCancellable from './asyncSleepCancellable.mjs'
 import TimeoutError from './TimeoutError.mjs'
 import asyncWrap from './asyncWrap.mjs'
 import Deferred from './Deferred.mjs'
@@ -17,27 +17,27 @@ import Deferred from './Deferred.mjs'
  * to `fct`. If `amount` milliseconds pass before the call to `fct` returns or rejects, this promise will
  * be rejected with a `TimeoutError`.
  * @example
- * import { timeout, sleep } from 'modern-async'
+ * import { asyncTimeout, asyncSleep } from 'modern-async'
  *
  * // the following statement will perform successfully because
  * // the function will return before the delay
- * await timeout(async () => {
- *   await sleep(10)
+ * await asyncTimeout(async () => {
+ *   await asyncSleep(10)
  * }, 100)
  *
  * try {
  *   // the following statement will throw after 10ms
- *   await timeout(async () => {
- *     await sleep(100)
+ *   await asyncTimeout(async () => {
+ *     await asyncSleep(100)
  *   }, 10)
  * } catch (e) {
  *   console.log(e.name) // prints TimeoutError
  * }
  */
-async function timeout (fct, amount) {
+async function asyncTimeout (fct, amount) {
   const asyncFct = asyncWrap(fct)
 
-  const [timoutPromise, cancelTimeout] = sleepCancellable(amount)
+  const [timoutPromise, cancelTimeout] = asyncSleepCancellable(amount)
 
   const basePromise = asyncFct()
 
@@ -54,4 +54,4 @@ async function timeout (fct, amount) {
   return deferred.promise.finally(cancelTimeout)
 }
 
-export default timeout
+export default asyncTimeout

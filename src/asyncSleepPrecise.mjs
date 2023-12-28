@@ -1,10 +1,10 @@
 
-import sleepPreciseCancellable from './sleepPreciseCancellable.mjs'
+import asyncSleepPreciseCancellable from './asyncSleepPreciseCancellable.mjs'
 
 /**
  * Waits a given amount of time.
  *
- * This function is similar to `sleep()` except it ensures that the amount of time measured
+ * This function is similar to `asyncSleep()` except it ensures that the amount of time measured
  * using the `Date` object is always greater than or equal the asked amount of time.
  *
  * This function can imply additional delay that can be bad for performances. As such it is
@@ -15,12 +15,12 @@ import sleepPreciseCancellable from './sleepPreciseCancellable.mjs'
  * @param {number} amount An amount of time in milliseconds
  * @returns {Promise<void>} A promise that will be resolved after the given amount of time has passed.
  * @example
- * import { sleepPrecise } from 'modern-async'
+ * import { asyncSleepPrecise } from 'modern-async'
  *
- * await sleepPrecise(100) // will wait 100ms
+ * await asyncSleepPrecise(100) // will wait 100ms
  */
-async function sleepPrecise (amount) {
-  return sleepPreciseCancellable(amount)[0]
+async function asyncSleepPrecise (amount) {
+  return asyncSleepPreciseCancellable(amount)[0]
 }
 
-export default sleepPrecise
+export default asyncSleepPrecise

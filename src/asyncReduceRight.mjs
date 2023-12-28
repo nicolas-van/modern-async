@@ -21,12 +21,12 @@ import asyncWrap from './asyncWrap.mjs'
  * @returns {Promise} A promise that will be resolved with the result of the reduce operation,
  *   or rejected if any of the calls to `reducer` throws an exception.
  * @example
- * import { asyncReduceRight, sleep } from 'modern-async'
+ * import { asyncReduceRight, asyncSleep } from 'modern-async'
  *
  * const array = [1, 2, 3]
  * const result = await asyncReduceRight(array, async (v, p) => {
  *   // these calls will be performed sequentially
- *   await sleep(10) // waits 10ms
+ *   await asyncSleep(10) // waits 10ms
  *   return v + p
  * })
  * console.log(result) // prints 6

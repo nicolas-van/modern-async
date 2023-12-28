@@ -1,10 +1,10 @@
 
 import { expect, test } from '@jest/globals'
-import sleepPrecise from './sleepPrecise.mjs'
+import asyncSleepPrecise from './asyncSleepPrecise.mjs'
 
-test('sleepPrecise', async () => {
+test('asyncSleepPrecise', async () => {
   const start = new Date().getTime()
-  await sleepPrecise(100)
+  await asyncSleepPrecise(100)
   const end = new Date().getTime()
   expect(end - start).toBeGreaterThanOrEqual(100)
 })

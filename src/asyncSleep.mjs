@@ -1,5 +1,5 @@
 
-import sleepCancellable from './sleepCancellable.mjs'
+import asyncSleepCancellable from './asyncSleepCancellable.mjs'
 
 /**
  * Waits a given amount of time.
@@ -10,21 +10,21 @@ import sleepCancellable from './sleepCancellable.mjs'
  * @param {number} amount An amount of time in milliseconds
  * @returns {Promise<void>} A promise that will be resolved after the given amount of time has passed.
  * @example
- * import { sleep } from 'modern-async'
+ * import { asyncSleep } from 'modern-async'
  *
- * await sleep(100) // will wait 100ms
+ * await asyncSleep(100) // will wait 100ms
  * @example
- * // another example that doesn't block on the sleep call
+ * // another example that doesn't block on the asyncSleep call
  * // it's functionally identical to using setTimout but with a promise syntax
- * import { sleep } from 'modern-async'
+ * import { asyncSleep } from 'modern-async'
  *
- * sleep(10).then(() => {
+ * asyncSleep(10).then(() => {
  *   console.log('hello')
  * })
  * // will print 'hello' after 10ms
  */
-async function sleep (amount) {
-  return sleepCancellable(amount)[0]
+async function asyncSleep (amount) {
+  return asyncSleepCancellable(amount)[0]
 }
 
-export default sleep
+export default asyncSleep

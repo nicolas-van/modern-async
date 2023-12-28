@@ -5,8 +5,8 @@ import { range } from 'itertools'
 import asyncDelay from './asyncDelay.mjs'
 import Queue from './Queue.mjs'
 import Deferred from './Deferred.mjs'
-import sleep from './sleep'
-import iterableToArray from './iterableToArray.mjs'
+import asyncSleep from './asyncSleep'
+import asyncIterableToArray from './asyncIterableToArray.mjs'
 
 // eslint-disable-next-line require-jsdoc
 class TestError extends Error {}
@@ -58,7 +58,7 @@ test('asyncGeneratorMap infinity all resolve in micro tasks', async () => {
 test('asyncGeneratorMap same queue one level concurrency 1 random delays', async () => {
   const queue = new Queue(10)
   const gen1 = asyncGeneratorMap(range(1000), async (x, i) => {
-    await sleep(Math.floor(Math.random() * 10))
+    await asyncSleep(Math.floor(Math.random() * 10))
     return x * 2
   }, queue)
   const p = (async () => {
@@ -75,7 +75,7 @@ test('asyncGeneratorMap same queue one level concurrency 1 random delays', async
 test('asyncGeneratorMap same queue one level concurrency 10 random delays', async () => {
   const queue = new Queue(10)
   const gen1 = asyncGeneratorMap(range(1000), async (x, i) => {
-    await sleep(Math.floor(Math.random() * 10))
+    await asyncSleep(Math.floor(Math.random() * 10))
     return x * 2
   }, queue)
   const p = (async () => {
@@ -95,7 +95,7 @@ test('asyncGeneratorMap same queue one level concurrency 3 busy queue random del
     queue.exec(async () => new Promise(() => {}))
   })
   const gen1 = asyncGeneratorMap(range(1000), async (x, i) => {
-    await sleep(Math.floor(Math.random() * 10))
+    await asyncSleep(Math.floor(Math.random() * 10))
     return x * 2
   }, queue)
   const p = (async () => {
@@ -190,15 +190,15 @@ test('asyncGeneratorMap same queue three levels concurrency infinity', async () 
 test('asyncGeneratorMap same queue three levels concurrency 1 random delays', async () => {
   const queue = new Queue(1)
   const gen1 = asyncGeneratorMap(range(100), async (x, i) => {
-    await sleep(Math.floor(Math.random() * 10))
+    await asyncSleep(Math.floor(Math.random() * 10))
     return x * 2
   }, queue)
   const gen2 = asyncGeneratorMap(gen1, async (x, i) => {
-    await sleep(Math.floor(Math.random() * 10))
+    await asyncSleep(Math.floor(Math.random() * 10))
     return x * 2
   }, queue)
   const gen3 = asyncGeneratorMap(gen2, async (x, i) => {
-    await sleep(Math.floor(Math.random() * 10))
+    await asyncSleep(Math.floor(Math.random() * 10))
     return x * 2
   }, queue)
   const p = (async () => {
@@ -215,15 +215,15 @@ test('asyncGeneratorMap same queue three levels concurrency 1 random delays', as
 test('asyncGeneratorMap same queue three levels concurrency 5 random delays', async () => {
   const queue = new Queue(5)
   const gen1 = asyncGeneratorMap(range(100), async (x, i) => {
-    await sleep(Math.floor(Math.random() * 10))
+    await asyncSleep(Math.floor(Math.random() * 10))
     return x * 2
   }, queue, true)
   const gen2 = asyncGeneratorMap(gen1, async (x, i) => {
-    await sleep(Math.floor(Math.random() * 10))
+    await asyncSleep(Math.floor(Math.random() * 10))
     return x * 2
   }, queue, true)
   const gen3 = asyncGeneratorMap(gen2, async (x, i) => {
-    await sleep(Math.floor(Math.random() * 10))
+    await asyncSleep(Math.floor(Math.random() * 10))
     return x * 2
   }, queue, true)
   const p = (async () => {
@@ -240,15 +240,15 @@ test('asyncGeneratorMap same queue three levels concurrency 5 random delays', as
 test('asyncGeneratorMap same queue three levels infinity random delays', async () => {
   const queue = new Queue(Number.POSITIVE_INFINITY)
   const gen1 = asyncGeneratorMap(range(100), async (x, i) => {
-    await sleep(Math.floor(Math.random() * 10))
+    await asyncSleep(Math.floor(Math.random() * 10))
     return x * 2
   }, queue)
   const gen2 = asyncGeneratorMap(gen1, async (x, i) => {
-    await sleep(Math.floor(Math.random() * 10))
+    await asyncSleep(Math.floor(Math.random() * 10))
     return x * 2
   }, queue)
   const gen3 = asyncGeneratorMap(gen2, async (x, i) => {
-    await sleep(Math.floor(Math.random() * 10))
+    await asyncSleep(Math.floor(Math.random() * 10))
     return x * 2
   }, queue)
   const p = (async () => {
@@ -268,15 +268,15 @@ test('asyncGeneratorMap same queue three levels busy queue random delays ', asyn
     queue.exec(async () => new Promise(() => {}))
   })
   const gen1 = asyncGeneratorMap(range(100), async (x, i) => {
-    await sleep(Math.floor(Math.random() * 10))
+    await asyncSleep(Math.floor(Math.random() * 10))
     return x * 2
   }, queue)
   const gen2 = asyncGeneratorMap(gen1, async (x, i) => {
-    await sleep(Math.floor(Math.random() * 10))
+    await asyncSleep(Math.floor(Math.random() * 10))
     return x * 2
   }, queue)
   const gen3 = asyncGeneratorMap(gen2, async (x, i) => {
-    await sleep(Math.floor(Math.random() * 10))
+    await asyncSleep(Math.floor(Math.random() * 10))
     return x * 2
   }, queue)
   const p = (async () => {
@@ -550,14 +550,14 @@ test('asyncGeneratorMap cancel scheduled busy queue', async () => {
   const callList = []
   const gen = asyncGeneratorMap(range(100), async (x, i) => {
     callList.push(i)
-    await sleep(1)
+    await asyncSleep(1)
     if (i === 50) {
       throw new TestError()
     }
     return x
   }, queue)
 
-  const [state, result] = await iterableToArray(gen).then((r) => ['resolved', r], (e) => ['rejected', e])
+  const [state, result] = await asyncIterableToArray(gen).then((r) => ['resolved', r], (e) => ['rejected', e])
   expect(state).toStrictEqual('rejected')
   expect(result).toBeInstanceOf(TestError)
 
@@ -582,7 +582,7 @@ test('asyncGeneratorMap infinite sync operator', async () => {
   }
   const results = []
   for await (const el of asyncGeneratorMap(infiniteSyncGenerator(), async (el) => {
-    await sleep(1)
+    await asyncSleep(1)
     if (el === 10) {
       shouldStop = true
     }
@@ -600,7 +600,7 @@ test('asyncGeneratorMap infinite sync operator', async () => {
 test('asyncGeneratorMap respect concurrency', async () => {
   const callList = []
   const d = new Deferred()
-  const p = iterableToArray(asyncGeneratorMap(range(10), async (el, i) => {
+  const p = asyncIterableToArray(asyncGeneratorMap(range(10), async (el, i) => {
     callList.push(i)
     await d.promise
     return el
@@ -609,5 +609,5 @@ test('asyncGeneratorMap respect concurrency', async () => {
   expect(callList).toStrictEqual([0, 1, 2])
   d.resolve()
   const result = await p
-  expect(result).toStrictEqual(await iterableToArray(range(10)))
+  expect(result).toStrictEqual(await asyncIterableToArray(range(10)))
 })

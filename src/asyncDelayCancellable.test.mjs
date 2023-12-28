@@ -1,11 +1,11 @@
 
 import { expect, test } from '@jest/globals'
-import delayCancellable from './delayCancellable.mjs'
+import asyncDelayCancellable from './asyncDelayCancellable.mjs'
 import CancelledError from './CancelledError.mjs'
 
-test('delayCancellable', async () => {
+test('asyncDelayCancellable', async () => {
   const events = []
-  const p = delayCancellable()[0].then(() => {
+  const p = asyncDelayCancellable()[0].then(() => {
     events.push('resolved')
   })
   Promise.resolve().then(() => {
@@ -16,8 +16,8 @@ test('delayCancellable', async () => {
   expect(events).toStrictEqual(['microtask', 'resolved'])
 })
 
-test('delayCancellable cancel', async () => {
-  const [p, cancel] = delayCancellable()
+test('asyncDelayCancellable cancel', async () => {
+  const [p, cancel] = asyncDelayCancellable()
   const res = cancel()
   expect(res).toBe(true)
   try {

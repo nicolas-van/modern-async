@@ -1,6 +1,6 @@
 
 import assert from 'nanoassert'
-import sleepCancellable from './sleepCancellable.mjs'
+import asyncSleepCancellable from './asyncSleepCancellable.mjs'
 import Deferred from './Deferred.mjs'
 
 /**
@@ -9,7 +9,7 @@ import Deferred from './Deferred.mjs'
  * This function returns both a promise and cancel function in order to cancel the
  * wait time if necessary. If cancelled, the promise will be rejected with a `CancelledError`.
  *
- * This function is similar to `sleep()` except it ensures that the amount of time measured
+ * This function is similar to `asyncSleep()` except it ensures that the amount of time measured
  * using the `Date` object is always greater than or equal the asked amount of time.
  *
  * This function can imply additional delay that can be bad for performances. As such it is
@@ -23,9 +23,9 @@ import Deferred from './Deferred.mjs'
  *   * `cancel`: The cancel function. It will return a boolean that will be `true` if the promise was effectively cancelled,
  *     `false` otherwise.
  * @example
- * import { sleepPreciseCancellable } from 'modern-async'
+ * import { asyncSleepPreciseCancellable } from 'modern-async'
  *
- * const [promise, cancel] = sleepPreciseCancellable(100) // schedule to resolve the promise after 100ms
+ * const [promise, cancel] = asyncSleepPreciseCancellable(100) // schedule to resolve the promise after 100ms
  *
  * cancel()
  *
@@ -35,13 +35,13 @@ import Deferred from './Deferred.mjs'
  *   console.log(e.name) // prints CancelledError
  * }
  */
-function sleepPreciseCancellable (amount) {
+function asyncSleepPreciseCancellable (amount) {
   return _innerWaitPreciseCancellable(amount, (ellasped, amount) => {
     return ellasped >= amount
   })
 }
 
-export default sleepPreciseCancellable
+export default asyncSleepPreciseCancellable
 
 /**
  * @ignore
@@ -52,7 +52,7 @@ export default sleepPreciseCancellable
 function _innerWaitPreciseCancellable (amount, checkPassed) {
   assert(typeof amount === 'number', 'amount must be a number')
   const start = new Date().getTime()
-  const [p, cancel] = sleepCancellable(amount)
+  const [p, cancel] = asyncSleepCancellable(amount)
   let lastCancel = cancel
   const deferred = new Deferred()
   const reject = (e) => {
@@ -64,7 +64,7 @@ function _innerWaitPreciseCancellable (amount, checkPassed) {
     if (checkPassed(ellasped, amount)) {
       deferred.resolve()
     } else {
-      const [np, ncancel] = sleepCancellable(amount - ellasped)
+      const [np, ncancel] = asyncSleepCancellable(amount - ellasped)
       lastCancel = ncancel
       np.then(resolve, reject)
     }

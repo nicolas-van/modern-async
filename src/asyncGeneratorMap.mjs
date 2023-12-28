@@ -4,7 +4,7 @@ import asyncWrap from './asyncWrap.mjs'
 import asyncIterableWrap from './asyncIterableWrap.mjs'
 import getQueue from './getQueue.mjs'
 import Queue from './Queue.mjs'
-import reflectStatus from './reflectStatus.mjs'
+import reflectAsyncStatus from './reflectAsyncStatus.mjs'
 
 /**
  * Produces a an async iterator that will return each value or `iterable` after having processed them through
@@ -34,7 +34,7 @@ import reflectStatus from './reflectStatus.mjs'
  * as a call to iteratee returned. Defaults to `true`.
  * @yields {any} Each element of `iterable` after processing it through `iteratee`.
  * @example
- * import {asyncGeneratorMap, sleep} from 'modern-async'
+ * import {asyncGeneratorMap, asyncSleep} from 'modern-async'
  *
  * const iterator = function * () {
  *   for (let i = 0; i < 10000; i += 1) {
@@ -42,7 +42,7 @@ import reflectStatus from './reflectStatus.mjs'
  *   }
  * }
  * const mapIterator = asyncGeneratorMap(iterator(), async (v) => {
- *   await sleep(1000)
+ *   await asyncSleep(1000)
  *   return v * 2
  * })
  * for await (const el of mapIterator) {
@@ -78,7 +78,7 @@ async function * asyncGeneratorMap (iterable, iteratee, queueOrConcurrency = 1, 
     const identifier = waitListIndex
     waitListIndex += 1
     const p = (async () => {
-      return [identifier, await reflectStatus(fct)]
+      return [identifier, await reflectAsyncStatus(fct)]
     })()
     assert(!waitList.has(identifier), 'waitList contains identifier')
     waitList.set(identifier, p)
@@ -110,7 +110,7 @@ async function * asyncGeneratorMap (iterable, iteratee, queueOrConcurrency = 1, 
         const removed = scheduledList.delete(index)
         assert(removed, 'Couldn\'t find index in scheduledList for removal')
 
-        const snapshot = await reflectStatus(() => iteratee(value, index, iterable))
+        const snapshot = await reflectAsyncStatus(() => iteratee(value, index, iterable))
 
         scheduledCount -= 1
         insertInResults(index, value, snapshot)
@@ -141,7 +141,7 @@ async function * asyncGeneratorMap (iterable, iteratee, queueOrConcurrency = 1, 
   const fetch = () => {
     fetching = true
     addToWaitList(async () => {
-      const snapshot = await reflectStatus(() => it.next())
+      const snapshot = await reflectAsyncStatus(() => it.next())
       fetching = false
       if (snapshot.status === 'fulfilled') {
         const { value, done } = snapshot.value

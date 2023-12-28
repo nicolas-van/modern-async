@@ -7,20 +7,20 @@ import asyncIterableWrap from './asyncIterableWrap.mjs'
  * @param {Iterable | AsyncIterable} iterable An iterator or async iterator.
  * @returns {Promise<any[]>} An array.
  * @example
- * import { iterableToArray, sleep } from 'modern-async'
+ * import { asyncIterableToArray, asyncSleep } from 'modern-async'
  *
  * // example async generator
  * async function* asyncGenerator() {
  *   for (let i = 0; i < 3; i += 1) {
- *     await sleep(10)
+ *     await asyncSleep(10)
  *     yield i
  *   }
  * }
  *
- * console.log(await iterableToArray(asyncGenerator()))
+ * console.log(await asyncIterableToArray(asyncGenerator()))
  * // prints [0, 1, 2]
  */
-async function iterableToArray (iterable) {
+async function asyncIterableToArray (iterable) {
   const it = asyncIterableWrap(iterable)
   const results = []
   for await (const el of it) {
@@ -29,4 +29,4 @@ async function iterableToArray (iterable) {
   return results
 }
 
-export default iterableToArray
+export default asyncIterableToArray

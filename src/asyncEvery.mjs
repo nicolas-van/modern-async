@@ -29,14 +29,14 @@ import asyncFindIndex from './asyncFindIndex.mjs'
  * if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
  * an exception.
  * @example
- * import { asyncEvery, sleep } from 'modern-async'
+ * import { asyncEvery, asyncSleep } from 'modern-async'
  *
  * const array = [1, 2, 3]
  *
  * const result = await asyncEvery(array, async (v) => {
  *   // these calls will be performed in parallel with a maximum of 2
  *   // concurrent calls
- *   await sleep(10) // waits 10ms
+ *   await asyncSleep(10) // waits 10ms
  *   return v > 0
  * }, 2)
  * console.log(result) // prints true

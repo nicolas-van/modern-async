@@ -27,13 +27,13 @@ import Queue from './Queue.mjs'
  * @returns {Promise<any | undefined>} A promise that will be resolved with the first found value or rejected if one of the
  * `iteratee` calls throws an exception before finding a value. If no value is found it will return `undefined`.
  * @example
- * import { asyncFind, sleep } from 'modern-async'
+ * import { asyncFind, asyncSleep } from 'modern-async'
  *
  * const array = [1, 2, 3, 4, 5]
  * const result = await asyncFind(array, async (v) => {
  *   // these calls will be performed in parallel with a maximum of 3
  *   // concurrent calls
- *   await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+ *   await asyncSleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
  *   return v % 2 === 1
  * }, 3)
  * console.log(result) // prints 1

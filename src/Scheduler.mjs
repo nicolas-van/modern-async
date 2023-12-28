@@ -1,5 +1,5 @@
 
-import sleepCancellable from './sleepCancellable.mjs'
+import asyncSleepCancellable from './asyncSleepCancellable.mjs'
 import Queue from './Queue.mjs'
 import assert from 'nanoassert'
 import asyncWrap from './asyncWrap.mjs'
@@ -12,14 +12,14 @@ import CancelledError from './CancelledError.mjs'
  * tasks. Notably it can limit the concurrency of asynchronous tasks running in parallel.
  *
  * @example
- * import { Scheduler, sleep } from 'modern-async'
+ * import { Scheduler, asyncSleep } from 'modern-async'
  *
  * let i = 0
  * const scheduler = new Scheduler(async () => {
  *   const taskNbr = i
  *   i += 1
  *   console.log(`Starting task ${taskNbr}`)
- *   await sleep(10) // waits 10ms
+ *   await asyncSleep(10) // waits 10ms
  *   console.log(`Ending task ${taskNbr}`)
  * }, 100) // a scheduler that triggers every 100ms
  * // the default configuration uses a maximum concurrency of 1 and doesn't allow pending
@@ -27,7 +27,7 @@ import CancelledError from './CancelledError.mjs'
  *
  * scheduler.start() // starts the scheduler
  *
- * await sleep(1000) // waits 1s, during that time the task should trigger ~ 9 times
+ * await asyncSleep(1000) // waits 1s, during that time the task should trigger ~ 9 times
  *
  * scheduler.stop() // stops the scheduler
  * console.log('Scheduler stopped')
@@ -198,13 +198,13 @@ class Scheduler {
     this._nbrTriggering += 1
     const nextTime = this._initialTime + (this.delay * this._nbrTriggering)
     const currentTime = new Date().getTime()
-    const [promise, cancel] = sleepCancellable(nextTime - currentTime)
+    const [promise, cancel] = asyncSleepCancellable(nextTime - currentTime)
     this._cancelSleep = cancel
     promise.then(() => {
       this._triggerTask()
       this._scheduleSleep()
     }, () => {
-      // ignore cancelled sleep
+      // ignore cancelled asyncSleep
     })
   }
 
