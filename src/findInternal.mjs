@@ -3,6 +3,7 @@ import assert from 'nanoassert'
 import asyncWrap from './asyncWrap.mjs'
 import asyncIterableWrap from './asyncIterableWrap.mjs'
 import getQueue from './getQueue.mjs'
+import reflectStatus from './reflectStatus.mjs'
 
 /**
  * @ignore
@@ -39,11 +40,7 @@ async function findInternal (iterable, iteratee, queueOrConcurrency, ordered) {
     const identifier = waitListIndex
     waitListIndex += 1
     const p = (async () => {
-      try {
-        return [identifier, 'resolved', await fct()]
-      } catch (e) {
-        return [identifier, 'rejected', e]
-      }
+      return [identifier, await reflectStatus(fct)]
     })()
     assert(!waitList.has(identifier), 'waitList already contains identifier')
     waitList.set(identifier, p)
@@ -75,12 +72,11 @@ async function findInternal (iterable, iteratee, queueOrConcurrency, ordered) {
         const removed = scheduledList.delete(index)
         assert(removed, 'Couldn\'t find index in scheduledList for removal')
 
-        const [state, result] = await iteratee(value, index, iterable)
-          .then((r) => ['resolved', r], (e) => ['rejected', e])
+        const snapshot = await reflectStatus(() => iteratee(value, index, iterable))
 
         scheduledCount -= 1
-        insertInResults(index, value, state, result)
-        if (state === 'rejected' || (state === 'resolved' && result)) {
+        insertInResults(index, value, snapshot)
+        if (snapshot.status === 'rejected' || (snapshot.status === 'fulfilled' && snapshot.value)) {
           shouldStop = true
           cancelAllScheduled(ordered ? index : 0)
         }
@@ -107,10 +103,10 @@ async function findInternal (iterable, iteratee, queueOrConcurrency, ordered) {
   const fetch = () => {
     fetching = true
     addToWaitList(async () => {
-      const [state, result] = await it.next().then((r) => ['resolved', r], (e) => ['rejected', e])
+      const snapshot = await reflectStatus(() => it.next())
       fetching = false
-      if (state === 'resolved') {
-        const { value, done } = result
+      if (snapshot.status === 'fulfilled') {
+        const { value, done } = snapshot.value
         if (!done) {
           lastIndexFetched += 1
           assert(fetchedValue === null, 'fetchedValue should be null')
@@ -124,19 +120,19 @@ async function findInternal (iterable, iteratee, queueOrConcurrency, ordered) {
         exhausted = true
         lastIndexFetched += 1
         const index = lastIndexFetched
-        insertInResults(index, undefined, state, result)
+        insertInResults(index, undefined, snapshot)
         cancelAllScheduled(ordered ? index : 0)
       }
     })
   }
 
-  const insertInResults = (index, value, state, result) => {
+  const insertInResults = (index, value, snapshot) => {
     if (ordered) {
       assert(index - lastIndexHandled - 1 >= 0, 'invalid index to insert')
       assert(results[index - lastIndexHandled - 1] === undefined, 'already inserted result')
-      results[index - lastIndexHandled - 1] = { index, value, state, result }
+      results[index - lastIndexHandled - 1] = { index, value, snapshot }
     } else {
-      results.push({ index, value, state, result })
+      results.push({ index, value, snapshot })
     }
   }
 
@@ -146,9 +142,9 @@ async function findInternal (iterable, iteratee, queueOrConcurrency, ordered) {
     while (results.length >= 1 && results[0] !== undefined) {
       const result = results.shift()
       lastIndexHandled += 1
-      if (result.state === 'rejected') {
-        throw result.result
-      } else if (result.result) {
+      if (result.snapshot.status === 'rejected') {
+        throw result.snapshot.reason
+      } else if (result.snapshot.value) {
         return [result.index, result.value]
       }
     }

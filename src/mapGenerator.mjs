@@ -78,8 +78,7 @@ async function * mapGenerator (iterable, iteratee, queueOrConcurrency = 1, order
     const identifier = waitListIndex
     waitListIndex += 1
     const p = (async () => {
-      const snapshot = await reflectStatus(fct)
-      return [identifier, snapshot]
+      return [identifier, await reflectStatus(fct)]
     })()
     assert(!waitList.has(identifier), 'waitList contains identifier')
     waitList.set(identifier, p)
