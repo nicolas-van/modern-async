@@ -58,11 +58,6 @@ declare module "Queue" {
         cancelAllPending(): number;
     }
 }
-declare module "findIndexLimit" {
-    export default findIndexLimit;
-    function findIndexLimit<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency: Queue | number, ordered?: boolean): Promise<number>;
-    import Queue from "Queue";
-}
 declare module "every" {
     export default every;
     function every<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency: Queue | number): Promise<boolean>;
@@ -94,11 +89,8 @@ declare module "find" {
 }
 declare module "findIndex" {
     export default findIndex;
-    function findIndex<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, ordered?: boolean): Promise<number>;
-}
-declare module "findIndexSeries" {
-    export default findIndexSeries;
-    function findIndexSeries<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean): Promise<number>;
+    function findIndex<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency: Queue | number, ordered?: boolean): Promise<number>;
+    import Queue from "Queue";
 }
 declare module "forEachLimit" {
     export default forEachLimit;
@@ -214,8 +206,6 @@ declare module "modern-async" {
     export { default as filterGenerator } from "filterGenerator";
     export { default as find } from "find";
     export { default as findIndex } from "findIndex";
-    export { default as findIndexLimit } from "findIndexLimit";
-    export { default as findIndexSeries } from "findIndexSeries";
     export { default as forEach } from "forEach";
     export { default as forEachLimit } from "forEachLimit";
     export { default as forEachSeries } from "forEachSeries";

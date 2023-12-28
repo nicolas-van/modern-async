@@ -1,5 +1,5 @@
 
-import findIndexLimit from './findIndexLimit.mjs'
+import findIndex from './findIndex.mjs'
 import Queue from './Queue.mjs'
 
 /**
@@ -40,7 +40,7 @@ import Queue from './Queue.mjs'
  * // total processing time should be ~ 10ms
  */
 async function someLimit (iterable, iteratee, queueOrConcurrency) {
-  const index = await findIndexLimit(iterable, iteratee, queueOrConcurrency, false)
+  const index = await findIndex(iterable, iteratee, queueOrConcurrency, false)
   const result = index !== -1
   return result
 }

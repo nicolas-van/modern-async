@@ -1,8 +1,8 @@
 
-import findIndexLimit from './findIndexLimit.mjs'
 import Queue from './Queue.mjs'
 import asyncWrap from './asyncWrap.mjs'
 import assert from 'nanoassert'
+import findIndex from './findIndex.mjs'
 
 /**
  * Returns `true` if all elements of an iterable pass a truth test and `false` otherwise.
@@ -45,7 +45,7 @@ import assert from 'nanoassert'
 async function every (iterable, iteratee, queueOrConcurrency = 1) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')
   iteratee = asyncWrap(iteratee)
-  const index = await findIndexLimit(iterable, async (value, index, iterable) => {
+  const index = await findIndex(iterable, async (value, index, iterable) => {
     return !(await iteratee(value, index, iterable))
   }, queueOrConcurrency, false)
   const result = index === -1
