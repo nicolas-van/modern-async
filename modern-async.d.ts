@@ -92,18 +92,10 @@ declare module "findIndex" {
     function findIndex<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency: Queue | number, ordered?: boolean): Promise<number>;
     import Queue from "Queue";
 }
-declare module "forEachLimit" {
-    export default forEachLimit;
-    function forEachLimit<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<void> | void, queueOrConcurrency: Queue | number): Promise<void>;
-    import Queue from "Queue";
-}
 declare module "forEach" {
     export default forEach;
-    function forEach<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<void> | void): Promise<void>;
-}
-declare module "forEachSeries" {
-    export default forEachSeries;
-    function forEachSeries<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<void> | void): Promise<void>;
+    function forEach<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<void> | void, queueOrConcurrency: Queue | number): Promise<void>;
+    import Queue from "Queue";
 }
 declare module "mapLimit" {
     export default mapLimit;
@@ -207,8 +199,6 @@ declare module "modern-async" {
     export { default as find } from "find";
     export { default as findIndex } from "findIndex";
     export { default as forEach } from "forEach";
-    export { default as forEachLimit } from "forEachLimit";
-    export { default as forEachSeries } from "forEachSeries";
     export { default as map } from "map";
     export { default as mapGenerator } from "mapGenerator";
     export { default as mapLimit } from "mapLimit";
