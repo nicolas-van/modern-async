@@ -1,7 +1,13 @@
 # Changelog
 
-## next version
+## 2.0.0
 
+* Major re-design of the API. This re-design was made with the following goals:
+  * Avoiding function naming conflict with popular libraries (notably lodash)
+  * Simplifying the API by removing duplicate functions
+  * Proposing safer default parameters regarding concurrency handling
+
+  See the [migration guide](https://github.com/nicolas-van/modern-async/blob/master/version-1-to-2-guide.md) to know how to migrate to version 2.X.
 * Added `reflectAsyncStatus()` function.
 
 ## 1.1.4
