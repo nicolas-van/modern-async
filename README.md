@@ -20,10 +20,6 @@ This library is a modernized alternative to a lot of libraries like [Async.js](h
 
 [![Stargazers repo roster for @nicolas-van/modern-async](https://reporoster.com/stars/nicolas-van/modern-async)](https://github.com/nicolas-van/modern-async/stargazers)
 
-## This project accepts feature requests !
-
-The goal of modern-async is to be as complete as possible. I coded everything I missed in the past while developing, yet it's difficult to know what other people would really need. So if you would like some more feature [the issue tracker is available](https://github.com/nicolas-van/modern-async/issues/new/choose). (Read also [the contribution guide](https://github.com/nicolas-van/modern-async/blob/master/CONTRIBUTING.md)).
-
 ## Installation
 
 ```bash
@@ -46,6 +42,10 @@ console.log(result)
 ```
 
 [See the documentation for the rest](https://nicolas-van.github.io/modern-async).
+
+## Migrating from version 1.X to version 2.X
+
+[See the migration guide](https://github.com/nicolas-van/modern-async/blob/master/version-1-to-2-guide.md).
 
 ## Changelog
 
