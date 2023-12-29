@@ -220,9 +220,9 @@ declare module "timeoutPrecise" {
     export default timeoutPrecise;
     function timeoutPrecise<T>(fct: () => Promise<T> | T, amount: number): Promise<T>;
 }
-declare module "reflectStatus" {
-    export default reflectStatus;
-    function reflectStatus<T>(fct: () => Promise<T> | T): Promise<PromiseSettledResult<T>>;
+declare module "reflectAsyncStatus" {
+    export default reflectAsyncStatus;
+    function reflectAsyncStatus<T>(fct: () => Promise<T> | T): Promise<PromiseSettledResult<T>>;
 }
 declare module "modern-async" {
     export { default as asyncIterableWrap } from "asyncIterableWrap";
@@ -269,5 +269,5 @@ declare module "modern-async" {
     export { default as TimeoutError } from "TimeoutError";
     export { default as timeoutPrecise } from "timeoutPrecise";
     export { default as toArray } from "toArray";
-    export { default as reflectStatus } from "reflectStatus";
+    export { default as reflectAsyncStatus } from "reflectAsyncStatus";
 }

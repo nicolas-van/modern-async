@@ -1,10 +1,10 @@
 
 import { expect, test } from '@jest/globals'
-import reflectStatus from './reflectStatus.mjs'
+import reflectAsyncStatus from './reflectAsyncStatus.mjs'
 import delay from './delay.mjs'
 
-test('reflectStatus base test', async () => {
-  const res1 = await reflectStatus(async () => {
+test('reflectAsyncStatus base test', async () => {
+  const res1 = await reflectAsyncStatus(async () => {
     await delay()
     return 3
   })
@@ -15,8 +15,8 @@ test('reflectStatus base test', async () => {
   expect(res1.reason).toBeUndefined()
 })
 
-test('reflectStatus falure', async () => {
-  const res1 = await reflectStatus(async () => {
+test('reflectAsyncStatus falure', async () => {
+  const res1 = await reflectAsyncStatus(async () => {
     await delay()
     throw new Error('error')
   })

@@ -2,7 +2,7 @@
 
 ## next version
 
-* Added `reflectStatus()` function.
+* Added `reflectAsyncStatus()` function.
 
 ## 1.1.4
 
