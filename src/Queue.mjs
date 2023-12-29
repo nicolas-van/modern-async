@@ -15,7 +15,7 @@ import queueMicrotask from './queueMicrotask.mjs'
  * Once a task is completed, its corresponding promise is terminated accordingly.
  *
  * @example
- * import { Queue, sleep } from 'modern-async'
+ * import { Queue, asyncSleep } from 'modern-async'
  *
  * const queue = new Queue(3) // create a queue with concurrency 3
  *
@@ -25,7 +25,7 @@ import queueMicrotask from './queueMicrotask.mjs'
  * for (const i of array) {
  *   promises.push(queue.exec(async () => {
  *     console.log(`Starting task ${i}`)
- *     await sleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+ *     await asyncSleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
  *     console.log(`Ending task ${i}`)
  *     return i;
  *   }))

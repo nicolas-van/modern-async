@@ -35,11 +35,11 @@ Or use [jsDelivr](https://www.jsdelivr.com/package/npm/modern-async) to get the 
 ## Usage
 
 ```javascript
-import { map, sleep } from 'modern-async'
+import { asyncMap, asyncSleep } from 'modern-async'
 
 const array = [1, 2, 3]
-const result = await map(array, async (v) => {
-  await sleep(10)
+const result = await asyncMap(array, async (v) => {
+  await asyncSleep(10)
   return v * 2
 })
 console.log(result)

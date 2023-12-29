@@ -1,5 +1,5 @@
 
-import delay from './delay.mjs'
+import asyncDelay from './asyncDelay.mjs'
 import assert from 'nanoassert'
 
 /**
@@ -15,7 +15,7 @@ import assert from 'nanoassert'
  * at the end of every loop. `checkDelay()` will check the amount of time that ellasped since the last time
  * it triggered a new task in the event loop. If the amount of time is below the trigger time it returns
  * an already resolved promise and the remaining computation will be able to continue processing in a
- * microtask. If not it will call the `delay()` function that will retrigger the operation in a later task
+ * microtask. If not it will call the `asyncDelay()` function that will retrigger the operation in a later task
  * of the event loop.
  *
  * @example
@@ -69,14 +69,14 @@ class Delayer {
 
   /**
    * Checks if a delay must be applied according to the internal timer. If that's the case this method
-   * will call `delay()` and return `true`. If not it will do nothing and return `false`.
+   * will call `asyncDelay()` and return `true`. If not it will do nothing and return `false`.
    *
    * @returns {boolean} `true` if a new task was scheduled in the event loop, `false` otherwise.
    */
   async checkDelay () {
     const current = new Date().getTime()
     if (current - this._last >= this.triggerTime) {
-      await delay()
+      await asyncDelay()
       this.reset()
       return true
     } else {
