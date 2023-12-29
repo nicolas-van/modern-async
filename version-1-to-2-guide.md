@@ -9,7 +9,7 @@ In version 2.X, modern-async had a major re-design of the API. This re-design oc
 * Simplifying the API by removing duplicate functions
 * Proposing safer default parameters regarding concurrency handling
 
-It can be noted that version 1.0 will still be supported for a reasonable amount of time regarding bug fixes.
+It can be noted that version 1.X will still be supported for a reasonable amount of time regarding bug fixes.
 
 ## How to migrate ?
 
