@@ -22,13 +22,27 @@ import asyncFindIndex from './asyncFindIndex.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {Queue | number} queueOrConcurrency If a queue is specified it will be used to schedule the calls to
+ * @param {Queue | number} [queueOrConcurrency] If a queue is specified it will be used to schedule the calls to
  * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
  * implicitly for the same purpose. Defaults to `1`.
  * @returns {Promise<boolean>} A promise that will be resolved to `true` if all values pass the truth test and `false`
  * if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
  * an exception.
  * @example
+ * // example using the default concurrency of 1
+ * import { asyncEvery, asyncSleep } from 'modern-async'
+ *
+ * const array = [1, 2, 3]
+ *
+ * const result = await asyncEvery(array, async (v) => {
+ *   // these calls will be performed sequentially
+ *   await asyncSleep(10) // waits 10ms
+ *   return v > 0
+ * })
+ * console.log(result) // prints true
+ * // total processing time should be ~ 30ms
+ * @example
+ * // example using a set concurrency
  * import { asyncEvery, asyncSleep } from 'modern-async'
  *
  * const array = [1, 2, 3]
@@ -41,6 +55,19 @@ import asyncFindIndex from './asyncFindIndex.mjs'
  * }, 2)
  * console.log(result) // prints true
  * // total processing time should be ~ 20ms
+ * @example
+ * // example using infinite concurrency
+ * import { asyncEvery, asyncSleep } from 'modern-async'
+ *
+ * const array = [1, 2, 3]
+ *
+ * const result = await asyncEvery(array, async (v) => {
+ *   // these calls will be performed in parallel
+ *   await asyncSleep(10) // waits 10ms
+ *   return v > 0
+ * }, Number.POSITIVE_INFINITY)
+ * console.log(result) // prints true
+ * // total processing time should be ~ 10ms
  */
 async function asyncEvery (iterable, iteratee, queueOrConcurrency = 1) {
   assert(typeof iteratee === 'function', 'iteratee must be a function')

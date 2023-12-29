@@ -20,12 +20,26 @@ import Queue from './Queue.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {Queue | number} queueOrConcurrency If a queue is specified it will be used to schedule the calls to
+ * @param {Queue | number} [queueOrConcurrency] If a queue is specified it will be used to schedule the calls to
  * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
  * implicitly for the same purpose. Defaults to `1`.
  * @returns {Promise<boolean>} A promise that will be resolved to `true` if at least one value pass the truth test and `false`
  * if none of them do. That promise will be rejected if one of the truth test throws an exception.
  * @example
+ * // example using the default concurrency of 1
+ * import { asyncSome, asyncSleep } from 'modern-async'
+ *
+ * const array = [1, 2, 3]
+ *
+ * const result = await asyncSome(array, async (v) => {
+ *   // these calls will be performed sequentially
+ *   await asyncSleep(10) // waits 10ms
+ *   return v % 2 === 0
+ * })
+ * console.log(result) // prints true
+ * // total processing time should be ~ 30ms
+ * @example
+ * // example using a set concurrency
  * import { asyncSome, asyncSleep } from 'modern-async'
  *
  * const array = [1, 2, 3]
@@ -36,6 +50,19 @@ import Queue from './Queue.mjs'
  *   await asyncSleep(10) // waits 10ms
  *   return v % 2 === 0
  * }, 2)
+ * console.log(result) // prints true
+ * // total processing time should be ~ 20ms
+ * @example
+ * // example using infinite concurrency
+ * import { asyncSome, asyncSleep } from 'modern-async'
+ *
+ * const array = [1, 2, 3]
+ *
+ * const result = await asyncSome(array, async (v) => {
+ *   // these calls will be performed in parallel
+ *   await asyncSleep(10) // waits 10ms
+ *   return v % 2 === 0
+ * }, Number.POSITIVE_INFINITY)
  * console.log(result) // prints true
  * // total processing time should be ~ 10ms
  */

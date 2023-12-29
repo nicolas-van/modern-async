@@ -19,7 +19,7 @@ import Queue from './Queue.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {Queue | number} queueOrConcurrency If a queue is specified it will be used to schedule the calls to
+ * @param {Queue | number} [queueOrConcurrency] If a queue is specified it will be used to schedule the calls to
  * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
  * implicitly for the same purpose. Defaults to `1`.
  * @param {boolean} [ordered] If true this function will return on the first element in the iterable
@@ -27,6 +27,18 @@ import Queue from './Queue.mjs'
  * @returns {Promise<any | undefined>} A promise that will be resolved with the first found value or rejected if one of the
  * `iteratee` calls throws an exception before finding a value. If no value is found it will return `undefined`.
  * @example
+ * // example using the default concurrency of 1
+ * import { asyncFind, asyncSleep } from 'modern-async'
+ *
+ * const array = [1, 2, 3]
+ * const result = await asyncFind(array, async (v) => {
+ *   // these calls will be performed sequentially
+ *   await asyncSleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+ *   return v % 2 === 1
+ * })
+ * console.log(result) // prints 1
+ * @example
+ * // example using a set concurrency
  * import { asyncFind, asyncSleep } from 'modern-async'
  *
  * const array = [1, 2, 3, 4, 5]
@@ -36,7 +48,18 @@ import Queue from './Queue.mjs'
  *   await asyncSleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
  *   return v % 2 === 1
  * }, 3)
- * console.log(result) // prints 1
+ * console.log(result) // prints 1 or 3, randomly
+ * @example
+ * // example using infinite concurrency
+ * import { asyncFind, asyncSleep } from 'modern-async'
+ *
+ * const array = [1, 2, 3]
+ * const result = await asyncFind(array, async (v) => {
+ *   // these calls will be performed in parallel
+ *   await asyncSleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+ *   return v % 2 === 1
+ * }, Number.POSITIVE_INFINITY)
+ * console.log(result) // prints 1 or 3, randomly
  */
 async function asyncFind (iterable, iteratee, queueOrConcurrency = 1, ordered = false) {
   const result = (await asyncFindInternal(iterable, iteratee, queueOrConcurrency, ordered))[1]

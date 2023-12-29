@@ -16,12 +16,24 @@ import Queue from './Queue.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {Queue | number} queueOrConcurrency If a queue is specified it will be used to schedule the calls to
+ * @param {Queue | number} [queueOrConcurrency] If a queue is specified it will be used to schedule the calls to
  * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
  * implicitly for the same purpose. Defaults to `1`.
  * @returns {Promise} A promise that will be resolved when all the calls to `iteratee` have been done.
  * This promise will be rejected if any call to `iteratee` throws an exception.
  * @example
+ * // example using the default concurrency of 1
+ * import { asyncForEach, asyncSleep } from 'modern-async'
+ *
+ * const array = [1, 2, 3]
+ * await asyncForEach(array, async (v) => {
+ *   // these calls will be performed sequentially
+ *   await asyncSleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+ *   console.log(v)
+ * })
+ * // prints 1, 2 and 3 in that exact order
+ * @example
+ * // example using a set concurrency
  * import { asyncForEach, asyncSleep } from 'modern-async'
  *
  * const array = [1, 2, 3]
@@ -33,6 +45,17 @@ import Queue from './Queue.mjs'
  * }, 2)
  * // prints 1, 2 and 3 in a random order (it will always print 1 or 2 before printing 3 due to
  * // the concurrency limit and the internal scheduling order)
+ * @example
+ * // example using infinite concurrency
+ * import { asyncForEach, asyncSleep } from 'modern-async'
+ *
+ * const array = [1, 2, 3]
+ * await asyncForEach(array, async (v) => {
+ *   // these calls will be performed in parallel
+ *   await asyncSleep(Math.random() * 10) // waits a random amount of time between 0ms and 10ms
+ *   console.log(v)
+ * }, Number.POSITIVE_INFINITY)
+ * // prints 1, 2 and 3 in a random order
  */
 async function asyncForEach (iterable, iteratee, queueOrConcurrency = 1) {
   // eslint-disable-next-line no-unused-vars
