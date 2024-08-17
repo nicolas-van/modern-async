@@ -1,5 +1,9 @@
 # Changelog
 
+## For next version
+
+* Fixes #19
+
 ## 2.0.0
 
 * Major re-design of the API. This re-design was made with the following goals:
