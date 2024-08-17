@@ -2,7 +2,7 @@
 
 ## For next version
 
-* Fixes #19
+* Fixes [#19](https://github.com/nicolas-van/modern-async/issues/19)
 
 ## 2.0.0
 
