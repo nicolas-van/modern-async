@@ -597,7 +597,7 @@ test('asyncGeneratorMap infinite sync operator', async () => {
   expect(results[2]).toStrictEqual(4)
 })
 
-test('asyncGeneratorMap respect concurrency', async () => {
+test('asyncGeneratorMap blocks when concurrency reached', async () => {
   const callList = []
   const d = new Deferred()
   const p = asyncIterableToArray(asyncGeneratorMap(range(10), async (el, i) => {
@@ -610,4 +610,25 @@ test('asyncGeneratorMap respect concurrency', async () => {
   d.resolve()
   const result = await p
   expect(result).toStrictEqual(await asyncIterableToArray(range(10)))
+})
+
+test('asyncGeneratorMap reaches concurrency', async () => {
+  const expectedConcurrency = 10
+  let currentConcurrency = 0
+  let maxConcurrency = 0
+  const d = new Deferred()
+  const p = asyncIterableToArray(asyncGeneratorMap(range(100), async (el, i) => {
+    currentConcurrency += 1
+    maxConcurrency = Math.max(maxConcurrency, currentConcurrency)
+    await d.promise
+    currentConcurrency -= 1
+    maxConcurrency = Math.max(maxConcurrency, currentConcurrency)
+    return el
+  }, expectedConcurrency))
+  await asyncDelay()
+  expect(maxConcurrency).toStrictEqual(expectedConcurrency)
+  d.resolve()
+  const result = await p
+  expect(maxConcurrency).toStrictEqual(expectedConcurrency)
+  expect(result).toStrictEqual(await asyncIterableToArray(range(100)))
 })

@@ -36,7 +36,7 @@
   "scripts": {
     "build": "rollup -c rollup.config.js",
     "test": "npm run lint && npm run coverage",
-    "coverage": "npm run jest -- --coverage",
+    "coverage": "npm run jest -- --coverage --verbose",
     "lint": "eslint -c .eslintrc.cjs \"src/**/*.mjs\"",
     "jest": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
     "docs": "jsdoc -c .jsdoc.json && node dev/docs-collect-version-numbers.cjs"
