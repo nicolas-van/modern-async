@@ -1,7 +1,6 @@
 declare module "asyncIterableWrap" {
     export default asyncIterableWrap;
-    function asyncIterableWrap<T>(iterable: Iterable<Promise<T>> | AsyncIterable<Promise<T>>): AsyncIterable<T>;
-    function asyncIterableWrap<T>(iterable: Iterable<T> | AsyncIterable<T>): AsyncIterable<T>;
+    function asyncIterableWrap<V>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>): AsyncIterable<V>;
 }
 declare module "asyncWrap" {
     export default asyncWrap;
@@ -61,70 +60,57 @@ declare module "Queue" {
 }
 declare module "asyncEvery" {
     export default asyncEvery;
-    function asyncEvery<V>(iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<boolean>;
-    function asyncEvery<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<boolean>;
+    function asyncEvery<V>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<boolean>;
     import Queue from "Queue";
 }
 declare module "asyncIterableToArray" {
     export default asyncIterableToArray;
-    function asyncIterableToArray<V>(iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>): Promise<V[]>;
-    function asyncIterableToArray<V>(iterable: Iterable<V> | AsyncIterable<V>): Promise<V[]>;
+    function asyncIterableToArray<V>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>): Promise<V[]>;
 }
 declare module "asyncGeneratorMap" {
     export default asyncGeneratorMap;
-    function asyncGeneratorMap<V, M>(iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>) => Promise<M> | M, queueOrConcurrency?: Queue | number, ordered?: boolean): AsyncIterable<M>;
-    function asyncGeneratorMap<V, M>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<M> | M, queueOrConcurrency?: Queue | number, ordered?: boolean): AsyncIterable<M>;
+    function asyncGeneratorMap<V, M>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<M> | M, queueOrConcurrency?: Queue | number, ordered?: boolean): AsyncIterable<M>;
     import Queue from "Queue";
 }
 declare module "asyncGeneratorFilter" {
     export default asyncGeneratorFilter;
-    function asyncGeneratorFilter<V>(iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): AsyncIterable<V>;
-    function asyncGeneratorFilter<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): AsyncIterable<V>;
+    function asyncGeneratorFilter<V>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): AsyncIterable<V>;
     import Queue from "Queue";
 }
 declare module "asyncFilter" {
     export default asyncFilter;
-    function asyncFilter<V>(iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<V[]>;
-    function asyncFilter<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<V[]>;
+    function asyncFilter<V>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<V[]>;
     import Queue from "Queue";
 }
 declare module "asyncFind" {
     export default asyncFind;
-    function asyncFind<V>(iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): Promise<V>;
-    function asyncFind<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): Promise<V>;
+    function asyncFind<V>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): Promise<V>;
     import Queue from "Queue";
 }
 declare module "asyncFindIndex" {
     export default asyncFindIndex;
-    function asyncFindIndex<V>(iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): Promise<number>;
-    function asyncFindIndex<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): Promise<number>;
+    function asyncFindIndex<V>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): Promise<number>;
     import Queue from "Queue";
 }
 declare module "asyncForEach" {
     export default asyncForEach;
-    function asyncForEach<V>(iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>) => Promise<void> | void, queueOrConcurrency?: Queue | number): Promise<void>;
-    function asyncForEach<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<void> | void, queueOrConcurrency?: Queue | number): Promise<void>;
+    function asyncForEach<V>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<void> | void, queueOrConcurrency?: Queue | number): Promise<void>;
     import Queue from "Queue";
 }
 declare module "asyncMap" {
     export default asyncMap;
-    function asyncMap<V, M>(iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>) => Promise<M> | M, queueOrConcurrency?: Queue | number): Promise<M[]>;
-    function asyncMap<V, M>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<M> | M, queueOrConcurrency?: Queue | number): Promise<M[]>;
+    function asyncMap<V, M>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<M> | M, queueOrConcurrency?: Queue | number): Promise<M[]>;
     import Queue from "Queue";
 }
 declare module "asyncReduce" {
     export default asyncReduce;
-    function asyncReduce<V, A>(iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>, reducer: (accumulator: A, value: V, index: number, iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>) => Promise<A> | A, initial: A): Promise<A>;
-    function asyncReduce<V>(iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>, reducer: (accumulator: V, value: V, index: number, iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>) => Promise<V> | V): Promise<V>;
-    function asyncReduce<V, A>(iterable: Iterable<V> | AsyncIterable<V>, reducer: (accumulator: A, value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<A> | A, initial: A): Promise<A>;
-    function asyncReduce<V>(iterable: Iterable<V> | AsyncIterable<V>, reducer: (accumulator: V, value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<V> | V): Promise<V>;
+    function asyncReduce<V, A>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, reducer: (accumulator: A, value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<A> | A, initial: A): Promise<A>;
+    function asyncReduce<V>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, reducer: (accumulator: V, value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<V> | V): Promise<V>;
 }
 declare module "asyncReduceRight" {
     export default asyncReduceRight;
-    function asyncReduceRight<V, A>(iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>,reducer: (accumulator: A, value: V, index: number, iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>) => Promise<A> | A, initial: A): Promise<A>;
-    function asyncReduceRight<V>(iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>, reducer: (accumulator: V, value: V, index: number, iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>) => Promise<V> | V): Promise<V>;
-    function asyncReduceRight<V, A>(iterable: Iterable<V> | AsyncIterable<V>,reducer: (accumulator: A, value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<A> | A, initial: A): Promise<A>;
-    function asyncReduceRight<V>(iterable: Iterable<V> | AsyncIterable<V>, reducer: (accumulator: V, value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<V> | V): Promise<V>;
+    function asyncReduceRight<V, A>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>,reducer: (accumulator: A, value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<A> | A, initial: A): Promise<A>;
+    function asyncReduceRight<V>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, reducer: (accumulator: V, value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<V> | V): Promise<V>;
 }
 declare module "asyncSleepCancellable" {
     export default asyncSleepCancellable;
@@ -161,8 +147,7 @@ declare module "asyncSleepPrecise" {
 }
 declare module "asyncSome" {
     export default asyncSome;
-    function asyncSome<V>(iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V>> | AsyncIterable<Promise<V>>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<boolean>;
-    function asyncSome<V>(iterable: Iterable<V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<boolean>;
+    function asyncSome<V>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<boolean>;
     import Queue from "Queue";
 }
 declare module "TimeoutError" {
