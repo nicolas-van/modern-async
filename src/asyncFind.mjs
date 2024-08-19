@@ -5,7 +5,7 @@ import Queue from './Queue.mjs'
 /**
  * Returns the first element of an iterable that passes an asynchronous truth test.
  *
- * The calls to `iteratee` will be performed asynchronously in a {@link Queue} to limit the concurrency of these calls.
+ * The calls to `iteratee` will be performed asynchronously in a {@link Queue}, allowing control over the concurrency of those calls.
  *
  * Whenever a result is found, all the remaining tasks will be cancelled as long
  * as they didn't started already. In case of exception in one of the `iteratee` calls the promise

@@ -7,7 +7,7 @@ import asyncFindIndex from './asyncFindIndex.mjs'
 /**
  * Returns `true` if all elements of an iterable pass a truth test and `false` otherwise.
  *
- * The calls to `iteratee` will be performed asynchronously in a {@link Queue} to limit the concurrency of these calls.
+ * The calls to `iteratee` will be performed asynchronously in a {@link Queue}, allowing control over the concurrency of those calls.
  * If any truth test returns `false` the promise is immediately resolved.
  *
  * Whenever a test returns `false`, all the remaining tasks will be cancelled as long

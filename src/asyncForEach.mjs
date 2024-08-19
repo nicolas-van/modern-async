@@ -5,7 +5,7 @@ import Queue from './Queue.mjs'
 /**
  * Calls a function on each element of iterable.
  *
- * The calls to `iteratee` will be performed asynchronously in a {@link Queue} to limit the concurrency of these calls.
+ * The calls to `iteratee` will be performed asynchronously in a {@link Queue}, allowing control over the concurrency of those calls.
  *
  * If any of the calls to iteratee throws an exception the returned promise will be rejected and the remaining
  * pending tasks will be cancelled.

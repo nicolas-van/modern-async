@@ -5,7 +5,7 @@ import Queue from './Queue.mjs'
 /**
  * Returns `true` if at least one element of an iterable pass a truth test and `false` otherwise.
  *
- * The calls to `iteratee` will be performed asynchronously in a {@link Queue} to limit the concurrency of these calls. If any
+ * The calls to `iteratee` will be performed asynchronously in a {@link Queue}, allowing control over the concurrency of those calls. If any
  * truth test returns `true` the promise is immediately resolved.
  *
  * Whenever a test returns `true`, all the remaining tasks will be cancelled as long

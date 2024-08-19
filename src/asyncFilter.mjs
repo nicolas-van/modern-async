@@ -6,7 +6,7 @@ import asyncGeneratorFilter from './asyncGeneratorFilter.mjs'
 /**
  * Returns an array of all the values in `iterable` which pass an asynchronous truth test.
  *
- * The calls to `iteratee` will be performed asynchronously in a {@link Queue} to limit the concurrency of these calls.
+ * The calls to `iteratee` will be performed asynchronously in a {@link Queue}, allowing control over the concurrency of those calls.
  * The results will be in the same order than in `iterable`.
  *
  * If any of the calls to `iteratee` throws an exception the returned promise will be rejected and the remaining
