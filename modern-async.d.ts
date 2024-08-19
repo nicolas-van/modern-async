@@ -178,17 +178,17 @@ declare module "asyncFromEntries" {
 }
 declare module "asyncMapEntries" {
     export default asyncMapEntries;
-    function asyncMapEntries<K, V>(obj: object, iteratee: (value: V, key: K, obj: object) => Promise<[K, V]> | [K, V], queueOrConcurrency?: Queue | number): Promise<object>;
+    function asyncMapEntries<K, V>(obj: object, iteratee: (value: V, key: K, obj: object) => Promise<[any, any]> | [any, any], queueOrConcurrency?: Queue | number): Promise<object>;
     import Queue from "Queue";
 }
 declare module "asyncMapKeys" {
     export default asyncMapKeys;
-    function asyncMapKeys<K, V>(obj: object, iteratee: (value: V, key: K, obj: object) => Promise<K> | K, queueOrConcurrency?: Queue | number): Promise<object>;
+    function asyncMapKeys<K, V>(obj: object, iteratee: (value: V, key: K, obj: object) => Promise<any> | any, queueOrConcurrency?: Queue | number): Promise<object>;
     import Queue from "Queue";
 }
 declare module "asyncMapValues" {
     export default asyncMapValues;
-    function asyncMapValues<K, V>(obj: object, iteratee: (value: V, key: K, obj: object) => Promise<V> | V, queueOrConcurrency?: Queue | number): Promise<object>;
+    function asyncMapValues<K, V>(obj: object, iteratee: (value: V, key: K, obj: object) => Promise<any> | any, queueOrConcurrency?: Queue | number): Promise<object>;
     import Queue from "Queue";
 }
 declare module "modern-async" {
