@@ -168,6 +168,14 @@ declare module "reflectAsyncStatus" {
     export default reflectAsyncStatus;
     function reflectAsyncStatus<T>(fct: () => Promise<T> | T): Promise<PromiseSettledResult<T>>;
 }
+declare module "generatorEntries" {
+    export default generatorEntries;
+    function generatorEntries(obj: object): Iterable<[any, any]>;
+}
+declare module "asyncFromEntries" {
+    export default asyncFromEntries;
+    function asyncFromEntries<K, V>(iterable: Iterable<Promise<[K, V]> | [K, V]> | AsyncIterable<[K, V]>): Promise<object>;
+}
 declare module "modern-async" {
     export { default as asyncIterableWrap } from "asyncIterableWrap";
     export { default as asyncRoot } from "asyncRoot";
@@ -200,4 +208,6 @@ declare module "modern-async" {
     export { default as asyncTimeoutPrecise } from "asyncTimeoutPrecise";
     export { default as asyncIterableToArray } from "asyncIterableToArray";
     export { default as reflectAsyncStatus } from "reflectAsyncStatus";
+    export { default as generatorEntries } from "generatorEntries";
+    export { default as asyncFromEntries } from "asyncFromEntries";
 }
