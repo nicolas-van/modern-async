@@ -10,6 +10,7 @@
  * @yields {Array} Each key-value pair in the object as a tuple of two objects:
  *   * The key
  *   * The value
+ * @see {@link asyncFromEntries} to convert a sync or async iterable of key-value pairs to an object
  * @example
  * import { generatorEntries } from 'modern-async'
  *

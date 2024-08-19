@@ -7,7 +7,7 @@ import asyncWrap from './asyncWrap.mjs'
 /**
  * Produces a an async iterable that will return each value or `iterable` which pass an asynchronous truth test.
  *
- * The iterable will perform the calls to `iteratee` in a queue to limit the concurrency of
+ * The iterable will perform the calls to `iteratee` asynchronously in a {@link Queue} to limit the concurrency of
  * these calls. The iterable will consume values from `iterable` only if slots are available in the
  * queue.
  *
@@ -23,8 +23,8 @@ import asyncWrap from './asyncWrap.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {Queue | number} [queueOrConcurrency] If a queue is specified it will be used to schedule the calls to
- * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
+ * @param {Queue | number} [queueOrConcurrency] If a {@link Queue} is specified it will be used to schedule the calls to
+ * `iteratee`. If a number is specified it will be used as the concurrency of a {@link Queue} that will be created
  * implicitly for the same purpose. Defaults to `1`.
  * @param {boolean} [ordered] If true the results will be yielded in the same order as in the source
  * iterable, regardless of which calls to iteratee returned first. If false the the results will be yielded as soon

@@ -5,7 +5,7 @@ import Queue from './Queue.mjs'
 /**
  * Calls a function on each element of iterable.
  *
- * The calls to `iteratee` will be performed in a queue to limit the concurrency of these calls.
+ * The calls to `iteratee` will be performed asynchronously in a {@link Queue} to limit the concurrency of these calls.
  *
  * If any of the calls to iteratee throws an exception the returned promise will be rejected and the remaining
  * pending tasks will be cancelled.
@@ -16,8 +16,8 @@ import Queue from './Queue.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {Queue | number} [queueOrConcurrency] If a queue is specified it will be used to schedule the calls to
- * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
+ * @param {Queue | number} [queueOrConcurrency] If a {@link Queue} is specified it will be used to schedule the calls to
+ * `iteratee`. If a number is specified it will be used as the concurrency of a {@link Queue} that will be created
  * implicitly for the same purpose. Defaults to `1`.
  * @returns {Promise} A promise that will be resolved when all the calls to `iteratee` have been done.
  * This promise will be rejected if any call to `iteratee` throws an exception.

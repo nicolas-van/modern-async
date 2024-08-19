@@ -5,7 +5,7 @@ import Queue from './Queue.mjs'
 /**
  * Returns `true` if at least one element of an iterable pass a truth test and `false` otherwise.
  *
- * The calls to `iteratee` will be performed in a queue to limit the concurrency of these calls. If any
+ * The calls to `iteratee` will be performed asynchronously in a {@link Queue} to limit the concurrency of these calls. If any
  * truth test returns `true` the promise is immediately resolved.
  *
  * Whenever a test returns `true`, all the remaining tasks will be cancelled as long
@@ -20,8 +20,8 @@ import Queue from './Queue.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {Queue | number} [queueOrConcurrency] If a queue is specified it will be used to schedule the calls to
- * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
+ * @param {Queue | number} [queueOrConcurrency] If a {@link Queue} is specified it will be used to schedule the calls to
+ * `iteratee`. If a number is specified it will be used as the concurrency of a {@link Queue} that will be created
  * implicitly for the same purpose. Defaults to `1`.
  * @returns {Promise<boolean>} A promise that will be resolved to `true` if at least one value pass the truth test and `false`
  * if none of them do. That promise will be rejected if one of the truth test throws an exception.

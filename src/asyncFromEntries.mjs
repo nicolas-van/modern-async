@@ -14,6 +14,7 @@ import asyncIterableWrap from './asyncIterableWrap.mjs'
  *   * The value
  * @returns {Promise<object>} A promise that will be resolved with a new object built with the
  * key-value pairs of the iterable.
+ * @see {@link generatorEntries} to convert an object to an iterable of key-value pairs
  * @example
  * // Example using a synchronous iterable
  * import { asyncFromEntries } from 'modern-async'

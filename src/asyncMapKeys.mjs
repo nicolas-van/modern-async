@@ -7,7 +7,7 @@ import asyncWrap from './asyncWrap.mjs'
  * Maps the keys found in an object by calling the `iteratee`
  * function, returning a new key, and re-construct a new object with the new keys.
  *
- * The calls to `iteratee` will be performed in a queue to limit the concurrency of these calls.
+ * The calls to `iteratee` will be performed asynchronously in a {@link Queue} to limit the concurrency of these calls.
  *
  * If any of the calls to iteratee throws an exception the returned promise will be rejected and the remaining
  * pending tasks will be cancelled.
@@ -18,11 +18,13 @@ import asyncWrap from './asyncWrap.mjs'
  *   * `value`: The current value to process
  *   * `key`: The current key to process
  *   * `obj`: The object on which the operation is being performed.
- * @param {Queue | number} [queueOrConcurrency] If a queue is specified it will be used to schedule the calls to
- * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
+ * @param {Queue | number} [queueOrConcurrency] If a {@link Queue} is specified it will be used to schedule the calls to
+ * `iteratee`. If a number is specified it will be used as the concurrency of a {@link Queue} that will be created
  * implicitly for the same purpose. Defaults to `1`.
  * @returns {Promise<object>} A promise that will be resolved with a new object built with the
  * new keys returned by `iteratee`.
+ * @see {@link asyncMapValues} to map values of an object
+ * @see {@link asyncMapEntries} to map both keys and values of an object simultaneously
  * @example
  * // example using the default concurrency of 1
  * import { asyncMapKeys, asyncSleep } from 'modern-async'
