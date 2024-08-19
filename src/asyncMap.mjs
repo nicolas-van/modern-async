@@ -31,7 +31,7 @@ import asyncIterableToArray from './asyncIterableToArray.mjs'
  *   // these calls will be performed sequentially
  *   await asyncSleep(10) // waits 10ms
  *   return v * 2
- * }, 2)
+ * })
  * console.log(result) // prints [2, 4, 6]
  * // total processing time should be ~ 30ms
  * @example

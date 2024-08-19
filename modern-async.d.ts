@@ -176,6 +176,21 @@ declare module "asyncFromEntries" {
     export default asyncFromEntries;
     function asyncFromEntries<K, V>(iterable: Iterable<Promise<[K, V]> | [K, V]> | AsyncIterable<[K, V]>): Promise<object>;
 }
+declare module "asyncMapEntries" {
+    export default asyncMapEntries;
+    function asyncMapEntries<K, V>(obj: object, iteratee: (value: V, key: K, obj: object) => Promise<[K, V]> | [K, V], queueOrConcurrency?: Queue | number): Promise<object>;
+    import Queue from "Queue";
+}
+declare module "asyncMapKeys" {
+    export default asyncMapKeys;
+    function asyncMapKeys<K, V>(obj: object, iteratee: (value: V, key: K, obj: object) => Promise<K> | K, queueOrConcurrency?: Queue | number): Promise<object>;
+    import Queue from "Queue";
+}
+declare module "asyncMapValues" {
+    export default asyncMapValues;
+    function asyncMapValues<K, V>(obj: object, iteratee: (value: V, key: K, obj: object) => Promise<V> | V, queueOrConcurrency?: Queue | number): Promise<object>;
+    import Queue from "Queue";
+}
 declare module "modern-async" {
     export { default as asyncIterableWrap } from "asyncIterableWrap";
     export { default as asyncRoot } from "asyncRoot";
@@ -210,4 +225,7 @@ declare module "modern-async" {
     export { default as reflectAsyncStatus } from "reflectAsyncStatus";
     export { default as generatorEntries } from "generatorEntries";
     export { default as asyncFromEntries } from "asyncFromEntries";
+    export { default as asyncMapEntries } from "asyncMapEntries";
+    export { default as asyncMapKeys } from "asyncMapKeys";
+    export { default as asyncMapValues } from "asyncMapValues";
 }

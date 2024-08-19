@@ -12,25 +12,31 @@ import asyncIterableWrap from './asyncIterableWrap.mjs'
  * Key value-pairs must be tuples containing two objects:
  *   * The key
  *   * The value
- * @returns {object} A new object built with the key-value pairs of the iterable.
+ * @returns {Promise<object>} A promise that will be resolved with a new object built with the
+ * key-value pairs of the iterable.
  * @example
  * // Example using a synchronous iterable
  * import { asyncFromEntries } from 'modern-async'
  *
  * const entries = [["a", 1], ["b", 2], ["c", 3]]
  *
- * const obj = await asyncFromEntries(entries) // prints Object { a: 1, b: 2, c: 3 }
+ * const obj = await asyncFromEntries(entries)
+ * console.log(obj) // prints Object { a: 1, b: 2, c: 3 }
  * @example
  * // Example using an asynchronous iterable
- * import { asyncFromEntries } from 'modern-async'
+ * import { asyncFromEntries, asyncSleep } from 'modern-async'
  *
  * async function * asyncEntryGenerator() {
+ *   await asyncSleep(10) // waits 10ms
  *   yield ["a", 1]
+ *   await asyncSleep(10) // waits 10ms
  *   yield ["b", 2]
+ *   await asyncSleep(10) // waits 10ms
  *   yield ["c", 3]
  * }
  *
- * const obj = await asyncFromEntries(asyncEntryGenerator()) // prints Object { a: 1, b: 2, c: 3 }
+ * const obj = await asyncFromEntries(asyncEntryGenerator())
+ * console.log(obj) // prints Object { a: 1, b: 2, c: 3 }
  */
 async function asyncFromEntries (iterable) {
   const it = asyncIterableWrap(iterable)
