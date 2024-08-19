@@ -5,17 +5,17 @@ import Queue from './Queue.mjs'
 import asyncWrap from './asyncWrap.mjs'
 
 /**
- * Produces a an async iterator that will return each value or `iterable` which pass an asynchronous truth test.
+ * Produces a an async iterable that will return each value or `iterable` which pass an asynchronous truth test.
  *
- * The iterator will perform the calls to `iteratee` in a queue to limit the concurrency of
- * these calls. The iterator will consume values from `iterable` only if slots are available in the
+ * The iterable will perform the calls to `iteratee` in a queue to limit the concurrency of
+ * these calls. The iterable will consume values from `iterable` only if slots are available in the
  * queue.
  *
- * If the returned iterator is not fully consumed it will stop consuming new values from `iterable` and scheduling
+ * If the returned iterable is not fully consumed it will stop consuming new values from `iterable` and scheduling
  * new calls to `iteratee` in the queue, but already scheduled tasks will still be executed.
  *
  * If `iterable` or any of the calls to `iteratee` throws an exception all pending tasks will be cancelled and the
- * returned async iterator will throw that exception.
+ * returned async iterable will throw that exception.
  *
  * @param {Iterable | AsyncIterable} iterable An iterable or async iterable object.
  * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
@@ -33,16 +33,16 @@ import asyncWrap from './asyncWrap.mjs'
  * @example
  * import {asyncGeneratorFilter, asyncSleep} from 'modern-async'
  *
- * const iterator = function * () {
+ * const generator = function * () {
  *   for (let i = 0; i < 10000; i += 1) {
  *     yield i
  *   }
  * }
- * const filterIterator = asyncGeneratorFilter(iterator(), async (v) => {
+ * const filterGenerator = asyncGeneratorFilter(generator(), async (v) => {
  *   await asyncSleep(1000)
  *   return v % 3 === 0
  * })
- * for await (const el of filterIterator) {
+ * for await (const el of filterGenerator) {
  *   console.log(el)
  * }
  * // will print "0", "3", "6", etc... Only one number will be printed every 3 seconds.
