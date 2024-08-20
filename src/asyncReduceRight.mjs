@@ -6,7 +6,7 @@ import asyncIterableToArray from './asyncIterableToArray.mjs'
 /**
  * Performs a reduce operation as defined in the `Array.reduceRight()` method but using an asynchronous
  * function as reducer. The reducer will be called sequentially.
- * 
+ *
  * Please note that this function exists only to provide compatibility with standard `Array.reduceRight()`.
  * Internally it only reads all values from the given iterator, store them all in an array, revert that array
  * and performs a common {@link asyncReduce} call. (Functions iterating on arrays from right to left do not

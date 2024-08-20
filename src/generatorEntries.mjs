@@ -1,4 +1,6 @@
 
+import assert from 'nanoassert'
+
 /**
  * An alternative to standard `Object.entries()` function, but returning an iterable
  * returning each key-value pair in the object.
