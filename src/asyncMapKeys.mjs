@@ -65,6 +65,7 @@ import asyncWrap from './asyncWrap.mjs'
  * // total processing time should be ~ 10ms
  */
 async function asyncMapKeys (obj, iteratee, queueOrConcurrency = 1) {
+  assert(typeof iteratee === 'function', 'iteratee must be a function')
   iteratee = asyncWrap(iteratee)
   return await asyncMapEntries(obj, async (v, k, o) => {
     const nk = await iteratee(v, k, o)

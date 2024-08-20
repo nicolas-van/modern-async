@@ -32,6 +32,7 @@
  * // "c" 3
  */
 function * generatorEntries (obj) {
+  assert(obj instanceof Object, 'obj must be an object')
   for (const key in obj) {
     if (Object.prototype.hasOwnProperty.call(obj, key)) {
       yield [key, obj[key]]
