@@ -1,7 +1,6 @@
 
 import Queue from './Queue.mjs'
 import asyncWrap from './asyncWrap.mjs'
-import assert from 'nanoassert'
 import asyncFindIndex from './asyncFindIndex.mjs'
 
 /**
@@ -70,7 +69,6 @@ import asyncFindIndex from './asyncFindIndex.mjs'
  * // total processing time should be ~ 10ms
  */
 async function asyncEvery (iterable, iteratee, queueOrConcurrency = 1) {
-  assert(typeof iteratee === 'function', 'iteratee must be a function')
   iteratee = asyncWrap(iteratee)
   const index = await asyncFindIndex(iterable, async (value, index, iterable) => {
     return !(await iteratee(value, index, iterable))

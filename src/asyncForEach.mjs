@@ -59,7 +59,7 @@ import Queue from './Queue.mjs'
  */
 async function asyncForEach (iterable, iteratee, queueOrConcurrency = 1) {
   // eslint-disable-next-line no-unused-vars
-  for await (const _el of asyncGeneratorMap(iterable, iteratee, queueOrConcurrency)) {
+  for await (const _el of asyncGeneratorMap(iterable, iteratee, queueOrConcurrency, false)) {
     // do nothing
   }
 }

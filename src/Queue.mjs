@@ -118,7 +118,6 @@ class Queue {
    *     `false` in any other case.
    */
   execCancellable (fct, priority = 0) {
-    assert(typeof fct === 'function', 'fct must be a function')
     assert(typeof priority === 'number', 'priority must be a number')
     const deferred = new Deferred()
     let i = this._iqueue.length

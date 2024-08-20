@@ -52,7 +52,6 @@ import reflectAsyncStatus from './reflectAsyncStatus.mjs'
  * // Numbers from `generator` will be consumed progressively
  */
 async function * asyncGeneratorMap (iterable, iteratee, queueOrConcurrency = 1, ordered = true) {
-  assert(typeof iteratee === 'function', 'iteratee must be a function')
   iteratee = asyncWrap(iteratee)
   const it = asyncIterableWrap(iterable)
   const queue = getQueue(queueOrConcurrency)

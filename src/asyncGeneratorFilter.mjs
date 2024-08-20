@@ -1,6 +1,5 @@
 
 import asyncGeneratorMap from './asyncGeneratorMap.mjs'
-import assert from 'nanoassert'
 import Queue from './Queue.mjs'
 import asyncWrap from './asyncWrap.mjs'
 
@@ -48,7 +47,6 @@ import asyncWrap from './asyncWrap.mjs'
  * // will print "0", "3", "6", etc... Only one number will be printed every 3 seconds.
  */
 async function * asyncGeneratorFilter (iterable, iteratee, queueOrConcurrency = 1, ordered = true) {
-  assert(typeof iteratee === 'function', 'iteratee must be a function')
   iteratee = asyncWrap(iteratee)
   for await (const [value, pass] of asyncGeneratorMap(iterable, async (v, i, t) => {
     return [v, await iteratee(v, i, t)]

@@ -1,6 +1,5 @@
 
 import asyncReduce from './asyncReduce.mjs'
-import assert from 'nanoassert'
 import asyncWrap from './asyncWrap.mjs'
 import asyncIterableToArray from './asyncIterableToArray.mjs'
 
@@ -39,7 +38,6 @@ import asyncIterableToArray from './asyncIterableToArray.mjs'
  * // total processing time should be ~ 20ms
  */
 async function asyncReduceRight (iterable, reducer, initial = undefined) {
-  assert(typeof reducer === 'function', 'iteratee must be a function')
   reducer = asyncWrap(reducer)
   const arr = await asyncIterableToArray(iterable)
   arr.reverse()
