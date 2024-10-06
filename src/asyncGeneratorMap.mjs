@@ -188,10 +188,8 @@ async function * asyncGeneratorMap (iterable, iteratee, queueOrConcurrency = 1, 
           yield result.snapshot.value
           yielded = true
         } finally {
-          if (!yielded)
-          {
+          if (!yielded) {
             await it.return()
-            return
           }
         }
       }

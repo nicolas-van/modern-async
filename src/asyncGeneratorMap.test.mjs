@@ -1,4 +1,6 @@
 
+/* eslint-disable require-jsdoc, jsdoc/require-jsdoc */
+
 import { expect, test } from '@jest/globals'
 import asyncGeneratorMap from './asyncGeneratorMap.mjs'
 import { range } from 'itertools'
@@ -8,7 +10,6 @@ import Deferred from './Deferred.mjs'
 import asyncSleep from './asyncSleep'
 import asyncIterableToArray from './asyncIterableToArray.mjs'
 
-// eslint-disable-next-line require-jsdoc
 class TestError extends Error {}
 
 test('asyncGeneratorMap base', async () => {
@@ -634,16 +635,15 @@ test('asyncGeneratorMap reaches concurrency', async () => {
 })
 
 test('common for await interrupts generator on interrupted iteration', async () => {
+  let finallyReached = false
 
-  let finallyReached = false;
-
-  async function *asyncGenWithFinally() {
+  async function * asyncGenWithFinally () {
     try {
       for (const element of range(10)) {
-        yield element;
+        yield element
       }
     } finally {
-      finallyReached = true;
+      finallyReached = true
     }
   }
 
@@ -653,54 +653,51 @@ test('common for await interrupts generator on interrupted iteration', async () 
     }
   }
 
-  expect(finallyReached).toBe(true);
+  expect(finallyReached).toBe(true)
 })
 
 test('common for await calls AsyncGenerator.return() not AsyncGenerator.throw()', async () => {
+  let catchedException = null
 
-  let catchedException = null;
-
-  async function *asyncGenWithFinally() {
+  async function * asyncGenWithFinally () {
     try {
       for (const element of range(10)) {
-        yield element;
+        yield element
       }
     } catch (e) {
-      catchedException = e;
+      catchedException = e
     }
   }
 
   try {
     for await (const n of asyncGenWithFinally()) {
       if (n === 2) {
-        throw new TestError();
+        throw new TestError()
       }
     }
-  } catch (e) // ignore
-  {
+  } catch (e) {
     expect(e instanceof TestError).toBe(true)
   }
-  expect(catchedException).toBe(null);
+  expect(catchedException).toBe(null)
 })
 
 test('asyncGeneratorMap interrupts generator on interrupted iteration', async () => {
+  let finallyReached = false
 
-  let finallyReached = false;
-
-  async function *asyncGenWithFinally() {
+  async function * asyncGenWithFinally () {
     try {
       for (const element of range(10)) {
-        yield element;
+        yield element
       }
     } finally {
-      finallyReached = true;
+      finallyReached = true
     }
   }
 
-  for await (const n of asyncGeneratorMap(asyncGenWithFinally(), n => n*2)) {
+  for await (const n of asyncGeneratorMap(asyncGenWithFinally(), n => n * 2)) {
     if (n === 4) {
       break
     }
   }
-  expect(finallyReached).toBe(true);
+  expect(finallyReached).toBe(true)
 })
