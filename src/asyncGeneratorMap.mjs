@@ -183,7 +183,17 @@ async function * asyncGeneratorMap (iterable, iteratee, queueOrConcurrency = 1, 
       if (result.snapshot.status === 'rejected') {
         throw result.snapshot.reason
       } else {
-        yield result.snapshot.value
+        let yielded = false
+        try {
+          yield result.snapshot.value
+          yielded = true
+        } finally {
+          if (!yielded)
+          {
+            await it.return()
+            return
+          }
+        }
       }
     }
     if (exhausted && lastIndexFetched === lastIndexHandled) {
