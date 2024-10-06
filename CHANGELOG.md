@@ -1,5 +1,9 @@
 # Changelog
 
+# 2.0.2
+
+* Fixes [#21](https://github.com/nicolas-van/modern-async/issues/21), regarding the absence of call to [`AsyncGenerator.return()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncGenerator/return) in `asyncGeneratorMap` when iteration is interrupted.
+
 ## 2.0.1
 
 * Fixes [#19](https://github.com/nicolas-van/modern-async/issues/19)
