@@ -1,6 +1,6 @@
 # Changelog
 
-## For next version
+## 2.0.1
 
 * Fixes [#19](https://github.com/nicolas-van/modern-async/issues/19)
 
