@@ -51,6 +51,10 @@
     "url": "https://github.com/nicolas-van/modern-async/issues"
   },
   "homepage": "https://nicolas-van.github.io/modern-async",
+  "funding": {
+    "type": "individual",
+    "url": "https://github.com/sponsors/nicolas-van"
+  },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^21.0.1",
     "@rollup/plugin-node-resolve": "^13.0.6",
