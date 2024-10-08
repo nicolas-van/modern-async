@@ -168,6 +168,29 @@ declare module "reflectAsyncStatus" {
     export default reflectAsyncStatus;
     function reflectAsyncStatus<T>(fct: () => Promise<T> | T): Promise<PromiseSettledResult<T>>;
 }
+declare module "generatorEntries" {
+    export default generatorEntries;
+    function generatorEntries(obj: object): Iterable<[any, any]>;
+}
+declare module "asyncFromEntries" {
+    export default asyncFromEntries;
+    function asyncFromEntries<K, V>(iterable: Iterable<Promise<[K, V]> | [K, V]> | AsyncIterable<[K, V]>): Promise<object>;
+}
+declare module "asyncMapEntries" {
+    export default asyncMapEntries;
+    function asyncMapEntries<K, V>(obj: object, iteratee: (value: V, key: K, obj: object) => Promise<[any, any]> | [any, any], queueOrConcurrency?: Queue | number): Promise<object>;
+    import Queue from "Queue";
+}
+declare module "asyncMapKeys" {
+    export default asyncMapKeys;
+    function asyncMapKeys<K, V>(obj: object, iteratee: (value: V, key: K, obj: object) => Promise<any> | any, queueOrConcurrency?: Queue | number): Promise<object>;
+    import Queue from "Queue";
+}
+declare module "asyncMapValues" {
+    export default asyncMapValues;
+    function asyncMapValues<K, V>(obj: object, iteratee: (value: V, key: K, obj: object) => Promise<any> | any, queueOrConcurrency?: Queue | number): Promise<object>;
+    import Queue from "Queue";
+}
 declare module "modern-async" {
     export { default as asyncIterableWrap } from "asyncIterableWrap";
     export { default as asyncRoot } from "asyncRoot";
@@ -200,4 +223,9 @@ declare module "modern-async" {
     export { default as asyncTimeoutPrecise } from "asyncTimeoutPrecise";
     export { default as asyncIterableToArray } from "asyncIterableToArray";
     export { default as reflectAsyncStatus } from "reflectAsyncStatus";
+    export { default as generatorEntries } from "generatorEntries";
+    export { default as asyncFromEntries } from "asyncFromEntries";
+    export { default as asyncMapEntries } from "asyncMapEntries";
+    export { default as asyncMapKeys } from "asyncMapKeys";
+    export { default as asyncMapValues } from "asyncMapValues";
 }

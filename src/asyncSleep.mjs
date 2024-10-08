@@ -9,6 +9,9 @@ import asyncSleepCancellable from './asyncSleepCancellable.mjs'
  *
  * @param {number} amount An amount of time in milliseconds
  * @returns {Promise<void>} A promise that will be resolved after the given amount of time has passed.
+ * @see {@link asyncSleepCancellable} for a cancellable sleep implementation
+ * @see {@link asyncSleepPrecise} for a sleep implementation that can't trigger before the asked delay
+ * @see {@link asyncSleepPreciseCancellable} for a cancellable sleep implementation that can't trigger before the asked delay
  * @example
  * import { asyncSleep } from 'modern-async'
  *
