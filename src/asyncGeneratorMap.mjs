@@ -7,18 +7,18 @@ import Queue from './Queue.mjs'
 import reflectAsyncStatus from './reflectAsyncStatus.mjs'
 
 /**
- * Produces a an async iterator that will return each value or `iterable` after having processed them through
+ * Produces a an async iterable that will return each value or `iterable` after having processed them through
  * the `iteratee` function.
  *
- * The iterator will perform the calls to `iteratee` in a queue to limit the concurrency of
- * these calls. The iterator will consume values from `iterable` only if slots are available in the
+ * The iterable will perform the calls to `iteratee` asynchronously in a {@link Queue} to limit the concurrency of
+ * these calls. The iterable will consume values from `iterable` only if slots are available in the
  * queue.
  *
- * If the returned iterator is not fully consumed it will stop consuming new values from `iterable` and scheduling
+ * If the returned iterable is not fully consumed it will stop consuming new values from `iterable` and scheduling
  * new calls to `iteratee` in the queue, but already scheduled tasks will still be executed.
  *
  * If `iterable` or any of the calls to `iteratee` throws an exception all pending tasks will be cancelled and the
- * returned async iterator will throw that exception.
+ * returned async iterable will throw that exception.
  *
  * @param {Iterable | AsyncIterable} iterable An iterable or async iterable object.
  * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
@@ -26,8 +26,8 @@ import reflectAsyncStatus from './reflectAsyncStatus.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {Queue | number} [queueOrConcurrency] If a queue is specified it will be used to schedule the calls to
- * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
+ * @param {Queue | number} [queueOrConcurrency] If a {@link Queue} is specified it will be used to schedule the calls to
+ * `iteratee`. If a number is specified it will be used as the concurrency of a {@link Queue} that will be created
  * implicitly for the same purpose. Defaults to `1`.
  * @param {boolean} [ordered] If true the results will be yielded in the same order as in the source
  * iterable, regardless of which calls to iteratee returned first. If false the the results will be yielded as soon
@@ -36,23 +36,22 @@ import reflectAsyncStatus from './reflectAsyncStatus.mjs'
  * @example
  * import {asyncGeneratorMap, asyncSleep} from 'modern-async'
  *
- * const iterator = function * () {
+ * const generator = function * () {
  *   for (let i = 0; i < 10000; i += 1) {
  *     yield i
  *   }
  * }
- * const mapIterator = asyncGeneratorMap(iterator(), async (v) => {
+ * const mapGenerator = asyncGeneratorMap(generator(), async (v) => {
  *   await asyncSleep(1000)
  *   return v * 2
  * })
- * for await (const el of mapIterator) {
+ * for await (const el of mapGenerator) {
  *   console.log(el)
  * }
  * // Will print "0", "2", "4", etc... Only one number will be printed per second.
- * // Numbers from `iterator` will be consumed progressively
+ * // Numbers from `generator` will be consumed progressively
  */
 async function * asyncGeneratorMap (iterable, iteratee, queueOrConcurrency = 1, ordered = true) {
-  assert(typeof iteratee === 'function', 'iteratee must be a function')
   iteratee = asyncWrap(iteratee)
   const it = asyncIterableWrap(iterable)
   const queue = getQueue(queueOrConcurrency)

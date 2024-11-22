@@ -6,7 +6,7 @@ import asyncIterableToArray from './asyncIterableToArray.mjs'
 /**
  * Produces a new collection of values by mapping each value in `iterable` through the `iteratee` function.
  *
- * The calls to `iteratee` will be performed in a queue to limit the concurrency of these calls.
+ * The calls to `iteratee` will be performed asynchronously in a {@link Queue}, allowing control over the concurrency of those calls.
  *
  * If any of the calls to iteratee throws an exception the returned promise will be rejected and the remaining
  * pending tasks will be cancelled.
@@ -17,8 +17,8 @@ import asyncIterableToArray from './asyncIterableToArray.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {Queue | number} [queueOrConcurrency] If a queue is specified it will be used to schedule the calls to
- * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
+ * @param {Queue | number} [queueOrConcurrency] If a {@link Queue} is specified it will be used to schedule the calls to
+ * `iteratee`. If a number is specified it will be used as the concurrency of a {@link Queue} that will be created
  * implicitly for the same purpose. Defaults to `1`.
  * @returns {Promise<any[]>} A promise that will be resolved with an array containing all the mapped value,
  * or will be rejected if any of the calls to `iteratee` throws an exception.
@@ -31,7 +31,7 @@ import asyncIterableToArray from './asyncIterableToArray.mjs'
  *   // these calls will be performed sequentially
  *   await asyncSleep(10) // waits 10ms
  *   return v * 2
- * }, 2)
+ * })
  * console.log(result) // prints [2, 4, 6]
  * // total processing time should be ~ 30ms
  * @example

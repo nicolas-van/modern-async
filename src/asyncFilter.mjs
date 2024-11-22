@@ -6,7 +6,7 @@ import asyncGeneratorFilter from './asyncGeneratorFilter.mjs'
 /**
  * Returns an array of all the values in `iterable` which pass an asynchronous truth test.
  *
- * The calls to `iteratee` will be performed in a queue to limit the concurrency of these calls.
+ * The calls to `iteratee` will be performed asynchronously in a {@link Queue}, allowing control over the concurrency of those calls.
  * The results will be in the same order than in `iterable`.
  *
  * If any of the calls to `iteratee` throws an exception the returned promise will be rejected and the remaining
@@ -18,8 +18,8 @@ import asyncGeneratorFilter from './asyncGeneratorFilter.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {Queue | number} [queueOrConcurrency] If a queue is specified it will be used to schedule the calls to
- * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
+ * @param {Queue | number} [queueOrConcurrency] If a {@link Queue} is specified it will be used to schedule the calls to
+ * `iteratee`. If a number is specified it will be used as the concurrency of a {@link Queue} that will be created
  * implicitly for the same purpose. Defaults to `1`.
  * @returns {Promise<any[]>} A promise that will be resolved with an array containing all the values that passed
  * the truth test. This promise will be rejected if any of the `iteratee` calls throws an exception.

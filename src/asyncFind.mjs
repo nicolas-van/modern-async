@@ -5,7 +5,7 @@ import Queue from './Queue.mjs'
 /**
  * Returns the first element of an iterable that passes an asynchronous truth test.
  *
- * The calls to `iteratee` will be performed in a queue to limit the concurrency of these calls.
+ * The calls to `iteratee` will be performed asynchronously in a {@link Queue}, allowing control over the concurrency of those calls.
  *
  * Whenever a result is found, all the remaining tasks will be cancelled as long
  * as they didn't started already. In case of exception in one of the `iteratee` calls the promise
@@ -19,8 +19,8 @@ import Queue from './Queue.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {Queue | number} [queueOrConcurrency] If a queue is specified it will be used to schedule the calls to
- * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
+ * @param {Queue | number} [queueOrConcurrency] If a {@link Queue} is specified it will be used to schedule the calls to
+ * `iteratee`. If a number is specified it will be used as the concurrency of a {@link Queue} that will be created
  * implicitly for the same purpose. Defaults to `1`.
  * @param {boolean} [ordered] If true this function will return on the first element in the iterable
  * order for which `iteratee` returned true. If false it will be the first in time.

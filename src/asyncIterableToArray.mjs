@@ -2,9 +2,9 @@
 import asyncIterableWrap from './asyncIterableWrap.mjs'
 
 /**
- * Fully consumes an iteratable or async iterable an returns an array with all the elements it contained.
+ * Fully consumes an iterable or async iterable an returns an array with all the elements it contained.
  *
- * @param {Iterable | AsyncIterable} iterable An iterator or async iterator.
+ * @param {Iterable | AsyncIterable} iterable An iterable or async iterable.
  * @returns {Promise<any[]>} An array.
  * @example
  * import { asyncIterableToArray, asyncSleep } from 'modern-async'
