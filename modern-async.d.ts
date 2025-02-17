@@ -84,7 +84,7 @@ declare module "asyncFilter" {
 }
 declare module "asyncFind" {
     export default asyncFind;
-    function asyncFind<V>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): Promise<V>;
+    function asyncFind<V>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): Promise<V | undefined>;
     import Queue from "Queue";
 }
 declare module "asyncFindIndex" {
