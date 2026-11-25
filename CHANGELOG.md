@@ -1,5 +1,10 @@
 # Changelog
 
+# Next version
+
+* Added `asyncFlatMap()`, the asynchronous counterpart of `Array.prototype.flatMap()`, which maps the values of an
+  iterable and flattens the result by one level.
+
 # 2.1.0
 
 * Adds new functions to work with objects: `asyncFilterObject()`, `asyncFindKey()`, `asyncForEachObject()`,
