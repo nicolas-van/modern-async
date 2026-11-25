@@ -1,6 +1,6 @@
 # Changelog
 
-# Next version
+# 2.2.0
 
 * Added `asyncFlatMap()`, the asynchronous counterpart of `Array.prototype.flatMap()`, which maps the values of an
   iterable and flattens the result by one level.
