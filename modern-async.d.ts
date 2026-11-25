@@ -191,6 +191,26 @@ declare module "asyncMapValues" {
     function asyncMapValues<K, V>(obj: object, iteratee: (value: V, key: K, obj: object) => Promise<any> | any, queueOrConcurrency?: Queue | number): Promise<object>;
     import Queue from "Queue";
 }
+declare module "asyncFilterObject" {
+    export default asyncFilterObject;
+    function asyncFilterObject<K, V>(obj: object, iteratee: (value: V, key: K, obj: object) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number): Promise<object>;
+    import Queue from "Queue";
+}
+declare module "asyncFindKey" {
+    export default asyncFindKey;
+    function asyncFindKey<K, V>(obj: object, iteratee: (value: V, key: K, obj: object) => Promise<boolean> | boolean, queueOrConcurrency?: Queue | number, ordered?: boolean): Promise<K>;
+    import Queue from "Queue";
+}
+declare module "asyncForEachObject" {
+    export default asyncForEachObject;
+    function asyncForEachObject<K, V>(obj: object, iteratee: (value: V, key: K, obj: object) => Promise<void> | void, queueOrConcurrency?: Queue | number): Promise<void>;
+    import Queue from "Queue";
+}
+declare module "asyncGroupBy" {
+    export default asyncGroupBy;
+    function asyncGroupBy<V, G>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<G> | G, queueOrConcurrency?: Queue | number): Promise<object>;
+    import Queue from "Queue";
+}
 declare module "modern-async" {
     export { default as asyncIterableWrap } from "asyncIterableWrap";
     export { default as asyncRoot } from "asyncRoot";
@@ -228,4 +248,8 @@ declare module "modern-async" {
     export { default as asyncMapEntries } from "asyncMapEntries";
     export { default as asyncMapKeys } from "asyncMapKeys";
     export { default as asyncMapValues } from "asyncMapValues";
+    export { default as asyncFilterObject } from "asyncFilterObject";
+    export { default as asyncFindKey } from "asyncFindKey";
+    export { default as asyncForEachObject } from "asyncForEachObject";
+    export { default as asyncGroupBy } from "asyncGroupBy";
 }
