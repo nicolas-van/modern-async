@@ -14,7 +14,6 @@ import reflectAsyncStatus from './reflectAsyncStatus.mjs'
  * @returns {*} ignore
  */
 async function asyncFindInternal (iterable, iteratee, queueOrConcurrency, ordered) {
-  assert(typeof iteratee === 'function', 'iteratee must be a function')
   iteratee = asyncWrap(iteratee)
   const it = asyncIterableWrap(iterable)
   const queue = getQueue(queueOrConcurrency)

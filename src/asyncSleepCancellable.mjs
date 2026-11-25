@@ -16,6 +16,9 @@ import CancelledError from './CancelledError.mjs'
  *   * `promise`: The promise
  *   * `cancel`: The cancel function. It will return a boolean that will be `true` if the promise was effectively cancelled,
  *     `false` otherwise.
+ * @see {@link asyncSleep} for a base sleep implementation
+ * @see {@link asyncSleepPrecise} for a sleep implementation that can't trigger before the asked delay
+ * @see {@link asyncSleepPreciseCancellable} for a cancellable sleep implementation that can't trigger before the asked delay
  * @example
  * import { asyncSleepCancellable } from 'modern-async'
  *

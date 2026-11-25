@@ -1,11 +1,16 @@
 
 import asyncReduce from './asyncReduce.mjs'
-import assert from 'nanoassert'
 import asyncWrap from './asyncWrap.mjs'
+import asyncIterableToArray from './asyncIterableToArray.mjs'
 
 /**
  * Performs a reduce operation as defined in the `Array.reduceRight()` method but using an asynchronous
  * function as reducer. The reducer will be called sequentially.
+ *
+ * Please note that this function exists only to provide compatibility with standard `Array.reduceRight()`.
+ * Internally it only reads all values from the given iterator, store them all in an array, revert that array
+ * and performs a common {@link asyncReduce} call. (Functions iterating on arrays from right to left do not
+ * apply properly to the iterable concept and should be avoided when trying to use that concept.)
  *
  * @param {Iterable | AsyncIterable} iterable An iterable object.
  * @param {Function} reducer The reducer function. It will be called with four arguments:
@@ -33,12 +38,8 @@ import asyncWrap from './asyncWrap.mjs'
  * // total processing time should be ~ 20ms
  */
 async function asyncReduceRight (iterable, reducer, initial = undefined) {
-  assert(typeof reducer === 'function', 'iteratee must be a function')
   reducer = asyncWrap(reducer)
-  const arr = []
-  for await (const el of iterable) {
-    arr.push(el)
-  }
+  const arr = await asyncIterableToArray(iterable)
   arr.reverse()
   return asyncReduce(arr, async (accumulator, value, index, iterable) => {
     return reducer(accumulator, value, arr.length - 1 - index, iterable)
