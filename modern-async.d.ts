@@ -102,6 +102,11 @@ declare module "asyncMap" {
     function asyncMap<V, M>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<M> | M, queueOrConcurrency?: Queue | number): Promise<M[]>;
     import Queue from "Queue";
 }
+declare module "asyncFlatMap" {
+    export default asyncFlatMap;
+    function asyncFlatMap<V, M>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<M | M[]> | M | M[], queueOrConcurrency?: Queue | number): Promise<M[]>;
+    import Queue from "Queue";
+}
 declare module "asyncReduce" {
     export default asyncReduce;
     function asyncReduce<V, A>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, reducer: (accumulator: A, value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<A> | A, initial: A): Promise<A>;
@@ -227,6 +232,7 @@ declare module "modern-async" {
     export { default as asyncFindIndex } from "asyncFindIndex";
     export { default as asyncForEach } from "asyncForEach";
     export { default as asyncMap } from "asyncMap";
+    export { default as asyncFlatMap } from "asyncFlatMap";
     export { default as asyncGeneratorMap } from "asyncGeneratorMap";
     export { default as Queue } from "Queue";
     export { default as queueMicrotask } from "queueMicrotask";
