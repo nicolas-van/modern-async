@@ -1,5 +1,4 @@
 
-import assert from 'nanoassert'
 import asyncWrap from './asyncWrap.mjs'
 
 /**
@@ -31,7 +30,6 @@ import asyncWrap from './asyncWrap.mjs'
  * // total processing time should be ~ 20ms
  */
 async function asyncReduce (iterable, reducer, initial = undefined) {
-  assert(typeof reducer === 'function', 'iteratee must be a function')
   reducer = asyncWrap(reducer)
   if (initial !== undefined) {
     let current = initial

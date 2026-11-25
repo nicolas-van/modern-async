@@ -1,13 +1,12 @@
 
 import Queue from './Queue.mjs'
 import asyncWrap from './asyncWrap.mjs'
-import assert from 'nanoassert'
 import asyncFindIndex from './asyncFindIndex.mjs'
 
 /**
  * Returns `true` if all elements of an iterable pass a truth test and `false` otherwise.
  *
- * The calls to `iteratee` will be performed in a queue to limit the concurrency of these calls.
+ * The calls to `iteratee` will be performed asynchronously in a {@link Queue}, allowing control over the concurrency of those calls.
  * If any truth test returns `false` the promise is immediately resolved.
  *
  * Whenever a test returns `false`, all the remaining tasks will be cancelled as long
@@ -22,8 +21,8 @@ import asyncFindIndex from './asyncFindIndex.mjs'
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
- * @param {Queue | number} [queueOrConcurrency] If a queue is specified it will be used to schedule the calls to
- * `iteratee`. If a number is specified it will be used as the concurrency of a Queue that will be created
+ * @param {Queue | number} [queueOrConcurrency] If a {@link Queue} is specified it will be used to schedule the calls to
+ * `iteratee`. If a number is specified it will be used as the concurrency of a {@link Queue} that will be created
  * implicitly for the same purpose. Defaults to `1`.
  * @returns {Promise<boolean>} A promise that will be resolved to `true` if all values pass the truth test and `false`
  * if a least one of them doesn't pass it. That promise will be rejected if one of the truth test throws
@@ -70,7 +69,6 @@ import asyncFindIndex from './asyncFindIndex.mjs'
  * // total processing time should be ~ 10ms
  */
 async function asyncEvery (iterable, iteratee, queueOrConcurrency = 1) {
-  assert(typeof iteratee === 'function', 'iteratee must be a function')
   iteratee = asyncWrap(iteratee)
   const index = await asyncFindIndex(iterable, async (value, index, iterable) => {
     return !(await iteratee(value, index, iterable))
