@@ -1,5 +1,12 @@
 # Changelog
 
+# Next version
+
+* Added new functions to work with objects: `asyncFilterObject()`, `asyncFindKey()`, `asyncForEachObject()`,
+  `asyncGroupBy()`, `asyncMapEntries()`, `asyncMapKeys()` and `asyncMapValues()`.
+* Added `generatorEntries()` to iterate over the key-value pairs of an object.
+* Added `asyncFromEntries()` to build a new object from an iterable or async iterable of key-value pairs.
+
 # 2.0.2
 
 * Fixes [#21](https://github.com/nicolas-van/modern-async/issues/21), regarding the absence of call to [`AsyncGenerator.return()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/AsyncGenerator/return) in `asyncGeneratorMap` when iteration is interrupted.
