@@ -2,10 +2,11 @@
 
 # 2.1.0
 
-* Added new functions to work with objects: `asyncFilterObject()`, `asyncFindKey()`, `asyncForEachObject()`,
+* Adds new functions to work with objects: `asyncFilterObject()`, `asyncFindKey()`, `asyncForEachObject()`,
   `asyncGroupBy()`, `asyncMapEntries()`, `asyncMapKeys()` and `asyncMapValues()`.
-* Added `generatorEntries()` to iterate over the key-value pairs of an object.
-* Added `asyncFromEntries()` to build a new object from an iterable or async iterable of key-value pairs.
+* Adds `generatorEntries()` to iterate over the key-value pairs of an object.
+* Adds `asyncFromEntries()` to build a new object from an iterable or async iterable of key-value pairs.
+* Fix invalid return type in typing of function `asyncFind`.
 
 # 2.0.2
 
