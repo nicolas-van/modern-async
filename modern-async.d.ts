@@ -104,7 +104,7 @@ declare module "asyncMap" {
 }
 declare module "asyncFlatMap" {
     export default asyncFlatMap;
-    function asyncFlatMap<V, M>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<M | M[]> | M | M[], queueOrConcurrency?: Queue | number): Promise<M[]>;
+    function asyncFlatMap<V, M>(iterable: Iterable<Promise<V> | V> | AsyncIterable<V>, iteratee: (value: V, index: number, iterable: Iterable<Promise<V> | V> | AsyncIterable<V>) => Promise<Iterable<M>> | Iterable<M>, queueOrConcurrency?: Queue | number): Promise<M[]>;
     import Queue from "Queue";
 }
 declare module "asyncReduce" {

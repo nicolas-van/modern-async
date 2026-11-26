@@ -6,8 +6,7 @@ import Queue from './Queue.mjs'
  * then flattening the result by one level.
  *
  * This is the asynchronous counterpart of `Array.prototype.flatMap()`: the values returned by `iteratee`
- * are flattened by one level into the result. See `Array.prototype.flatMap()` for the exact semantics of
- * the flattening.
+ * are flattened by one level into the result.
  *
  * The calls to `iteratee` will be performed asynchronously in a {@link Queue}, allowing control over the concurrency of those calls.
  * The results will be in the same order than in `iterable`.
@@ -16,13 +15,13 @@ import Queue from './Queue.mjs'
  * pending tasks will be cancelled.
  *
  * @param {Iterable | AsyncIterable} iterable An iterable or async iterable object.
- * @param {Function} iteratee A function that will be called with each member of the iterable. It will receive
+ * @param {function} iteratee A function that will be called with each member of the iterable. It will receive
  * three arguments:
  *   * `value`: The current value to process
  *   * `index`: The index in the iterable. Will start from 0.
  *   * `iterable`: The iterable on which the operation is being performed.
  *
- * It may return an array of values that will be flattened by one level in the resulting array.
+ * It must return an iterable of values that will be flattened by one level in the resulting array.
  * @param {Queue | number} [queueOrConcurrency] If a {@link Queue} is specified it will be used to schedule the calls to
  * `iteratee`. If a number is specified it will be used as the concurrency of a {@link Queue} that will be created
  * implicitly for the same purpose. Defaults to `1`.
@@ -72,10 +71,8 @@ import Queue from './Queue.mjs'
 async function asyncFlatMap (iterable, iteratee, queueOrConcurrency = 1) {
   const result = []
   for await (const mapped of asyncGeneratorMap(iterable, iteratee, queueOrConcurrency)) {
-    if (Array.isArray(mapped)) {
-      mapped.forEach((value) => result.push(value))
-    } else {
-      result.push(mapped)
+    for (const el of mapped) {
+      result.push(el)
     }
   }
   return result

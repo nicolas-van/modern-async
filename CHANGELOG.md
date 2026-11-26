@@ -1,5 +1,9 @@
 # Changelog
 
+# 2.2.1
+
+* Fix design and definition of `asyncFlatMap()`, that should have accepted an iterable returned by `iteratee` for constistency with the rest of the library.
+
 # 2.2.0
 
 * Added `asyncFlatMap()`, the asynchronous counterpart of `Array.prototype.flatMap()`, which maps the values of an
